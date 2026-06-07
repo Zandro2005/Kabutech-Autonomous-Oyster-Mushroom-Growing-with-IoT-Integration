@@ -1,0 +1,2846 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KabuTech Hiyas - Farm Operations</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#004521",
+                        "app-bg": "#f5f9f6",
+                        "on-secondary-fixed-variant": "#00522c",
+                        "primary-fixed-dim": "#92d6a2",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#88d7a1",
+                        "primary-container": "#1b5e35",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "success-green": "#166534",
+                        "surface": "#ebffec",
+                        "surface-bright": "#ebffec",
+                        "surface-container-high": "#daeddb",
+                        "on-tertiary-fixed": "#002110",
+                        "on-surface": "#0f1f14",
+                        "surface-container": "#dff3e1",
+                        "surface-dim": "#ccdfcd",
+                        "primary-fixed": "#adf2bc",
+                        "surface-variant": "#d4e8d6",
+                        "surface-container-highest": "#d4e8d6",
+                        "on-primary-fixed-variant": "#09522a",
+                        "outline-variant": "#c0c9be",
+                        "tertiary-fixed-dim": "#7ada9e",
+                        "error-red": "#991b1b",
+                        "surface-tint": "#296a40",
+                        "brand-deep": "#0d3d1e",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#404941",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#92d5a1",
+                        "inverse-surface": "#243428",
+                        "border-muted": "#cce5d6",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#1f7044",
+                        "on-secondary-fixed": "#00210f",
+                        "surface-container-low": "#e5f9e6",
+                        "inverse-primary": "#92d6a2",
+                        "background": "#ebffec",
+                        "inverse-on-surface": "#e2f6e3",
+                        "warning-gold": "#fbbf24",
+                        "secondary": "#196c40",
+                        "on-background": "#0f1f14",
+                        "secondary-fixed": "#a4f4bc",
+                        "outline": "#707970",
+                        "secondary-container": "#a1f1b9",
+                        "on-tertiary-fixed-variant": "#00522e",
+                        "on-tertiary-container": "#79d99e",
+                        "tertiary-container": "#005f37",
+                        "surface-soft": "#f0f7f2",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#004526",
+                        "on-primary-fixed": "#00210d",
+                        "tertiary-fixed": "#96f7b9"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "unit": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "gutter": "16px",
+                        "sm": "8px",
+                        "margin-edge": "20px"
+                    },
+                    fontFamily: {
+                        "sans": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    animation: {
+                        "pulse-fast": "pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+                        "progress": "progress 2s ease-in-out infinite",
+                        "spin-slow": "spin 8s linear infinite",
+                        "bounce-slow": "bounce 3s infinite"
+                    },
+                    keyframes: {
+                        progress: {
+                            "0%": { width: "0%", marginLeft: "0%" },
+                            "50%": { width: "50%", marginLeft: "25%" },
+                            "100%": { width: "0%", marginLeft: "100%" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modern Scrollbars & Transitions */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 31, 20, 0.05);
+        }
+
+        .interactive-shadow {
+            box-shadow: 0px 8px 24px rgba(15, 31, 20, 0.08);
+        }
+
+        .glow-green {
+            box-shadow: 0px 0px 15px rgba(22, 101, 52, 0.25);
+        }
+
+        .glow-red {
+            box-shadow: 0px 0px 15px rgba(186, 26, 26, 0.3);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Mobile Shell Frame Styling */
+        .phone-frame {
+            border: 12px solid #1e293b;
+            border-radius: 40px;
+            box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background-color: #1e293b;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            z-index: 100;
+        }
+
+        .phone-indicator {
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 4px;
+            background-color: #475569;
+            border-radius: 2px;
+            z-index: 100;
+        }
+
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #004521;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #004521;
+        }
+
+        .toggle-checkbox:checked+.toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+
+        .toggle-label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Ambient Depth for background */
+        .ambient-glow-1 {
+            background: radial-gradient(circle at 10% 20%, rgba(146, 214, 162, 0.15) 0%, transparent 40%);
+        }
+
+        .ambient-glow-2 {
+            background: radial-gradient(circle at 90% 80%, rgba(161, 241, 185, 0.2) 0%, transparent 45%);
+        }
+
+        /* Anomaly Animations */
+        @keyframes mist-flow {
+            0% {
+                transform: translateY(0) scale(1) opacity: 0.2;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-15px) scale(1.1) opacity: 0;
+            }
+        }
+
+        .misting-active-particle {
+            animation: mist-flow 1.5s infinite ease-out;
+        }
+
+        /* Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #004521;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0px 4px 10px rgba(0, 69, 33, 0.3);
+            border: 2px solid #ffffff;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #cce5d6;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-900 text-on-surface antialiased min-h-screen flex items-center justify-center py-6 px-4 select-none relative overflow-hidden transition-colors duration-300 dark:bg-slate-950">
+
+    <!-- Screen Anomaly Glow Overlay -->
+    <div id="system-error-glow"
+        class="fixed inset-0 pointer-events-none z-50 border-8 border-error/0 transition-all duration-500"></div>
+
+    <!-- Toggle Device Frame Button (visible on desktop) -->
+    <button onclick="togglePhoneFrame()"
+        class="hidden md:flex fixed top-4 right-4 z-50 bg-slate-800 text-slate-300 hover:text-white px-4 py-2 rounded-full border border-slate-700 text-body-sm items-center gap-2 shadow-lg transition-all active:scale-95">
+        <span class="material-symbols-outlined text-[18px]">cell_phone</span>
+        <span id="frame-toggle-text">Full Screen View</span>
+    </button>
+
+    <!-- Main Mobile Application Container Wrapper -->
+    <div id="app-wrapper"
+        class="w-full max-w-[430px] h-[884px] phone-frame bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300">
+
+        <!-- Phone UI elements -->
+        <div id="notch" class="phone-notch"></div>
+        <div id="home-indicator" class="phone-indicator"></div>
+
+        <!-- Phone Top Status Bar Mock -->
+        <div
+            class="h-8 shrink-0 flex items-center justify-between px-6 pt-3 pb-1 text-[11px] font-bold text-slate-600 dark:text-slate-400 z-40">
+            <span id="statusBarTime">09:41</span>
+            <div class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[13px]"
+                    style="font-variation-settings: 'wght' 700;">signal_cellular_alt</span>
+                <span class="material-symbols-outlined text-[13px]"
+                    style="font-variation-settings: 'wght' 700;">wifi</span>
+                <span class="material-symbols-outlined text-[14px]"
+                    style="font-variation-settings: 'wght' 700;">battery_5_bar</span>
+            </div>
+        </div>
+
+        <!-- Toast Notifications Layer -->
+        <div id="toast-container" class="absolute top-10 left-4 right-4 z-[99] flex flex-col gap-2 pointer-events-none">
+        </div>
+
+        <!-- APP SHELL SCENE CONTAINER -->
+        <div class="flex-1 flex flex-col overflow-hidden relative">
+
+            <!-- 1. LOADING SCREEN SCENE -->
+            <div id="scene-loading"
+                class="absolute inset-0 z-[60] bg-gradient-to-br from-primary to-brand-deep flex flex-col items-center justify-center text-center px-lg transition-all duration-500">
+                <div class="relative flex flex-col items-center max-w-xs w-full">
+                    <!-- Logo Container -->
+                    <div
+                        class="mb-xl animate-pulse-fast bg-surface-soft/10 p-md rounded-full shadow-[0px_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-sm border border-primary-fixed/20">
+                        <span class="material-symbols-outlined text-primary-fixed text-6xl">energy_savings_leaf</span>
+                    </div>
+                    <!-- Brand Name -->
+                    <h1 class="text-display-lg text-on-primary mb-xs tracking-tight font-extrabold">KabuTech Hiyas</h1>
+                    <!-- Status Text -->
+                    <p class="text-body-md text-primary-fixed-dim mb-lg opacity-80" id="loading-status">Initializing
+                        Farm Intelligence...</p>
+                    <!-- Progress Bar Track -->
+                    <div class="w-full h-1 bg-primary-container/50 rounded-full overflow-hidden relative">
+                        <div class="h-full bg-primary-fixed rounded-full absolute top-0 left-0 animate-progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. LOGIN SCREEN SCENE -->
+            <div id="scene-login"
+                class="hidden absolute inset-0 z-50 bg-app-bg dark:bg-zinc-950 flex flex-col justify-center px-margin-edge pb-10 transition-all duration-500 overflow-y-auto hide-scrollbar">
+                <!-- Background ambient glows -->
+                <div
+                    class="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary-container opacity-[0.06] blur-[100px] rounded-full pointer-events-none z-0">
+                </div>
+                <div
+                    class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary-container opacity-[0.12] blur-[100px] rounded-full pointer-events-none z-0">
+                </div>
+
+                <div
+                    class="w-full bg-surface-container-lowest dark:bg-zinc-900 rounded-[28px] shadow-lg border border-muted dark:border-zinc-800 p-6 relative z-10 flex flex-col gap-6">
+                    <!-- Hero Section -->
+                    <div class="flex flex-col items-center text-center">
+                        <div
+                            class="w-16 h-16 bg-surface-soft dark:bg-zinc-800 rounded-2xl border border-muted dark:border-zinc-700 flex items-center justify-center shadow-sm mb-4 relative">
+                            <span
+                                class="material-symbols-outlined text-primary dark:text-primary-fixed text-[36px] relative z-10"
+                                style="font-variation-settings: 'FILL' 1;">eco</span>
+                        </div>
+                        <h1 class="text-headline-md font-extrabold text-brand-deep dark:text-primary-fixed mb-1">
+                            KabuTech Hiyas</h1>
+                        <p class="text-body-sm text-on-surface-variant dark:text-zinc-400">Precision Urban Mushroom Farm
+                        </p>
+                    </div>
+
+                    <!-- Role Toggle -->
+                    <div class="bg-surface-variant dark:bg-zinc-800 rounded-full p-1 flex relative shadow-inner">
+                        <div id="login-toggle-pill"
+                            class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-surface-container-lowest dark:bg-zinc-700 rounded-full shadow-[0px_2px_8px_rgba(15,31,20,0.08)] transition-transform duration-300 ease-in-out">
+                        </div>
+                        <button onclick="selectLoginRole('admin')"
+                            class="flex-1 py-2 relative z-10 text-body-md font-bold text-primary dark:text-white transition-colors duration-300"
+                            id="btn-login-admin">Admin</button>
+                        <button onclick="selectLoginRole('staff')"
+                            class="flex-1 py-2 relative z-10 text-body-sm text-on-surface-variant dark:text-zinc-400 transition-colors duration-300 hover:text-primary"
+                            id="btn-login-staff">Staff</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form onsubmit="handleLogin(event)" class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-body-sm text-on-surface-variant dark:text-zinc-400 ml-1">Email
+                                Address</label>
+                            <div class="relative flex items-center group">
+                                <span
+                                    class="material-symbols-outlined absolute left-3.5 text-outline dark:text-zinc-500 group-focus-within:text-primary transition-colors">mail</span>
+                                <input id="login-email"
+                                    class="w-full bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-3 pl-[44px] pr-4 text-body-md text-on-surface dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                    required type="email" placeholder="admin@kabutech.com">
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <div class="flex justify-between items-center ml-1">
+                                <label class="text-body-sm text-on-surface-variant dark:text-zinc-400">Password</label>
+                                <a href="#" onclick="showForgotPasswordToast()"
+                                    class="text-body-sm text-primary dark:text-primary-fixed hover:text-brand-deep transition-colors">Forgot?</a>
+                            </div>
+                            <div class="relative flex items-center group">
+                                <span
+                                    class="material-symbols-outlined absolute left-3.5 text-outline dark:text-zinc-500 group-focus-within:text-primary transition-colors">lock</span>
+                                <input id="login-password"
+                                    class="w-full bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-3 pl-[44px] pr-[44px] text-body-md text-on-surface dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                                    required type="password" placeholder="admin123">
+                                <button type="button" onclick="togglePasswordVisibility()"
+                                    class="absolute right-3.5 text-outline dark:text-zinc-500 hover:text-on-surface transition-colors flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[20px]"
+                                        id="login-password-toggle-icon">visibility_off</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-primary dark:bg-primary-container text-on-primary dark:text-white py-3.5 rounded-xl font-bold hover:bg-tertiary-container active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-md">
+                            Sign In
+                            <span class="material-symbols-outlined text-[18px]">login</span>
+                        </button>
+                    </form>
+                    <p class="text-center text-caption text-on-surface-variant dark:text-zinc-500">Secure connection to
+                        environmental core.</p>
+                </div>
+            </div>
+
+            <!-- 3. MAIN APP VIEW SCENE (With Shell Navigation) -->
+            <div id="scene-app"
+                class="hidden absolute inset-0 z-40 bg-app-bg dark:bg-zinc-950 flex flex-col overflow-hidden transition-all duration-500">
+
+                <!-- TOP HEADER -->
+                <header
+                    class="w-full bg-surface-container-low dark:bg-zinc-900 border-b border-muted dark:border-zinc-800 shadow-sm flex justify-between items-center px-4 h-14 z-30 shrink-0">
+                    <div class="flex items-center gap-2.5">
+                        <div
+                            class="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center text-primary-fixed font-bold text-caption shadow-sm">
+                            <span class="material-symbols-outlined text-[18px]">eco</span>
+                        </div>
+                        <h1 class="text-body-lg font-extrabold text-primary dark:text-primary-fixed tracking-tight">
+                            KabuTech Hiyas</h1>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <!-- Theme Toggle Button -->
+                        <button onclick="toggleDarkMode()"
+                            class="text-slate-600 dark:text-zinc-300 hover:bg-surface-container-high dark:hover:bg-zinc-800 p-1.5 rounded-full active:scale-95 duration-150 flex items-center justify-center">
+                            <span id="theme-toggle-icon" class="material-symbols-outlined text-[20px]">dark_mode</span>
+                        </button>
+                        <!-- Logged user profile status -->
+                        <div onclick="switchTab('profile')"
+                            class="flex items-center gap-1.5 cursor-pointer bg-surface-soft dark:bg-zinc-800 py-1 px-2.5 rounded-full border border-border-muted dark:border-zinc-700 active:scale-95 transition-all">
+                            <div
+                                class="w-5 h-5 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[9px]">
+                                <span id="header-user-avatar">A</span>
+                            </div>
+                            <span id="header-user-name"
+                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-300">Admin</span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- SCROLLABLE PAGE CANVAS -->
+                <div class="flex-1 overflow-y-auto p-4 pb-28 hide-scrollbar relative">
+                    <div class="absolute inset-0 ambient-glow-1 pointer-events-none"></div>
+                    <div class="absolute inset-0 ambient-glow-2 pointer-events-none"></div>
+
+                    <!-- ACTIVE ALERTS BANNER -->
+                    <div id="active-alert-banner"
+                        class="hidden mb-4 bg-error-container/90 dark:bg-red-950/80 text-on-error-container border border-error/20 dark:border-red-900/50 rounded-2xl p-3 shadow-md flex items-start justify-between relative z-10 transition-all duration-300">
+                        <div class="flex items-start gap-2.5">
+                            <span
+                                class="material-symbols-outlined text-error-red text-[20px] shrink-0 mt-0.5 animate-bounce-slow">warning</span>
+                            <div>
+                                <p class="text-body-sm font-bold text-error-red dark:text-red-400"
+                                    id="banner-alert-title">Critical Anomaly Detected</p>
+                                <p class="text-[11px] text-error-red/90 dark:text-red-400/80 mt-0.5"
+                                    id="banner-alert-desc">CO2 sensor offline in Sector A. Action needed.</p>
+                            </div>
+                        </div>
+                        <button onclick="dismissBannerAlert()"
+                            class="text-error-red dark:text-red-400 hover:bg-error/15 p-1 rounded-full flex items-center justify-center transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">close</span>
+                        </button>
+                    </div>
+
+                    <!-- --- PAGE TABS --- -->
+
+                    <!-- TAB A: HOME / DASHBOARD -->
+                    <div id="tab-home" class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-headline-sm font-bold text-on-background dark:text-white"
+                                    id="greeting-text">Good morning, Admin</h2>
+                                <p class="text-body-sm text-on-surface-variant dark:text-zinc-400 transition-colors duration-500"
+                                    id="system-status-msg">System is running optimally.</p>
+                            </div>
+                            <span id="live-indicator"
+                                class="flex items-center gap-1 text-[10px] font-bold text-success-green bg-surface-soft dark:bg-emerald-950/40 dark:text-emerald-400 px-2.5 py-1 rounded-full border border-border-muted dark:border-emerald-800">
+                                <span
+                                    class="material-symbols-outlined text-[10px] animate-pulse">fiber_manual_record</span>
+                                Live Sim
+                            </span>
+                        </div>
+
+                        <!-- Live Sensor Grid -->
+                        <div class="grid grid-cols-2 gap-3.5">
+                            <!-- Temp -->
+                            <div
+                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                <div
+                                    class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
+                                </div>
+                                <div class="flex justify-between items-start mb-3 relative z-10">
+                                    <div
+                                        class="bg-surface-soft dark:bg-zinc-800 p-2 rounded-lg text-primary dark:text-primary-fixed">
+                                        <span class="material-symbols-outlined text-[18px]"
+                                            style="font-variation-settings: 'FILL' 1;">device_thermostat</span>
+                                    </div>
+                                    <span id="temp-trend"
+                                        class="flex items-center text-success-green dark:text-emerald-400 text-caption bg-success-green/10 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded-full">
+                                        <span class="material-symbols-outlined text-[12px] mr-0.5">arrow_upward</span>
+                                        0.1%
+                                    </span>
+                                </div>
+                                <div class="relative z-10">
+                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">
+                                        Temperature</p>
+                                    <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
+                                        id="sensor-temp">24.2°C</p>
+                                </div>
+                            </div>
+                            <!-- Humidity -->
+                            <div
+                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                <div
+                                    class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
+                                </div>
+                                <div class="flex justify-between items-start mb-3 relative z-10">
+                                    <div
+                                        class="bg-surface-soft dark:bg-zinc-800 p-2 rounded-lg text-primary dark:text-primary-fixed">
+                                        <span class="material-symbols-outlined text-[18px]"
+                                            style="font-variation-settings: 'FILL' 1;">water_drop</span>
+                                    </div>
+                                    <span id="humidity-trend"
+                                        class="flex items-center text-on-surface-variant dark:text-zinc-400 text-caption bg-surface-variant dark:bg-zinc-800 px-1.5 py-0.5 rounded-full">
+                                        <span
+                                            class="material-symbols-outlined text-[12px] mr-0.5">horizontal_rule</span>
+                                        0%
+                                    </span>
+                                </div>
+                                <div class="relative z-10">
+                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">Humidity
+                                    </p>
+                                    <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
+                                        id="sensor-humidity">68%</p>
+                                </div>
+                            </div>
+                            <!-- Light -->
+                            <div
+                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                <div
+                                    class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
+                                </div>
+                                <div class="flex justify-between items-start mb-3 relative z-10">
+                                    <div
+                                        class="bg-surface-soft dark:bg-zinc-800 p-2 rounded-lg text-primary dark:text-primary-fixed">
+                                        <span class="material-symbols-outlined text-[18px]"
+                                            style="font-variation-settings: 'FILL' 1;">light_mode</span>
+                                    </div>
+                                    <span id="light-trend"
+                                        class="flex items-center text-success-green dark:text-emerald-400 text-caption bg-success-green/10 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded-full">
+                                        <span class="material-symbols-outlined text-[12px] mr-0.5">arrow_upward</span>
+                                        1.5%
+                                    </span>
+                                </div>
+                                <div class="relative z-10">
+                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">Light
+                                        Intensity</p>
+                                    <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
+                                        id="sensor-light">420 µmol</p>
+                                </div>
+                            </div>
+                            <!-- CO2 -->
+                            <div id="sensor-co2-card"
+                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
+                                <div
+                                    class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
+                                </div>
+                                <div class="flex justify-between items-start mb-3 relative z-10">
+                                    <div id="sensor-co2-icon-bg"
+                                        class="bg-surface-soft dark:bg-zinc-800 p-2 rounded-lg text-primary dark:text-primary-fixed">
+                                        <span class="material-symbols-outlined text-[18px]"
+                                            style="font-variation-settings: 'FILL' 1;">co2</span>
+                                    </div>
+                                    <span id="co2-trend"
+                                        class="flex items-center text-on-surface-variant dark:text-zinc-400 text-caption bg-surface-variant dark:bg-zinc-800 px-1.5 py-0.5 rounded-full">
+                                        <span
+                                            class="material-symbols-outlined text-[12px] mr-0.5">horizontal_rule</span><span
+                                            class="co2-trend-val">0%</span>
+                                    </span>
+                                </div>
+                                <div class="relative z-10">
+                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">CO2 Level
+                                    </p>
+                                    <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
+                                        id="sensor-co2">420 ppm</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Manual Overrides Quick Panel -->
+                        <div
+                            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-body-md font-bold text-brand-deep dark:text-primary-fixed">Quick Device
+                                    Controls</h3>
+                                <span id="home-mode-badge"
+                                    class="text-[9px] font-bold uppercase tracking-wider bg-surface-soft dark:bg-zinc-800 px-2.5 py-0.5 border border-border-muted dark:border-zinc-700 text-primary dark:text-primary-fixed rounded-full">Auto
+                                    Mode</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <!-- Fans -->
+                                <button id="btn-quick-fans" onclick="toggleQuickDevice('fans')"
+                                    class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-muted dark:border-zinc-800 hover:bg-surface-soft/50 dark:hover:bg-zinc-800 transition-all select-none">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-on-surface-variant dark:text-zinc-300">
+                                        <span id="icon-quick-fans"
+                                            class="material-symbols-outlined text-[20px]">mode_fan</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold">Fans</span>
+                                    <span id="status-quick-fans"
+                                        class="text-[9px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
+                                </button>
+                                <!-- Misters -->
+                                <button id="btn-quick-misters" onclick="toggleQuickDevice('misters')"
+                                    class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-muted dark:border-zinc-800 hover:bg-surface-soft/50 dark:hover:bg-zinc-800 transition-all select-none">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-on-surface-variant dark:text-zinc-300">
+                                        <span id="icon-quick-misters"
+                                            class="material-symbols-outlined text-[20px]">opacity</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold">Mister</span>
+                                    <span id="status-quick-misters"
+                                        class="text-[9px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
+                                </button>
+                                <!-- Lights -->
+                                <button id="btn-quick-lights" onclick="toggleQuickDevice('lights')"
+                                    class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-muted dark:border-zinc-800 hover:bg-surface-soft/50 dark:hover:bg-zinc-800 transition-all select-none">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-on-surface-variant dark:text-zinc-300">
+                                        <span id="icon-quick-lights"
+                                            class="material-symbols-outlined text-[20px]">wb_incandescent</span>
+                                    </div>
+                                    <span class="text-[10px] font-bold">Grow Light</span>
+                                    <span id="status-quick-lights"
+                                        class="text-[9px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
+                                </button>
+                            </div>
+                            <!-- Active Particle animations wrapper (only visible when Misting or Fans are spinning) -->
+                            <div
+                                class="flex items-center justify-center h-4 relative bg-slate-50 dark:bg-zinc-950 rounded-lg overflow-hidden border border-slate-100 dark:border-zinc-900 select-none">
+                                <span class="text-[8px] font-semibold text-slate-400 z-10 flex items-center gap-1"
+                                    id="dynamic-simulation-label">
+                                    <span id="sim-fans-dot" class="w-1.5 h-1.5 rounded-full bg-slate-300"></span> Fans •
+                                    <span id="sim-misters-dot" class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                                    Mister •
+                                    <span id="sim-lights-dot" class="w-1.5 h-1.5 rounded-full bg-slate-300"></span> Grow
+                                    Lights
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Yield AI Panel Dashboard Card -->
+                        <div
+                            class="bg-primary-container text-on-primary-container rounded-2xl p-4 shadow-md relative overflow-hidden flex flex-col justify-between min-h-[140px]">
+                            <div class="absolute -right-8 -top-8 opacity-[0.08] text-white">
+                                <span class="material-symbols-outlined text-[100px]">psychology</span>
+                            </div>
+                            <div class="relative z-10 space-y-2">
+                                <div class="flex items-center gap-1.5 text-white">
+                                    <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                                    <h3 class="text-body-md font-extrabold tracking-wide">Yield AI Insight</h3>
+                                </div>
+                                <p class="text-body-sm text-primary-fixed-dim leading-relaxed"
+                                    id="home-yield-recommendation">
+                                    Misting is active. Crop environment is set to optimize Oyster mushroom fruiting.
+                                    Predicted yield is hovering around 2.45 kg.
+                                </p>
+                            </div>
+                            <button onclick="switchTab('yield')"
+                                class="relative z-10 mt-3 bg-primary-fixed text-on-primary-fixed-variant font-bold text-body-sm py-2 px-4 rounded-xl w-full hover:bg-white active:scale-95 transition-all text-center">
+                                View Full AI Analysis
+                            </button>
+                        </div>
+
+                        <!-- Quick Action Area -->
+                        <div class="pt-2">
+                            <button id="admin-report-btn" onclick="openReportModal()"
+                                class="hidden w-full border-2 border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold text-body-md rounded-full py-2.5 text-center flex items-center justify-center gap-2 hover:bg-surface-container transition-colors active:scale-[0.98] shadow-sm">
+                                <span class="material-symbols-outlined text-[20px]">report_problem</span>
+                                Report Farm Issue
+                            </button>
+                            <button id="staff-report-btn" onclick="openReportModal()"
+                                class="hidden w-full border-2 border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold text-body-md rounded-full py-2.5 text-center flex items-center justify-center gap-2 hover:bg-surface-container transition-colors active:scale-[0.98] shadow-sm">
+                                <span class="material-symbols-outlined text-[20px]">report_problem</span>
+                                Report Farm Issue
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TAB B: ENVIRONMENT CONTROLS -->
+                    <div id="tab-controls" class="hidden space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Environment
+                                    Controls</h2>
+                                <p class="text-caption text-on-surface-variant dark:text-zinc-400">Greenhouse setpoint
+                                    parameters & rules.</p>
+                            </div>
+                            <!-- Mode Toggle Switch -->
+                            <div
+                                class="flex items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-700 rounded-full p-1 shadow-sm">
+                                <button id="mode-btn-auto" onclick="setSystemMode('auto')"
+                                    class="px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300">Auto</button>
+                                <button id="mode-btn-manual" onclick="setSystemMode('manual')"
+                                    class="px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300">Manual</button>
+                            </div>
+                        </div>
+
+                        <!-- Setpoint Sliders Grid -->
+                        <div class="space-y-4">
+                            <!-- Temp Setpoint -->
+                            <div
+                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <div
+                                            class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
+                                            <span class="material-symbols-outlined text-[20px]"
+                                                style="font-variation-settings: 'FILL' 1;">thermostat</span>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-body-md font-bold text-on-background dark:text-white">
+                                                Temperature target</h3>
+                                            <span
+                                                class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Zone
+                                                1 & 2</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
+                                    <div>
+                                        <p
+                                            class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
+                                            CURRENT TEMP</p>
+                                        <div class="flex items-baseline gap-0.5">
+                                            <span
+                                                class="text-headline-md font-extrabold text-on-background dark:text-white"
+                                                id="ctrl-current-temp">24.2</span>
+                                            <span
+                                                class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">°C</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
+                                    <div class="text-right">
+                                        <p
+                                            class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
+                                            TARGET SETPOINT</p>
+                                        <div class="flex items-baseline gap-0.5 justify-end">
+                                            <span
+                                                class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
+                                                id="val-temp-setpoint">23.5</span>
+                                            <span
+                                                class="text-body-sm font-bold text-primary dark:text-primary-fixed">°C</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col gap-1.5 pt-1">
+                                    <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
+                                        <span>15.0°C</span>
+                                        <span>35.0°C</span>
+                                    </div>
+                                    <input id="slider-temp" class="w-full h-1" max="35" min="15" step="0.5" type="range"
+                                        value="23.5" oninput="updateTempSetpoint(this.value)">
+                                </div>
+                            </div>
+
+                            <!-- Humidity Setpoint -->
+                            <div
+                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <div
+                                            class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
+                                            <span class="material-symbols-outlined text-[20px]"
+                                                style="font-variation-settings: 'FILL' 1;">humidity_mid</span>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-body-md font-bold text-on-background dark:text-white">
+                                                Humidity target</h3>
+                                            <span
+                                                class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Misters</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
+                                    <div>
+                                        <p
+                                            class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
+                                            CURRENT HUMIDITY</p>
+                                        <div class="flex items-baseline gap-0.5">
+                                            <span
+                                                class="text-headline-md font-extrabold text-on-background dark:text-white"
+                                                id="ctrl-current-humidity">68</span>
+                                            <span
+                                                class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
+                                    <div class="text-right">
+                                        <p
+                                            class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
+                                            TARGET SETPOINT</p>
+                                        <div class="flex items-baseline gap-0.5 justify-end">
+                                            <span
+                                                class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
+                                                id="val-humidity-setpoint">75</span>
+                                            <span
+                                                class="text-body-sm font-bold text-primary dark:text-primary-fixed">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col gap-1.5 pt-1">
+                                    <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
+                                        <span>40%</span>
+                                        <span>90%</span>
+                                    </div>
+                                    <input id="slider-humidity" class="w-full h-1" max="90" min="40" step="1"
+                                        type="range" value="75" oninput="updateHumiditySetpoint(this.value)">
+                                </div>
+                            </div>
+
+                            <!-- Light Setpoint -->
+                            <div id="light-setpoint-card"
+                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <div
+                                            class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
+                                            <span class="material-symbols-outlined text-[20px]"
+                                                style="font-variation-settings: 'FILL' 1;">wb_incandescent</span>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-body-md font-bold text-on-background dark:text-white">
+                                                Light Intensity</h3>
+                                            <span
+                                                class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Grow
+                                                Lights</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
+                                    <div>
+                                        <p
+                                            class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
+                                            CURRENT LIGHT</p>
+                                        <div class="flex items-baseline gap-0.5">
+                                            <span
+                                                class="text-headline-md font-extrabold text-on-background dark:text-white"
+                                                id="ctrl-current-light">420</span>
+                                            <span
+                                                class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">µmol</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
+                                    <div class="text-right" id="light-target-display">
+                                        <p
+                                            class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
+                                            TARGET SETPOINT</p>
+                                        <div class="flex items-baseline gap-0.5 justify-end">
+                                            <span
+                                                class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
+                                                id="val-light-setpoint">500</span>
+                                            <span
+                                                class="text-body-sm font-bold text-primary dark:text-primary-fixed">µmol</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1.5 pt-1" id="light-slider-wrapper">
+                                    <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
+                                        <span>100 µmol</span>
+                                        <span>1000 µmol</span>
+                                    </div>
+                                    <input id="slider-light" class="w-full h-1" max="1000" min="100" step="10"
+                                        type="range" value="500" oninput="updateLightSetpoint(this.value)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Control Strategy Info Panel -->
+                        <div
+                            class="bg-surface-soft dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 text-body-sm text-on-surface-variant dark:text-zinc-300 space-y-2">
+                            <h4 class="font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[18px]">info</span> Control Logic
+                            </h4>
+                            <ul class="list-disc pl-4 space-y-1 text-caption">
+                                <li><strong>Cooling circulation fans</strong> engage if temperature rises 0.5°C above
+                                    setpoint.</li>
+                                <li><strong>High pressure misters</strong> turn on if humidity falls 3% below target and
+                                    turn off once target is reached.</li>
+                                <li><strong>Lighting cycle</strong> operates on automated schedules matching harvest
+                                    predictions.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- TAB C: YIELD AI -->
+                    <div id="tab-yield" class="hidden space-y-4">
+                        <div>
+                            <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Yield AI Analytics
+                            </h2>
+                            <p class="text-caption text-on-surface-variant dark:text-zinc-400">Batch #402 prediction
+                                model & optimizations.</p>
+                        </div>
+
+                        <!-- Pred & Confidence Bento Row -->
+                        <div class="grid grid-cols-5 gap-3.5">
+                            <!-- Target Card -->
+                            <div
+                                class="col-span-3 bg-surface-container-lowest dark:bg-zinc-900 rounded-2xl p-4 border border-muted dark:border-zinc-800 flex flex-col justify-between relative overflow-hidden shadow-sm">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-1 text-primary dark:text-primary-fixed">
+                                        <span class="material-symbols-outlined text-[20px]">psychology</span>
+                                        <span class="text-body-sm font-bold">Predicted Yield</span>
+                                    </div>
+                                    <span
+                                        class="bg-surface-soft dark:bg-zinc-800 text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700 text-[9px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                                        <span class="material-symbols-outlined text-[11px]">trending_up</span>+12% vs
+                                        Avg
+                                    </span>
+                                </div>
+                                <div class="my-4 flex items-baseline gap-1">
+                                    <span
+                                        class="text-[42px] font-extrabold text-brand-deep dark:text-white leading-none tracking-tighter"
+                                        id="val-predicted-yield">2.45</span>
+                                    <span
+                                        class="text-body-md font-bold text-on-surface-variant dark:text-zinc-400">kg</span>
+                                </div>
+                                <div>
+                                    <div class="w-full bg-surface-variant dark:bg-zinc-800 rounded-full h-2">
+                                        <div class="bg-primary dark:bg-primary-fixed h-2 rounded-full transition-all"
+                                            style="width: 81.6%" id="predicted-yield-progress"></div>
+                                    </div>
+                                    <div
+                                        class="flex justify-between mt-1 text-[8px] text-on-surface-variant dark:text-zinc-500 font-bold uppercase">
+                                        <span>Target: 2.20kg</span>
+                                        <span>Max: 3.0kg</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Confidence Arc Card -->
+                            <div
+                                class="col-span-2 bg-surface-container-lowest dark:bg-zinc-900 rounded-2xl p-4 border border-muted dark:border-zinc-800 flex flex-col items-center justify-center text-center shadow-sm relative">
+                                <svg class="w-20 h-20 transform -rotate-90" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" fill="transparent" r="40" stroke="#daeddb" stroke-width="8"
+                                        class="dark:stroke-zinc-800"></circle>
+                                    <circle cx="50" cy="50" fill="transparent" r="40" stroke="#166534"
+                                        stroke-dasharray="251.2" stroke-dashoffset="18" stroke-width="8"
+                                        class="dark:stroke-primary-fixed" id="confidence-score-circle"></circle>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-body-md font-extrabold text-primary dark:text-primary-fixed mt-1"
+                                        id="val-confidence-score">92%</span>
+                                    <span
+                                        class="text-[8px] font-bold text-slate-400 uppercase tracking-wide">Confidence</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Yield Trend Chart -->
+                        <div
+                            class="bg-surface-container-lowest dark:bg-zinc-900 rounded-2xl p-4 border border-muted dark:border-zinc-800 shadow-sm flex flex-col gap-3">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-1.5 text-primary dark:text-primary-fixed">
+                                    <span class="material-symbols-outlined text-[20px]">bar_chart</span>
+                                    <span class="text-body-sm font-bold">Yield History (Actual vs Pred)</span>
+                                </div>
+                                <select
+                                    class="bg-surface-soft dark:bg-zinc-800 border-border-muted dark:border-zinc-700 text-on-surface dark:text-white text-[10px] font-bold rounded-lg py-1 px-2 focus:ring-primary focus:border-primary">
+                                    <option>Last 5 Batches</option>
+                                    <option>Last 10 Batches</option>
+                                </select>
+                            </div>
+
+                            <!-- Custom Chart Frame -->
+                            <div
+                                class="h-44 w-full bg-surface-soft dark:bg-zinc-800/40 rounded-xl border border-border-muted dark:border-zinc-800 flex items-end p-3 gap-2 relative">
+                                <!-- Y Axis -->
+                                <div
+                                    class="absolute left-2.5 top-2.5 bottom-6 flex flex-col justify-between text-[8px] text-slate-400 font-bold">
+                                    <span>3.0 kg</span>
+                                    <span>2.0 kg</span>
+                                    <span>1.0 kg</span>
+                                    <span>0.0 kg</span>
+                                </div>
+                                <!-- Horizontal Grid Lines -->
+                                <div class="absolute left-8 right-2.5 top-2.5 h-px bg-slate-200 dark:bg-zinc-800"></div>
+                                <div
+                                    class="absolute left-8 right-2.5 top-[calc(33%+2.5px)] h-px bg-slate-200 dark:bg-zinc-800">
+                                </div>
+                                <div
+                                    class="absolute left-8 right-2.5 top-[calc(66%+2.5px)] h-px bg-slate-200 dark:bg-zinc-800">
+                                </div>
+                                <div class="absolute left-8 right-2.5 bottom-6 h-px bg-slate-200 dark:bg-zinc-800">
+                                </div>
+
+                                <!-- Columns wrapper -->
+                                <div class="flex-1 flex justify-around items-end ml-7 h-full pb-6 select-none z-10">
+                                    <!-- Batch 398 -->
+                                    <div class="flex flex-col items-center gap-1 group w-8">
+                                        <div class="flex items-end gap-0.5 h-28 justify-center">
+                                            <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[60%] rounded-t-sm"
+                                                title="Pred: 1.80kg"></div>
+                                            <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[65%] rounded-t-sm"
+                                                title="Actual: 1.95kg"></div>
+                                        </div>
+                                        <span class="text-[8px] font-bold text-slate-400">#398</span>
+                                    </div>
+                                    <!-- Batch 399 -->
+                                    <div class="flex flex-col items-center gap-1 group w-8">
+                                        <div class="flex items-end gap-0.5 h-28 justify-center">
+                                            <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[70%] rounded-t-sm"
+                                                title="Pred: 2.10kg"></div>
+                                            <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[68%] rounded-t-sm"
+                                                title="Actual: 2.05kg"></div>
+                                        </div>
+                                        <span class="text-[8px] font-bold text-slate-400">#399</span>
+                                    </div>
+                                    <!-- Batch 400 -->
+                                    <div class="flex flex-col items-center gap-1 group w-8">
+                                        <div class="flex items-end gap-0.5 h-28 justify-center">
+                                            <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[75%] rounded-t-sm"
+                                                title="Pred: 2.25kg"></div>
+                                            <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[78%] rounded-t-sm"
+                                                title="Actual: 2.34kg"></div>
+                                        </div>
+                                        <span class="text-[8px] font-bold text-slate-400">#400</span>
+                                    </div>
+                                    <!-- Batch 401 -->
+                                    <div class="flex flex-col items-center gap-1 group w-8">
+                                        <div class="flex items-end gap-0.5 h-28 justify-center">
+                                            <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[80%] rounded-t-sm"
+                                                title="Pred: 2.40kg"></div>
+                                            <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[75%] rounded-t-sm"
+                                                title="Actual: 2.25kg"></div>
+                                        </div>
+                                        <span class="text-[8px] font-bold text-slate-400">#401</span>
+                                    </div>
+                                    <!-- Batch 402 -->
+                                    <div class="flex flex-col items-center gap-1 group w-8">
+                                        <div class="flex items-end gap-0.5 h-28 justify-center relative">
+                                            <div class="w-2.5 bg-primary dark:bg-primary-fixed h-[82%] rounded-t-sm"
+                                                title="Current Pred: 2.45kg">
+                                                <div
+                                                    class="absolute -top-5 left-1/2 -translate-x-1/2 bg-surface dark:bg-zinc-800 border border-primary dark:border-primary-fixed px-1 py-0.5 rounded text-[8px] text-primary dark:text-primary-fixed font-bold whitespace-nowrap shadow-sm">
+                                                    2.45kg</div>
+                                            </div>
+                                            <div
+                                                class="w-2.5 border border-dashed border-border-muted dark:border-zinc-700 bg-transparent h-[10%] rounded-t-sm">
+                                            </div>
+                                        </div>
+                                        <span
+                                            class="text-[8px] font-extrabold text-primary dark:text-primary-fixed">#402</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="flex justify-center gap-4 text-[9px] font-bold text-on-surface-variant dark:text-zinc-400">
+                                <div class="flex items-center gap-1">
+                                    <div class="w-2 h-2 bg-surface-variant dark:bg-zinc-700 rounded-sm"></div> Predicted
+                                    Yield
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <div class="w-2 h-2 bg-secondary dark:bg-emerald-700 rounded-sm"></div> Actual Yield
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Optimization Recommendations -->
+                        <div class="space-y-3">
+                            <h3
+                                class="text-body-md font-bold text-primary dark:text-primary-fixed flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[20px]">tips_and_updates</span>
+                                AI Yield Optimizations
+                            </h3>
+
+                            <!-- Recommendation Cards -->
+                            <div class="space-y-2">
+                                <div class="bg-surface-soft dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-3 flex items-start gap-3 hover:border-primary transition-colors cursor-pointer group"
+                                    onclick="applyAIOptimization('mist')">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-surface-container-high dark:bg-zinc-800 text-secondary dark:text-primary-fixed flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[18px]">water_drop</span>
+                                    </div>
+                                    <div class="flex-1 space-y-1">
+                                        <div class="flex justify-between items-center">
+                                            <h4 class="text-body-sm font-bold text-on-surface dark:text-white">Optimize
+                                                Misting Targets</h4>
+                                            <span
+                                                class="text-[8px] font-extrabold bg-secondary-container text-on-secondary-container dark:bg-emerald-950 dark:text-emerald-400 px-1.5 py-0.5 rounded">HIGH</span>
+                                        </div>
+                                        <p
+                                            class="text-[11px] text-on-surface-variant dark:text-zinc-400 leading-normal">
+                                            Current humidity falls during peak illumination. Increase target to 80% to
+                                            accelerate growth (+0.12 kg prediction boost).</p>
+                                        <span
+                                            class="text-caption font-bold text-primary dark:text-primary-fixed flex items-center gap-0.5 mt-2">
+                                            Apply target setpoint <span
+                                                class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="bg-surface-soft dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-3 flex items-start gap-3 hover:border-primary transition-colors cursor-pointer group"
+                                    onclick="applyAIOptimization('temp')">
+                                    <div
+                                        class="w-8 h-8 rounded-full bg-surface-container-high dark:bg-zinc-800 text-secondary dark:text-primary-fixed flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[18px]">thermostat</span>
+                                    </div>
+                                    <div class="flex-1 space-y-1">
+                                        <div class="flex justify-between items-center">
+                                            <h4 class="text-body-sm font-bold text-on-surface dark:text-white">Reduce
+                                                Peak Temperature</h4>
+                                            <span
+                                                class="text-[8px] font-extrabold bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400 px-1.5 py-0.5 rounded">MEDIUM</span>
+                                        </div>
+                                        <p
+                                            class="text-[11px] text-on-surface-variant dark:text-zinc-400 leading-normal">
+                                            Reduce target temperature to 22.0°C to lock in substrate nutrients and
+                                            prevent moisture loss.</p>
+                                        <span
+                                            class="text-caption font-bold text-primary dark:text-primary-fixed flex items-center gap-0.5 mt-2">
+                                            Apply target setpoint <span
+                                                class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB D: GROW LOGS (MUSHROOM CROPS MANAGER) -->
+                    <div id="tab-grow-log" class="hidden space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Oyster
+                                    Mushroom Batches
+                                </h2>
+                                <p class="text-caption text-on-surface-variant dark:text-zinc-400">Track active racks &
+                                    substrate batches.</p>
+                            </div>
+                            <button onclick="openAddBatchModal()"
+                                class="bg-primary dark:bg-primary-container text-on-primary dark:text-white text-caption font-bold px-3 py-1.5 rounded-full flex items-center gap-1 active:scale-95 transition-all shadow-sm">
+                                <span class="material-symbols-outlined text-[16px]">add</span> Add Batch
+                            </button>
+                        </div>
+
+                        <!-- Active Batches Grid -->
+                        <div id="active-batches-list" class="space-y-3">
+                            <!-- Batches will be generated dynamically here -->
+                        </div>
+                    </div>
+
+                    <!-- TAB E: DIAGNOSTICS & ALERTS CENTER -->
+                    <div id="tab-diagnostics" class="hidden space-y-4">
+                        <div>
+                            <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Diagnostics &
+                                Alerts</h2>
+                            <p class="text-caption text-on-surface-variant dark:text-zinc-400">Trigger simulated
+                                environment anomalies & view alerts.</p>
+                        </div>
+
+                        <!-- SIMULATION TRIGGER CONSOLE -->
+                        <div
+                            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
+                            <h3
+                                class="text-body-md font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[18px]">bug_report</span> Anomaly Simulation
+                                Console
+                            </h3>
+                            <p class="text-[11px] text-on-surface-variant dark:text-zinc-400">Trigger failure cases to
+                                test alerting logic and notification banners.</p>
+                            <div class="grid grid-cols-2 gap-2 pt-1">
+                                <button onclick="triggerSimulatedAnomaly('co2')"
+                                    class="bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900 text-[10px] font-bold py-2 px-3 rounded-xl transition-all active:scale-95">
+                                    Spike CO2 Level
+                                </button>
+                                <button onclick="triggerSimulatedAnomaly('mister')"
+                                    class="bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900 text-[10px] font-bold py-2 px-3 rounded-xl transition-all active:scale-95">
+                                    Mister Jammed
+                                </button>
+                                <button onclick="triggerSimulatedAnomaly('temp')"
+                                    class="bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900 text-[10px] font-bold py-2 px-3 rounded-xl transition-all active:scale-95">
+                                    Overheat Anomaly
+                                </button>
+                                <button onclick="resetSimulationAnomalies()"
+                                    class="bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 border border-slate-300 dark:border-zinc-700 text-[10px] font-bold py-2 px-3 rounded-xl transition-all active:scale-95">
+                                    Reset Sensors (Clear)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ALERTS HISTORY LIST -->
+                        <div
+                            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-body-md font-bold text-brand-deep dark:text-primary-fixed">Alerts &
+                                    System Logs</h3>
+                                <button onclick="clearResolvedAlerts()"
+                                    class="text-[10px] text-primary dark:text-primary-fixed font-bold hover:underline">Clear
+                                    Resolved</button>
+                            </div>
+                            <div id="alerts-list-container" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                                <!-- Alerts populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB F: MORE PANEL (TASKS, EVENT LOGS & PROFILE) -->
+                    <div id="tab-profile" class="hidden space-y-4">
+                        <div
+                            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex items-center gap-4 relative">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/10 dark:bg-zinc-800 text-primary dark:text-primary-fixed flex items-center justify-center font-extrabold text-headline-sm">
+                                <span id="profile-initials">AR</span>
+                            </div>
+                            <div>
+                                <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed"
+                                    id="profile-name">Farm Administrator</h3>
+                                <p class="text-caption text-on-surface-variant dark:text-zinc-400" id="profile-email">
+                                    admin@kabutech.com</p>
+                                <span
+                                    class="text-[9px] uppercase tracking-widest font-extrabold bg-primary/15 dark:bg-emerald-950/40 text-primary dark:text-primary-fixed px-2 py-0.5 rounded border border-primary/20 dark:border-emerald-800"
+                                    id="profile-role-badge">Admin Role</span>
+                            </div>
+                            <button onclick="handleLogout()"
+                                class="absolute right-4 top-4 text-error-red hover:bg-error-container/30 p-1.5 rounded-full flex items-center justify-center transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">logout</span>
+                            </button>
+                        </div>
+
+                        <!-- Operations Tasks Checklist -->
+                        <div
+                            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h3
+                                    class="text-body-md font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[20px]">task_alt</span> Operations Task
+                                    List
+                                </h3>
+                                <button id="btn-add-task-modal" onclick="openAddTaskModal()"
+                                    class="text-[10px] bg-primary dark:bg-primary-container text-on-primary dark:text-white font-bold py-1 px-2.5 rounded-full hover:shadow-sm">Assign
+                                    Task</button>
+                            </div>
+                            <div id="tasks-container" class="space-y-2">
+                                <!-- Tasks generated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- System Audit Trails / Event Logs -->
+                        <div
+                            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
+                            <div class="flex justify-between items-center">
+                                <h3
+                                    class="text-body-md font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[20px]">receipt_long</span> System Audit
+                                    Logs
+                                </h3>
+                                <div class="relative w-1/2">
+                                    <input type="text" id="log-search-input" oninput="filterLogs()"
+                                        placeholder="Search logs..."
+                                        class="w-full text-[10px] bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 py-1 px-2.5 rounded-full outline-none focus:border-primary">
+                                </div>
+                            </div>
+                            <div id="logs-container"
+                                class="text-[10px] space-y-1.5 max-h-48 overflow-y-auto font-mono text-slate-600 dark:text-zinc-400 pr-1">
+                                <!-- Log rows dynamically generated -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MOBILE BOTTOM NAVIGATION BAR -->
+                <nav
+                    class="absolute bottom-0 left-0 w-full z-40 flex justify-around items-center px-2 pb-5 pt-2 bg-surface-container/95 dark:bg-zinc-900/95 border-t border-muted/80 dark:border-zinc-800 backdrop-blur-md rounded-t-2xl shadow-[0px_-4px_24px_rgba(15,31,20,0.08)] shrink-0 select-none">
+                    <button id="nav-home" onclick="switchTab('home')"
+                        class="flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed py-1 active:scale-95 transition-transform duration-150">
+                        <span class="material-symbols-outlined text-[22px]"
+                            style="font-variation-settings: 'FILL' 1;">home</span>
+                        <span class="text-[10px] font-bold mt-0.5">Home</span>
+                    </button>
+                    <button id="nav-controls" onclick="switchTab('controls')"
+                        class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150">
+                        <span class="material-symbols-outlined text-[22px]">settings_input_component</span>
+                        <span class="text-[10px] font-semibold mt-0.5">Controls</span>
+                    </button>
+                    <button id="nav-yield" onclick="switchTab('yield')"
+                        class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150">
+                        <span class="material-symbols-outlined text-[22px]">trending_up</span>
+                        <span class="text-[10px] font-semibold mt-0.5">Yield AI</span>
+                    </button>
+                    <button id="nav-grow-log" onclick="switchTab('grow-log')"
+                        class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150">
+                        <span class="material-symbols-outlined text-[22px]">psychology</span>
+                        <span class="text-[10px] font-semibold mt-0.5">Crops</span>
+                    </button>
+                    <button id="nav-diagnostics" onclick="switchTab('diagnostics')"
+                        class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 relative active:scale-95 transition-transform duration-150">
+                        <span id="nav-alert-dot"
+                            class="hidden absolute top-1 right-5 w-2 h-2 bg-error rounded-full animate-ping"></span>
+                        <span class="material-symbols-outlined text-[22px]">warning</span>
+                        <span class="text-[10px] font-semibold mt-0.5">Alerts</span>
+                    </button>
+                    <button id="nav-profile" onclick="switchTab('profile')"
+                        class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150">
+                        <span class="material-symbols-outlined text-[22px]">more_horiz</span>
+                        <span class="text-[10px] font-semibold mt-0.5">More</span>
+                    </button>
+                </nav>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- --- MODALS LAYER --- -->
+
+    <!-- Modal 1: Report Issue Modal -->
+    <div id="modal-report-issue"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div
+            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-3xl p-5 w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-error-red">report_problem</span> Report Farm Issue
+                </h3>
+                <button onclick="closeReportModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-full"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+
+            <form onsubmit="submitIssueReport(event)" class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                    <label
+                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Issue
+                        Title</label>
+                    <input id="report-title" type="text" required
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary outline-none text-on-surface dark:text-white"
+                        placeholder="e.g. Temperature reading spike">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Category</label>
+                        <select id="report-category"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                            <option value="Hardware">Hardware</option>
+                            <option value="Growth">Growth</option>
+                            <option value="Contamination">Contamination</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Severity</label>
+                        <select id="report-severity"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Sector</label>
+                        <select id="report-sector"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                            <option value="Sector A">Sector A</option>
+                            <option value="Sector B">Sector B</option>
+                            <option value="Sector C">Sector C</option>
+                            <option value="Sector D">Sector D</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Substrate
+                            Bag ID</label>
+                        <input id="report-bag" type="text"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white"
+                            placeholder="e.g. B-04">
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label
+                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Issue
+                        Description</label>
+                    <textarea id="report-desc" rows="3" required
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary outline-none text-on-surface dark:text-white"
+                        placeholder="Describe the anomaly or observation..."></textarea>
+                </div>
+
+                <button type="submit"
+                    class="bg-primary dark:bg-primary-container text-on-primary dark:text-white py-2.5 rounded-xl font-bold hover:bg-tertiary-container active:scale-95 transition-all text-center mt-2">
+                    Submit Report
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Add Substrate Batch Modal -->
+    <div id="modal-add-batch"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div
+            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-3xl p-5 w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                    <span class="material-symbols-outlined">inventory_2</span> Log New Batch
+                </h3>
+                <button onclick="closeAddBatchModal()"
+                    class="text-slate-400 hover:text-slate-600 p-1 rounded-full"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+
+            <form onsubmit="submitAddBatch(event)" class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                    <label
+                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Mushroom
+                        Type</label>
+                    <div
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2.5 px-3 text-body-sm text-on-surface dark:text-white">
+                        🍄 Oyster Mushroom (Pleurotus ostreatus)
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label
+                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Rack</label>
+                    <select id="batch-rack"
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2.5 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                        <option value="Rack A">Rack A</option>
+                        <option value="Rack B">Rack B</option>
+                        <option value="Rack C">Rack C</option>
+                        <option value="Rack D">Rack D</option>
+                        <option value="Rack E">Rack E</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Bag
+                            Quantity</label>
+                        <input id="batch-qty" type="number" required min="1" value="50"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Substrate</label>
+                        <select id="batch-substrate"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                            <option value="Sawdust + Bran">Sawdust + Bran</option>
+                            <option value="Straw Mix">Straw Mix</option>
+                            <option value="Coco Coir">Coco Coir</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label
+                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Inoculation
+                        Date</label>
+                    <input id="batch-date" type="date" required
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                </div>
+
+                <button type="submit"
+                    class="bg-primary dark:bg-primary-container text-on-primary dark:text-white py-2.5 rounded-xl font-bold hover:bg-tertiary-container active:scale-95 transition-all text-center mt-2">
+                    Inoculate & Register
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 3: Add Task Modal -->
+    <div id="modal-add-task"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div
+            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-3xl p-5 w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                    <span class="material-symbols-outlined">assignment_add</span> Assign Farm Task
+                </h3>
+                <button onclick="closeAddTaskModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-full"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+
+            <form onsubmit="submitAddTask(event)" class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1">
+                    <label
+                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Task
+                        Description</label>
+                    <input id="task-title" type="text" required
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white"
+                        placeholder="e.g. Harvest fruiting bags in Sector A">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Assign
+                            To</label>
+                        <select id="task-assignee"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                            <option value="Renz">Renz (Admin)</option>
+                            <option value="Sarah">Sarah (Staff)</option>
+                            <option value="Jojo">Jojo (Staff)</option>
+                            <option value="Staff Crew">Staff Crew</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label
+                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Priority</label>
+                        <select id="task-priority"
+                            class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                            <option value="Low">Low</option>
+                            <option value="Normal" selected>Normal</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="bg-primary dark:bg-primary-container text-on-primary dark:text-white py-2.5 rounded-xl font-bold hover:bg-tertiary-container active:scale-95 transition-all text-center mt-2">
+                    Assign Task
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCRIPT -->
+    <script>
+        // --- 1. CORE APPLICATION STATE ---
+        let state = {
+            currentUser: null,  // { email, role }
+            currentTab: 'home',
+            isPhoneFrame: true,
+            theme: 'light', // light or dark
+
+            // Environment States
+            tempSetpoint: 23.5,
+            humiditySetpoint: 75.0,
+            lightSetpoint: 500,
+            systemMode: 'auto', // auto or manual
+
+            currentTemp: 24.2,
+            currentHumidity: 68.0,
+            currentCO2: 420,
+            currentLight: 420,
+
+            deviceStates: {
+                fans: true,
+                misters: false,
+                lights: false
+            },
+
+            // Alerts
+            alerts: [], // { id, severity, title, desc, time, acknowledged: bool }
+            activeBannerAlert: null,
+
+            // Simulation flags
+            anomalies: {
+                co2Spike: false,
+                misterJammed: false,
+                overheat: false
+            },
+
+            // Grow Batches
+            growBatches: [], // { id, variety, bags, substrate, inocDate, stage }
+
+            // Tasks
+            tasks: [], // { id, title, assignee, priority, status }
+
+            // Logs
+            eventLogs: [] // { timestamp, msg, type: info/success/warning/error }
+        };
+
+        // Static initial databases if localStorage is empty
+        const defaultBatches = [
+            { id: 400, variety: 'Oyster Mushroom', rack: 'Rack A', bags: 120, substrate: 'Sawdust + Bran', inocDate: '2026-05-10', stage: 'Harvested' },
+            { id: 401, variety: 'Oyster Mushroom', rack: 'Rack B', bags: 80, substrate: 'Straw Mix', inocDate: '2026-05-18', stage: 'Fruiting' },
+            { id: 402, variety: 'Oyster Mushroom', rack: 'Rack C', bags: 65, substrate: 'Sawdust + Bran', inocDate: '2026-06-01', stage: 'Spawn Run' }
+        ];
+
+        const defaultTasks = [
+            { id: 1, title: 'Inoculate Batch #403 (White Button)', assignee: 'Sarah', priority: 'High', status: 'Pending' },
+            { id: 2, title: 'Check Sector B grow bags for mold', assignee: 'Jojo', priority: 'Normal', status: 'In Progress' },
+            { id: 3, title: 'Harvest ready fruiting bodies in Sector A', assignee: 'Renz', priority: 'High', status: 'Completed' }
+        ];
+
+        const defaultLogs = [
+            { timestamp: new Date(Date.now() - 3600000 * 3).toLocaleTimeString(), msg: 'Environmental auto-mode active.', type: 'success' },
+            { timestamp: new Date(Date.now() - 3600000 * 2).toLocaleTimeString(), msg: 'Batch #402 transitioned to Spawn Run.', type: 'info' },
+            { timestamp: new Date(Date.now() - 3600000).toLocaleTimeString(), msg: 'System check complete. All sensors healthy.', type: 'info' }
+        ];
+
+        // --- 2. INITIALIZATION ---
+        // Track previous sensor readings for trend calculation
+        let prevReadings = { temp: 24.2, humidity: 68.0, co2: 420, light: 420 };
+
+        window.addEventListener('load', () => {
+            initTime();
+            loadStateFromStorage();
+            updateSensorDOM();
+            updateGreeting();
+
+            // Set current date in inoculation form
+            document.getElementById('batch-date').value = new Date().toISOString().substring(0, 10);
+
+            // Start Dynamic Clock + Greeting refresh
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('statusBarTime').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                updateGreeting();
+            }, 60000);
+
+            // Simulation Engine Tick (Every 3 seconds)
+            setInterval(runSimulationTick, 3000);
+
+            // Autologin check if previously saved
+            if (state.currentUser) {
+                transitionToApp();
+            } else {
+                setTimeout(() => {
+                    // transition to login screen after loading
+                    document.getElementById('scene-loading').classList.add('opacity-0');
+                    setTimeout(() => {
+                        document.getElementById('scene-loading').classList.add('hidden');
+                        document.getElementById('scene-login').classList.remove('hidden');
+                    }, 500);
+                }, 1800);
+            }
+        });
+
+        // Dynamic time-based greeting
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const role = state.currentUser ? state.currentUser.role : 'admin';
+            const name = role === 'admin' ? 'Admin Renz' : 'Sarah';
+            let timeGreet = 'Good morning';
+            if (hour >= 12 && hour < 17) timeGreet = 'Good afternoon';
+            else if (hour >= 17) timeGreet = 'Good evening';
+            const greetEl = document.getElementById('greeting-text');
+            if (greetEl) greetEl.innerText = `${timeGreet}, ${name}`;
+        }
+
+        function initTime() {
+            const now = new Date();
+            document.getElementById('statusBarTime').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+
+        // --- 3. LOCALSTORAGE STATE LOGIC ---
+        function loadStateFromStorage() {
+            // Load Batches
+            const localBatches = localStorage.getItem('kb_batches');
+            if (localBatches) {
+                state.growBatches = JSON.parse(localBatches);
+            } else {
+                state.growBatches = [...defaultBatches];
+                saveBatches();
+            }
+
+            // Load Tasks
+            const localTasks = localStorage.getItem('kb_tasks');
+            if (localTasks) {
+                state.tasks = JSON.parse(localTasks);
+            } else {
+                state.tasks = [...defaultTasks];
+                saveTasks();
+            }
+
+            // Load Logs
+            const localLogs = localStorage.getItem('kb_logs');
+            if (localLogs) {
+                state.eventLogs = JSON.parse(localLogs);
+            } else {
+                state.eventLogs = [...defaultLogs];
+                saveLogs();
+            }
+
+            // Load Active User (session persist)
+            const localUser = localStorage.getItem('kb_user');
+            if (localUser) {
+                state.currentUser = JSON.parse(localUser);
+            }
+
+            // Setpoints
+            const setpoints = localStorage.getItem('kb_setpoints');
+            if (setpoints) {
+                const sp = JSON.parse(setpoints);
+                state.tempSetpoint = sp.temp;
+                state.humiditySetpoint = sp.humidity;
+                state.lightSetpoint = sp.light || 500;
+                state.systemMode = sp.mode;
+                state.deviceStates = sp.devices;
+            }
+
+            // Alerts
+            const localAlerts = localStorage.getItem('kb_alerts');
+            if (localAlerts) {
+                state.alerts = JSON.parse(localAlerts);
+            }
+
+            // Render views
+            renderBatches();
+            renderTasks();
+            renderLogs();
+            renderAlertsList();
+            syncControlsUI();
+        }
+
+        function saveBatches() { localStorage.setItem('kb_batches', JSON.stringify(state.growBatches)); }
+        function saveTasks() { localStorage.setItem('kb_tasks', JSON.stringify(state.tasks)); }
+        function saveLogs() { localStorage.setItem('kb_logs', JSON.stringify(state.eventLogs)); }
+        function saveAlerts() { localStorage.setItem('kb_alerts', JSON.stringify(state.alerts)); }
+
+        function saveSetpoints() {
+            localStorage.setItem('kb_setpoints', JSON.stringify({
+                temp: state.tempSetpoint,
+                humidity: state.humiditySetpoint,
+                light: state.lightSetpoint,
+                mode: state.systemMode,
+                devices: state.deviceStates
+            }));
+        }
+
+        function addLog(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            state.eventLogs.unshift({ timestamp: time, msg, type });
+            if (state.eventLogs.length > 100) state.eventLogs.pop(); // keep last 100
+            saveLogs();
+            renderLogs();
+        }
+
+        // --- 4. NAVIGATION / ROUTER ---
+        function switchTab(tabId) {
+            // Role-based access control - staff cannot access admin tabs
+            const userRole = state.currentUser ? state.currentUser.role : 'admin';
+            const staffRestrictedTabs = ['yield', 'grow-log']; // admin-only tabs
+
+            if (userRole === 'staff' && staffRestrictedTabs.includes(tabId)) {
+                showToast('Access denied. Admin privileges required.', 'warning');
+                return;
+            }
+
+            // Hide all tabs
+            const tabs = ['home', 'controls', 'yield', 'grow-log', 'diagnostics', 'profile'];
+            tabs.forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`nav-${t}`).className = "flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150";
+
+                // Remove FILL attribute from icons
+                const icon = document.getElementById(`nav-${t}`).querySelector('.material-symbols-outlined');
+                if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+            });
+
+            // Show active tab
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabId}`).className = "flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed py-1 active:scale-95 transition-transform duration-150";
+
+            const activeIcon = document.getElementById(`nav-${tabId}`).querySelector('.material-symbols-outlined');
+            if (activeIcon) activeIcon.style.fontVariationSettings = "'FILL' 1";
+
+            state.currentTab = tabId;
+        }
+
+        // Phone Frame Toggle Logic
+        function togglePhoneFrame() {
+            const wrapper = document.getElementById('app-wrapper');
+            const toggleText = document.getElementById('frame-toggle-text');
+            const notch = document.getElementById('notch');
+            const ind = document.getElementById('home-indicator');
+
+            if (state.isPhoneFrame) {
+                wrapper.className = "w-screen h-screen bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300";
+                notch.classList.add('hidden');
+                ind.classList.add('hidden');
+                toggleText.innerText = "Phone Frame View";
+                state.isPhoneFrame = false;
+            } else {
+                wrapper.className = "w-full max-w-[430px] h-[884px] phone-frame bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300";
+                notch.classList.remove('hidden');
+                ind.classList.remove('hidden');
+                toggleText.innerText = "Full Screen View";
+                state.isPhoneFrame = true;
+            }
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-toggle-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.innerText = 'dark_mode';
+                state.theme = 'light';
+                addLog('Switched interface to Light Mode.', 'info');
+            } else {
+                html.classList.add('dark');
+                icon.innerText = 'light_mode';
+                state.theme = 'dark';
+                addLog('Switched interface to Dark Mode.', 'info');
+            }
+        }
+
+        // --- 5. AUTHENTICATION LOGIC ---
+        let selectedLoginRole = 'admin';
+
+        function selectLoginRole(role) {
+            selectedLoginRole = role;
+            const pill = document.getElementById('login-toggle-pill');
+            const btnAdmin = document.getElementById('btn-login-admin');
+            const btnStaff = document.getElementById('btn-login-staff');
+            const emailInput = document.getElementById('login-email');
+            const passInput = document.getElementById('login-password');
+
+            if (role === 'admin') {
+                pill.style.transform = 'translateX(0)';
+                btnAdmin.className = 'flex-1 py-2 relative z-10 text-body-md font-bold text-primary dark:text-white transition-colors duration-300';
+                btnStaff.className = 'flex-1 py-2 relative z-10 text-body-sm text-on-surface-variant dark:text-zinc-400 transition-colors duration-300 hover:text-primary';
+                emailInput.value = 'admin@kabutech.com';
+                passInput.value = 'admin123';
+            } else {
+                pill.style.transform = 'translateX(100%)';
+                btnStaff.className = 'flex-1 py-2 relative z-10 text-body-md font-bold text-primary dark:text-white transition-colors duration-300';
+                btnAdmin.className = 'flex-1 py-2 relative z-10 text-body-sm text-on-surface-variant dark:text-zinc-400 transition-colors duration-300 hover:text-primary';
+                emailInput.value = 'staff@kabutech.com';
+                passInput.value = 'staff123';
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('login-password');
+            const icon = document.getElementById('login-password-toggle-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+
+        function showForgotPasswordToast() {
+            showToast('Reset password link sent to agricultural email account.', 'success');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const role = selectedLoginRole;
+
+            state.currentUser = { email, role };
+            localStorage.setItem('kb_user', JSON.stringify(state.currentUser));
+
+            // Set dynamic greeting and header values
+            document.getElementById('header-user-name').innerText = role === 'admin' ? 'Admin Renz' : 'Staff Sarah';
+            document.getElementById('header-user-avatar').innerText = role === 'admin' ? 'A' : 'S';
+            document.getElementById('profile-initials').innerText = role === 'admin' ? 'AR' : 'SS';
+            document.getElementById('profile-name').innerText = role === 'admin' ? 'Admin Renz' : 'Staff Sarah';
+            document.getElementById('profile-email').innerText = email;
+            document.getElementById('profile-role-badge').innerText = role === 'admin' ? 'Administrator Role' : 'Staff Operations Role';
+            updateGreeting();
+
+            // Show/Hide role specific buttons
+            const taskModalBtn = document.getElementById('btn-add-task-modal');
+            if (role === 'admin') {
+                taskModalBtn.classList.remove('hidden');
+            } else {
+                taskModalBtn.classList.add('hidden');
+            }
+
+            // Restrict nav tabs for Staff role
+            applyRoleNavRestrictions(role);
+
+            addLog(`User logged in as ${role === 'admin' ? 'Admin' : 'Staff'}.`, 'success');
+
+            showToast(`Sign in successful. Welcome, ${role}!`, 'success');
+            transitionToApp();
+        }
+
+        function transitionToApp() {
+            // Show loading overlay briefly
+            const loading = document.getElementById('scene-loading');
+            loading.classList.remove('hidden');
+            loading.classList.remove('opacity-0');
+            document.getElementById('loading-status').innerText = "Authenticating Farm Security...";
+
+            setTimeout(() => {
+                loading.classList.add('opacity-0');
+                document.getElementById('scene-login').classList.add('hidden');
+                document.getElementById('scene-app').classList.remove('hidden');
+
+                // Preset matching role visuals
+                const role = state.currentUser.role;
+                document.getElementById('header-user-name').innerText = role === 'admin' ? 'Admin Renz' : 'Staff Sarah';
+                document.getElementById('header-user-avatar').innerText = role === 'admin' ? 'A' : 'S';
+                document.getElementById('profile-initials').innerText = role === 'admin' ? 'AR' : 'SS';
+                document.getElementById('profile-name').innerText = role === 'admin' ? 'Admin Renz' : 'Staff Sarah';
+                document.getElementById('profile-email').innerText = state.currentUser.email;
+                document.getElementById('profile-role-badge').innerText = role === 'admin' ? 'Administrator Role' : 'Staff Operations Role';
+                updateGreeting();
+
+                const taskModalBtn = document.getElementById('btn-add-task-modal');
+                if (role === 'admin') {
+                    taskModalBtn.classList.remove('hidden');
+                } else {
+                    taskModalBtn.classList.add('hidden');
+                }
+
+                // Restrict nav tabs for Staff role
+                applyRoleNavRestrictions(role);
+
+                // Always land on dashboard
+                switchTab('home');
+
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                }, 500);
+            }, 1000);
+        }
+
+        function handleLogout() {
+            state.currentUser = null;
+            localStorage.removeItem('kb_user');
+
+            const loading = document.getElementById('scene-loading');
+            loading.classList.remove('hidden');
+            loading.classList.remove('opacity-0');
+            document.getElementById('loading-status').innerText = "Logging out securely...";
+
+            setTimeout(() => {
+                document.getElementById('scene-app').classList.add('hidden');
+                document.getElementById('scene-login').classList.remove('hidden');
+                loading.classList.add('opacity-0');
+                setTimeout(() => {
+                    loading.classList.add('hidden');
+                }, 500);
+            }, 1000);
+        }
+
+        // --- 6. TOAST MESSAGES ---
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            let bgClass = "bg-primary dark:bg-emerald-950 text-white";
+            let icon = "check_circle";
+
+            if (type === 'error') {
+                bgClass = "bg-error text-white dark:bg-red-950/90";
+                icon = "error";
+            } else if (type === 'warning') {
+                bgClass = "bg-warning-gold text-slate-900";
+                icon = "warning";
+            } else if (type === 'info') {
+                bgClass = "bg-slate-800 text-white dark:bg-zinc-800";
+                icon = "info";
+            }
+
+            toast.className = `flex items-center gap-2 px-4 py-3 rounded-2xl shadow-xl transition-all duration-300 transform translate-y-[-20px] opacity-0 pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined text-[18px] shrink-0">${icon}</span>
+                <span class="text-caption font-bold">${msg}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
+            }, 50);
+
+            // Hide and remove
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-20px]', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // --- 7. SENSOR SIMULATION ENGINE ---
+        function runSimulationTick() {
+            // Apply slight random fluctuations
+            let tempDelta = (Math.random() - 0.5) * 0.15;
+            let humDelta = (Math.random() - 0.5) * 0.6;
+            let co2Delta = Math.floor((Math.random() - 0.5) * 6);
+            let lightDelta = Math.floor((Math.random() - 0.5) * 4);
+
+            // Environmental changes based on active devices
+            if (state.deviceStates.fans) {
+                // Cooling Temp
+                state.currentTemp -= 0.15;
+                if (state.currentTemp < 20.0) state.currentTemp = 20.0;
+
+                // CO2 drops when fans circulate fresh air
+                state.currentCO2 -= 12;
+                if (state.currentCO2 < 380) state.currentCO2 = 380;
+            } else {
+                // Ambient Temp drifts towards 26.5°C
+                if (state.currentTemp < 26.5) {
+                    state.currentTemp += 0.08;
+                } else {
+                    state.currentTemp -= 0.08;
+                }
+            }
+
+            if (state.deviceStates.misters) {
+                if (!state.anomalies.misterJammed) {
+                    // Hum increases
+                    state.currentHumidity += 1.4;
+                    if (state.currentHumidity > 95.0) state.currentHumidity = 95.0;
+                }
+            } else {
+                // Humidity drops towards ambient 52.0%
+                if (state.currentHumidity > 52.0) {
+                    state.currentHumidity -= 0.4;
+                }
+            }
+
+            if (state.deviceStates.lights) {
+                // Grow light is on
+                state.currentLight = Math.min(850, state.currentLight + 80);
+                // Heat slightly spikes from lamps
+                state.currentTemp += 0.05;
+            } else {
+                state.currentLight = Math.max(120, state.currentLight - 60);
+            }
+
+            // Apply anomalies overrides
+            if (state.anomalies.co2Spike) {
+                state.currentCO2 += 35;
+                if (state.currentCO2 > 1200) state.currentCO2 = 1200;
+            } else {
+                // slow decay towards normal if anomaly cleared
+                if (state.currentCO2 > 420 && !state.deviceStates.fans) {
+                    state.currentCO2 -= 10;
+                }
+            }
+
+            if (state.anomalies.misterJammed) {
+                state.deviceStates.misters = false;
+                state.currentHumidity -= 1.8;
+                if (state.currentHumidity < 40.0) state.currentHumidity = 40.0;
+            }
+
+            if (state.anomalies.overheat) {
+                state.currentTemp += 0.35;
+                if (state.currentTemp > 34.0) state.currentTemp = 34.0;
+            }
+
+            // Normal fluctuations applying
+            state.currentTemp += tempDelta;
+            state.currentHumidity += humDelta;
+            state.currentCO2 += co2Delta;
+            state.currentLight += lightDelta;
+
+            // Constrain normal limits
+            if (state.currentTemp < 10) state.currentTemp = 10;
+            if (state.currentTemp > 45) state.currentTemp = 45;
+            if (state.currentHumidity < 20) state.currentHumidity = 20;
+            if (state.currentHumidity > 100) state.currentHumidity = 100;
+            if (state.currentCO2 < 300) state.currentCO2 = 300;
+            if (state.currentCO2 > 2000) state.currentCO2 = 2000;
+            if (state.currentLight < 0) state.currentLight = 0;
+            if (state.currentLight > 1000) state.currentLight = 1000;
+
+            // AUTOMATED ENVIRONMENT CONTROL LOOP
+            if (state.systemMode === 'auto') {
+                let autoLogged = false;
+                // Temperature control
+                if (state.currentTemp > state.tempSetpoint + 0.5) {
+                    if (!state.deviceStates.fans) {
+                        state.deviceStates.fans = true;
+                        addLog(`Auto Mode triggered Circulation Fans ON. (Temp: ${state.currentTemp.toFixed(1)}°C, Target: ${state.tempSetpoint}°C)`, 'success');
+                    }
+                } else if (state.currentTemp <= state.tempSetpoint) {
+                    if (state.deviceStates.fans) {
+                        state.deviceStates.fans = false;
+                        addLog(`Auto Mode triggered Circulation Fans OFF. (Temp: ${state.currentTemp.toFixed(1)}°C reached setpoint)`, 'success');
+                    }
+                }
+
+                // Humidity control
+                if (state.currentHumidity < state.humiditySetpoint - 3.0) {
+                    if (!state.deviceStates.misters && !state.anomalies.misterJammed) {
+                        state.deviceStates.misters = true;
+                        addLog(`Auto Mode triggered Misting System ON. (Humidity: ${state.currentHumidity.toFixed(0)}%, Target: ${state.humiditySetpoint}%)`, 'success');
+                    }
+                } else if (state.currentHumidity >= state.humiditySetpoint) {
+                    if (state.deviceStates.misters) {
+                        state.deviceStates.misters = false;
+                        addLog(`Auto Mode triggered Misting System OFF. (Humidity: ${state.currentHumidity.toFixed(0)}% reached setpoint)`, 'success');
+                    }
+                }
+            }
+
+            // AUTOMATIC ANOMALY TRIP ALERTS
+            checkAlertThresholds();
+
+            // Refresh UI
+            updateSensorDOM();
+            syncControlsUI();
+            updateSystemStatusMsg();
+        }
+
+        function updateSensorDOM() {
+            // Calculate trends vs previous reading
+            function getTrendHTML(current, previous, unit, higherIsBad) {
+                const diff = current - previous;
+                const pct = previous !== 0 ? Math.abs((diff / previous) * 100).toFixed(1) : '0.0';
+                const isUp = diff > 0.05;
+                const isDown = diff < -0.05;
+                if (!isUp && !isDown) {
+                    return `<span class="flex items-center text-on-surface-variant dark:text-zinc-400 text-caption bg-surface-variant dark:bg-zinc-800 px-1.5 py-0.5 rounded-full"><span class="material-symbols-outlined text-[12px] mr-0.5">horizontal_rule</span> 0%</span>`;
+                }
+                const alertTrend = (higherIsBad && isUp) || (!higherIsBad && isDown);
+                const color = alertTrend ? 'text-error-red bg-error-container' : 'text-success-green dark:text-emerald-400 bg-success-green/10 dark:bg-emerald-950/40';
+                const arrow = isUp ? 'arrow_upward' : 'arrow_downward';
+                return `<span class="flex items-center ${color} text-caption px-1.5 py-0.5 rounded-full"><span class="material-symbols-outlined text-[12px] mr-0.5">${arrow}</span>${pct}%</span>`;
+            }
+
+            // Update sensor metric displays
+            document.getElementById('sensor-temp').innerText = `${state.currentTemp.toFixed(1)}°C`;
+            document.getElementById('sensor-humidity').innerText = `${state.currentHumidity.toFixed(0)}%`;
+            document.getElementById('sensor-light').innerText = `${state.currentLight.toFixed(0)} µmol`;
+            document.getElementById('sensor-co2').innerText = `${state.currentCO2} ppm`;
+
+            // Update live trend badges
+            document.getElementById('temp-trend').outerHTML = getTrendHTML(state.currentTemp, prevReadings.temp, '°C', false).replace('<span class="flex', '<span id="temp-trend" class="flex');
+            document.getElementById('humidity-trend').outerHTML = getTrendHTML(state.currentHumidity, prevReadings.humidity, '%', false).replace('<span class="flex', '<span id="humidity-trend" class="flex');
+            document.getElementById('light-trend').outerHTML = getTrendHTML(state.currentLight, prevReadings.light, 'µmol', false).replace('<span class="flex', '<span id="light-trend" class="flex');
+
+            // Store current as previous for next tick
+            prevReadings = { temp: state.currentTemp, humidity: state.currentHumidity, co2: state.currentCO2, light: state.currentLight };
+
+            // Set stats elements in setpoint page too
+            document.getElementById('ctrl-current-temp').innerText = state.currentTemp.toFixed(1);
+            document.getElementById('ctrl-current-humidity').innerText = state.currentHumidity.toFixed(0);
+            const ctrlLight = document.getElementById('ctrl-current-light');
+            if (ctrlLight) ctrlLight.innerText = state.currentLight.toFixed(0);
+
+            // Sync visual alert state for CO2 card borders
+            const co2Card = document.getElementById('sensor-co2-card');
+            const co2Icon = document.getElementById('sensor-co2-icon-bg');
+            if (state.currentCO2 > 800) {
+                co2Card.className = "bg-surface-container-lowest dark:bg-zinc-900 border border-error/50 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group glow-red transition-all duration-300";
+                co2Icon.className = "bg-error-container p-2 rounded-lg text-error-red";
+                document.getElementById('co2-trend').className = "flex items-center text-error-red font-caption text-caption bg-error-container px-1.5 py-0.5 rounded-full";
+                document.getElementById('co2-trend').innerHTML = `<span class="material-symbols-outlined text-[12px] mr-0.5 animate-bounce">arrow_upward</span> DANGER`;
+            } else {
+                co2Card.className = "bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300";
+                co2Icon.className = "bg-surface-soft dark:bg-zinc-800 p-2 rounded-lg text-primary dark:text-primary-fixed";
+                const co2Trend = document.getElementById('co2-trend');
+                if (co2Trend) {
+                    co2Trend.className = "flex items-center text-on-surface-variant dark:text-zinc-400 text-caption bg-surface-variant dark:bg-zinc-800 px-1.5 py-0.5 rounded-full";
+                    co2Trend.innerHTML = `<span class="material-symbols-outlined text-[12px] mr-0.5">horizontal_rule</span><span class="co2-trend-val">0%</span>`;
+                }
+            }
+        }
+
+        // Dynamic system status message
+        function updateSystemStatusMsg() {
+            const el = document.getElementById('system-status-msg');
+            if (!el) return;
+            const activeAlerts = state.alerts.filter(a => !a.acknowledged);
+            if (activeAlerts.length > 0) {
+                el.innerText = `⚠ ${activeAlerts.length} active alert${activeAlerts.length > 1 ? 's' : ''}. Review alerts tab.`;
+                el.className = 'text-body-sm text-error-red dark:text-red-400 font-semibold transition-colors duration-500';
+            } else if (state.deviceStates.misters && !state.anomalies.misterJammed) {
+                el.innerText = 'Misting system active. Humidity rising.';
+                el.className = 'text-body-sm text-primary dark:text-primary-fixed transition-colors duration-500';
+            } else if (state.deviceStates.fans) {
+                el.innerText = 'Circulation fans running. Cooling in progress.';
+                el.className = 'text-body-sm text-primary dark:text-primary-fixed transition-colors duration-500';
+            } else {
+                el.innerText = 'System is running optimally.';
+                el.className = 'text-body-sm text-on-surface-variant dark:text-zinc-400 transition-colors duration-500';
+            }
+        }
+
+        // Check environmental readings against bounds to auto-create alerts
+        function checkAlertThresholds() {
+            let triggered = false;
+
+            // CO2 Alarm
+            if (state.currentCO2 > 800) {
+                triggerSystemAlert('CO2 Levels High', `CO2 level reached ${state.currentCO2} ppm in Sector B. Ventilation triggered.`, 'warning');
+                triggered = true;
+            }
+
+            // Mister jamming or humidity drop
+            if (state.currentHumidity < 50.0) {
+                triggerSystemAlert('Critical Low Humidity', `Humidity dropped to ${state.currentHumidity.toFixed(0)}%. Crop growth impaired!`, 'critical');
+                triggered = true;
+            }
+
+            // Temp Spike
+            if (state.currentTemp > 28.5) {
+                triggerSystemAlert('High Temperature Alarm', `Crop temperature spiked to ${state.currentTemp.toFixed(1)}°C. Cooldown fans enabled.`, 'critical');
+                triggered = true;
+            }
+
+            // Adjust indicator dot on navigation bar
+            const dot = document.getElementById('nav-alert-dot');
+            const activeAlerts = state.alerts.filter(a => !a.acknowledged);
+            if (activeAlerts.length > 0) {
+                dot.classList.remove('hidden');
+
+                // Show banner of the highest severity alert
+                const topAlert = activeAlerts[0];
+                document.getElementById('active-alert-banner').classList.remove('hidden');
+                document.getElementById('banner-alert-title').innerText = topAlert.title;
+                document.getElementById('banner-alert-desc').innerText = topAlert.desc;
+
+                // Red glowing border on app shell
+                document.getElementById('system-error-glow').classList.remove('border-error/0');
+                document.getElementById('system-error-glow').classList.add('border-error/20');
+            } else {
+                dot.classList.add('hidden');
+                document.getElementById('active-alert-banner').classList.add('hidden');
+                document.getElementById('system-error-glow').classList.remove('border-error/20');
+                document.getElementById('system-error-glow').classList.add('border-error/0');
+            }
+        }
+
+        function triggerSystemAlert(title, desc, severity) {
+            // Check if alert already active to avoid duplicates
+            const activeDuplicate = state.alerts.find(a => a.title === title && !a.acknowledged);
+            if (activeDuplicate) return;
+
+            const newAlert = {
+                id: Date.now(),
+                severity,
+                title,
+                desc,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                acknowledged: false
+            };
+
+            state.alerts.unshift(newAlert);
+            saveAlerts();
+            renderAlertsList();
+            showToast(`${title} alert triggered!`, 'error');
+            addLog(`SYSTEM ALERT: ${title} (${desc})`, 'error');
+        }
+
+        function dismissBannerAlert() {
+            // Acknowledge all active alerts
+            state.alerts.forEach(a => a.acknowledged = true);
+            saveAlerts();
+            renderAlertsList();
+            document.getElementById('active-alert-banner').classList.add('hidden');
+            document.getElementById('system-error-glow').classList.remove('border-error/20');
+            document.getElementById('system-error-glow').classList.add('border-error/0');
+            showToast('All active alerts acknowledged.', 'info');
+            addLog('Alerts cleared and acknowledged by operator.', 'info');
+        }
+
+        // --- 8. DEVICE OVERRIDES & AUTO SYNC ---
+        function setSystemMode(mode) {
+            state.systemMode = mode;
+            saveSetpoints();
+            syncControlsUI();
+
+            const btnAuto = document.getElementById('mode-btn-auto');
+            const btnManual = document.getElementById('mode-btn-manual');
+
+            if (mode === 'auto') {
+                btnAuto.className = "px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300";
+                btnManual.className = "px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300";
+                addLog('Environmental system Mode set to AUTO.', 'success');
+                showToast('Automatic control loop enabled.', 'info');
+            } else {
+                btnManual.className = "px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300";
+                btnAuto.className = "px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300";
+                addLog('Environmental system Mode set to MANUAL override.', 'warning');
+                showToast('Manual device controls enabled.', 'warning');
+            }
+        }
+
+        function toggleQuickDevice(device) {
+            if (state.systemMode === 'auto') {
+                showToast('Cannot toggle in Auto Mode. Switch to Manual Override first!', 'warning');
+                return;
+            }
+
+            state.deviceStates[device] = !state.deviceStates[device];
+
+            // Check mister jammed anomaly block
+            if (device === 'misters' && state.anomalies.misterJammed) {
+                state.deviceStates.misters = false;
+                showToast('Mister toggle failed: Hardware feedback reports Mister Jammed.', 'error');
+                return;
+            }
+
+            saveSetpoints();
+            syncControlsUI();
+            addLog(`Operator manually toggled ${device.toUpperCase()} ${state.deviceStates[device] ? 'ON' : 'OFF'}.`, 'warning');
+            showToast(`${device.charAt(0).toUpperCase() + device.slice(1)} toggled ${state.deviceStates[device] ? 'ON' : 'OFF'}.`, 'success');
+        }
+
+        function syncControlsUI() {
+            const homeBadge = document.getElementById('home-mode-badge');
+            homeBadge.innerText = state.systemMode === 'auto' ? 'Auto Mode' : 'Manual Mode';
+
+            // Quick toggles UI sync
+            const devices = ['fans', 'misters', 'lights'];
+            devices.forEach(d => {
+                const btn = document.getElementById(`btn-quick-${d}`);
+                const status = document.getElementById(`status-quick-${d}`);
+                const icon = document.getElementById(`icon-quick-${d}`);
+                const dot = document.getElementById(`sim-${d}-dot`);
+
+                if (state.deviceStates[d]) {
+                    btn.className = "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-primary bg-surface-soft dark:bg-emerald-950/20 dark:border-primary-fixed transition-all glow-green select-none";
+                    status.className = "text-[9px] text-primary dark:text-primary-fixed font-bold uppercase tracking-wide";
+                    status.innerText = "Active";
+                    dot.className = "w-1.5 h-1.5 rounded-full bg-success-green animate-ping";
+
+                    if (d === 'fans') {
+                        icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-spin-slow";
+                    } else if (d === 'misters') {
+                        icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-pulse";
+                    } else {
+                        icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-pulse";
+                    }
+                } else {
+                    btn.className = "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-muted dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-all select-none";
+                    status.className = "text-[9px] text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide";
+                    status.innerText = "Off";
+                    icon.className = "material-symbols-outlined text-[20px] text-on-surface-variant dark:text-zinc-400";
+                    dot.className = "w-1.5 h-1.5 rounded-full bg-slate-300";
+                }
+            });
+
+            // Sliders Readout sync
+            document.getElementById('val-temp-setpoint').innerText = state.tempSetpoint.toFixed(1);
+            document.getElementById('val-humidity-setpoint').innerText = state.humiditySetpoint;
+            document.getElementById('slider-temp').value = state.tempSetpoint;
+            document.getElementById('slider-humidity').value = state.humiditySetpoint;
+            const lightSp = document.getElementById('val-light-setpoint');
+            const lightSlider = document.getElementById('slider-light');
+            if (lightSp) lightSp.innerText = state.lightSetpoint;
+            if (lightSlider) lightSlider.value = state.lightSetpoint;
+        }
+
+        function updateTempSetpoint(val) {
+            state.tempSetpoint = parseFloat(val);
+            document.getElementById('val-temp-setpoint').innerText = state.tempSetpoint.toFixed(1);
+            saveSetpoints();
+        }
+
+        function updateHumiditySetpoint(val) {
+            state.humiditySetpoint = parseInt(val);
+            document.getElementById('val-humidity-setpoint').innerText = state.humiditySetpoint;
+            saveSetpoints();
+        }
+
+        function updateLightSetpoint(val) {
+            state.lightSetpoint = parseInt(val);
+            const el = document.getElementById('val-light-setpoint');
+            if (el) el.innerText = state.lightSetpoint;
+            saveSetpoints();
+        }
+
+        // --- 9. AI OPTIMIZATION RECOMMENDATIONS ---
+        function applyAIOptimization(type) {
+            if (type === 'mist') {
+                updateHumiditySetpoint(80);
+                addLog('AI Optimization applied: target humidity set to 80%.', 'success');
+                showToast('Humidity target set to 80% (AI Optimized)', 'success');
+            } else if (type === 'temp') {
+                updateTempSetpoint(22.0);
+                addLog('AI Optimization applied: target temp set to 22.0°C.', 'success');
+                showToast('Temperature target set to 22.0°C (AI Optimized)', 'success');
+            }
+            syncControlsUI();
+        }
+
+        // --- 10. GROW BATCHES / CROPS LOG MANAGER ---
+        function renderBatches() {
+            const container = document.getElementById('active-batches-list');
+            container.innerHTML = '';
+
+            state.growBatches.forEach(batch => {
+                let statusColor = "bg-primary/10 border-primary/20 text-primary dark:bg-emerald-950 dark:text-emerald-400";
+                if (batch.stage === 'Harvested') statusColor = "bg-slate-100 border-slate-200 text-slate-600 dark:bg-zinc-800 dark:text-zinc-400";
+
+                let icon = "eco";
+
+                const card = document.createElement('div');
+                card.className = "bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-3 relative";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed">
+                                <span class="material-symbols-outlined text-[18px]">${icon}</span>
+                            </div>
+                            <div>
+                                <h4 class="text-body-sm font-bold text-on-background dark:text-white">${batch.rack || 'Rack A'} — Oyster Mushroom</h4>
+                                <p class="text-[10px] text-on-surface-variant dark:text-zinc-400">Batch #${batch.id} • ${batch.bags} bags • ${batch.substrate}</p>
+                            </div>
+                        </div>
+                        <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded border ${statusColor}">${batch.stage}</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-[10px] text-slate-500 font-bold border-t border-slate-50 dark:border-zinc-800 pt-2 mt-1">
+                        <span>Inoculated: ${batch.inocDate}</span>
+                        ${batch.stage !== 'Harvested' ? `
+                            <div class="flex gap-1.5">
+                                <button onclick="advanceBatchStage(${batch.id})" class="text-primary dark:text-primary-fixed hover:underline flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-[12px]">arrow_circle_right</span> Next Stage
+                                </button>
+                                <button onclick="markBatchHarvested(${batch.id})" class="text-secondary dark:text-emerald-400 hover:underline flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-[12px]">done_all</span> Harvested
+                                </button>
+                            </div>
+                        ` : `
+                            <span class="text-slate-400">Cycle Complete</span>
+                        `}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function advanceBatchStage(id) {
+            const batch = state.growBatches.find(b => b.id === id);
+            if (!batch) return;
+
+            const stages = ['Inoculation', 'Spawn Run', 'Primordia', 'Fruiting', 'Harvested'];
+            const currIdx = stages.indexOf(batch.stage);
+            if (currIdx < stages.length - 1) {
+                batch.stage = stages[currIdx + 1];
+                saveBatches();
+                renderBatches();
+                addLog(`Batch #${id} (${batch.rack || batch.variety}) advanced to ${batch.stage}.`, 'success');
+                showToast(`Batch #${id} advanced to ${batch.stage}.`, 'success');
+            }
+        }
+
+        function markBatchHarvested(id) {
+            const batch = state.growBatches.find(b => b.id === id);
+            if (!batch) return;
+
+            batch.stage = 'Harvested';
+            saveBatches();
+            renderBatches();
+            addLog(`Batch #${id} (${batch.variety}) marked harvested. Final yield logged to statistics.`, 'success');
+            showToast(`Batch #${id} successfully harvested!`, 'success');
+        }
+
+        function openAddBatchModal() {
+            document.getElementById('modal-add-batch').classList.remove('hidden');
+        }
+
+        function closeAddBatchModal() {
+            document.getElementById('modal-add-batch').classList.add('hidden');
+        }
+
+        function submitAddBatch(e) {
+            e.preventDefault();
+            const rack = document.getElementById('batch-rack').value;
+            const bags = parseInt(document.getElementById('batch-qty').value);
+            const substrate = document.getElementById('batch-substrate').value;
+            const inocDate = document.getElementById('batch-date').value;
+
+            const newBatch = {
+                id: 400 + state.growBatches.length + 1,
+                variety: 'Oyster Mushroom',
+                rack,
+                bags,
+                substrate,
+                inocDate,
+                stage: 'Inoculation'
+            };
+
+            state.growBatches.unshift(newBatch);
+            saveBatches();
+            renderBatches();
+            closeAddBatchModal();
+            addLog(`Created new crop log: Batch #${newBatch.id} - ${rack} (${bags} Bags).`, 'success');
+            showToast(`Substrate Batch #${newBatch.id} registered.`, 'success');
+        }
+
+        // --- 11. ANOMALY SIMULATOR ---
+        function triggerSimulatedAnomaly(type) {
+            if (type === 'co2') {
+                state.anomalies.co2Spike = true;
+                state.currentCO2 = 820;
+                addLog('ANOMALY SIMULATION: High CO2 gas release spiked levels.', 'error');
+                showToast('CO2 release spike triggered.', 'warning');
+            } else if (type === 'mister') {
+                state.anomalies.misterJammed = true;
+                state.deviceStates.misters = false;
+                addLog('ANOMALY SIMULATION: Misting nozzle feedback failure detected.', 'error');
+                showToast('Misting Jam anomaly triggered.', 'error');
+            } else if (type === 'temp') {
+                state.anomalies.overheat = true;
+                state.currentTemp = 29.5;
+                addLog('ANOMALY SIMULATION: HVAC heater unit stuck in heating loop.', 'error');
+                showToast('Overheating Stuck-Relay triggered.', 'error');
+            }
+        }
+
+        function resetSimulationAnomalies() {
+            state.anomalies.co2Spike = false;
+            state.anomalies.misterJammed = false;
+            state.anomalies.overheat = false;
+
+            // Re-normalize readings
+            state.currentCO2 = 420;
+            state.currentTemp = 23.5;
+            state.currentHumidity = 75.0;
+
+            // Clear inactive alarms
+            state.alerts = state.alerts.map(a => {
+                a.acknowledged = true;
+                return a;
+            });
+            saveAlerts();
+            renderAlertsList();
+            checkAlertThresholds();
+
+            addLog('Anomaly sensors recalibrated. Operational variables reset.', 'success');
+            showToast('All anomaly states cleared.', 'success');
+        }
+
+        function renderAlertsList() {
+            const container = document.getElementById('alerts-list-container');
+            container.innerHTML = '';
+
+            const unacknowledged = state.alerts.filter(a => !a.acknowledged);
+            const acknowledged = state.alerts.filter(a => a.acknowledged);
+
+            const displayAlerts = [...unacknowledged, ...acknowledged];
+
+            if (displayAlerts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 text-slate-400 dark:text-zinc-500 font-bold text-caption flex flex-col items-center justify-center gap-1">
+                        <span class="material-symbols-outlined text-[32px] text-success-green">check_circle</span>
+                        No active anomalies detected
+                    </div>
+                `;
+                return;
+            }
+
+            displayAlerts.forEach(alert => {
+                let colorClass = "bg-warning-gold/15 border-warning-gold/30 text-warning-gold";
+                if (alert.severity === 'critical') colorClass = "bg-error/15 border-error/30 text-error-red dark:text-red-400";
+                if (alert.acknowledged) colorClass = "bg-slate-50 dark:bg-zinc-800/40 border-slate-200 dark:border-zinc-800 text-slate-400 dark:text-zinc-500";
+
+                const div = document.createElement('div');
+                div.className = `p-3 rounded-xl border flex items-start justify-between ${colorClass}`;
+                div.innerHTML = `
+                    <div class="space-y-1 pr-4">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-body-sm font-extrabold">${alert.title}</span>
+                            ${alert.acknowledged ? `<span class="text-[8px] bg-slate-200 dark:bg-zinc-800 px-1 py-0.5 rounded font-bold uppercase">ACK</span>` : `<span class="text-[8px] bg-red-600 text-white px-1 py-0.5 rounded font-bold uppercase">ACTIVE</span>`}
+                        </div>
+                        <p class="text-[11px] leading-normal opacity-90">${alert.desc}</p>
+                        <p class="text-[9px] font-bold opacity-60">Fired at ${alert.time}</p>
+                    </div>
+                    ${!alert.acknowledged ? `
+                        <button onclick="acknowledgeSingleAlert(${alert.id})" class="text-[9px] uppercase font-bold shrink-0 bg-white/20 hover:bg-white/40 dark:bg-zinc-800 dark:hover:bg-zinc-700 py-1 px-2 rounded-lg border border-current">Acknowledge</button>
+                    ` : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function acknowledgeSingleAlert(id) {
+            const alert = state.alerts.find(a => a.id === id);
+            if (alert) {
+                alert.acknowledged = true;
+                saveAlerts();
+                renderAlertsList();
+                checkAlertThresholds();
+                showToast(`Alert "${alert.title}" acknowledged.`, 'info');
+                addLog(`Alert resolved: "${alert.title}"`, 'success');
+            }
+        }
+
+        function clearResolvedAlerts() {
+            state.alerts = state.alerts.filter(a => !a.acknowledged);
+            saveAlerts();
+            renderAlertsList();
+            showToast('Cleared resolved alerts log.', 'info');
+        }
+
+        // --- 12. TASK MANAGER BOARD ---
+        function renderTasks() {
+            const container = document.getElementById('tasks-container');
+            container.innerHTML = '';
+
+            if (state.tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-6 gap-2 text-slate-400 dark:text-zinc-500">
+                        <span class="material-symbols-outlined text-[32px]">task_alt</span>
+                        <p class="text-[11px] font-semibold">No tasks assigned today.</p>
+                    </div>`;
+                return;
+            }
+
+            state.tasks.forEach(task => {
+                let statusIcon = "radio_button_unchecked";
+                let statusColor = "text-slate-300 dark:text-zinc-600 hover:text-primary";
+                let cardAccent = "border-slate-100 dark:border-zinc-800";
+                let titleClass = "text-body-sm font-semibold text-on-surface dark:text-white";
+
+                if (task.status === 'In Progress') {
+                    statusIcon = "pending";
+                    statusColor = "text-warning-gold";
+                    cardAccent = "border-l-2 border-l-warning-gold border-t border-r border-b border-slate-100 dark:border-zinc-800";
+                    titleClass = "text-body-sm font-semibold text-on-surface dark:text-white";
+                } else if (task.status === 'Completed') {
+                    statusIcon = "check_circle";
+                    statusColor = "text-success-green dark:text-emerald-500";
+                    cardAccent = "border-slate-100 dark:border-zinc-800 opacity-60";
+                    titleClass = "text-body-sm font-medium line-through text-slate-400 dark:text-zinc-500";
+                }
+
+                let priorityPill = "";
+                if (task.priority === 'High') {
+                    priorityPill = `<span class="text-[8px] font-extrabold uppercase tracking-wide bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400 px-1.5 py-0.5 rounded-full">High</span>`;
+                } else if (task.priority === 'Normal') {
+                    priorityPill = `<span class="text-[8px] font-extrabold uppercase tracking-wide bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400 px-1.5 py-0.5 rounded-full">Normal</span>`;
+                } else if (task.priority === 'Low') {
+                    priorityPill = `<span class="text-[8px] font-extrabold uppercase tracking-wide bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400 px-1.5 py-0.5 rounded-full">Low</span>`;
+                }
+
+                const isAdmin = state.currentUser && state.currentUser.role === 'admin';
+
+                const item = document.createElement('div');
+                item.className = `flex items-center gap-3 p-3 rounded-2xl border bg-white dark:bg-zinc-900 ${cardAccent} transition-all`;
+                item.innerHTML = `
+                    <button onclick="cycleTaskStatus(${task.id})" class="shrink-0 transition-colors ${statusColor}" title="Cycle status">
+                        <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">${statusIcon}</span>
+                    </button>
+                    <div class="flex-1 min-w-0">
+                        <p class="${titleClass} truncate">${task.title}</p>
+                        <div class="flex items-center gap-1.5 mt-1">
+                            <span class="text-[9px] text-slate-400 dark:text-zinc-500 font-medium">${task.assignee}</span>
+                            <span class="text-slate-300 dark:text-zinc-700">•</span>
+                            ${priorityPill}
+                        </div>
+                    </div>
+                    ${isAdmin ? `<button onclick="deleteTask(${task.id})" class="shrink-0 text-slate-200 dark:text-zinc-700 hover:text-error-red dark:hover:text-red-400 transition-colors p-1 rounded-full"><span class="material-symbols-outlined text-[16px]">delete</span></button>` : ''}
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function cycleTaskStatus(id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (!task) return;
+
+            if (task.status === 'Pending') {
+                task.status = 'In Progress';
+                showToast(`Task status: In Progress (${task.assignee})`, 'info');
+                addLog(`Task "${task.title}" status updated to IN PROGRESS.`, 'info');
+            } else if (task.status === 'In Progress') {
+                task.status = 'Completed';
+                showToast(`Task completed! Well done.`, 'success');
+                addLog(`Task "${task.title}" completed by ${task.assignee}.`, 'success');
+            } else {
+                task.status = 'Pending';
+                addLog(`Task "${task.title}" reverted to PENDING.`, 'warning');
+            }
+            saveTasks();
+            renderTasks();
+        }
+
+        function deleteTask(id) {
+            state.tasks = state.tasks.filter(t => t.id !== id);
+            saveTasks();
+            renderTasks();
+            showToast('Task removed from board.', 'info');
+        }
+
+        function openAddTaskModal() {
+            document.getElementById('modal-add-task').classList.remove('hidden');
+        }
+
+        function closeAddTaskModal() {
+            document.getElementById('modal-add-task').classList.add('hidden');
+        }
+
+        function submitAddTask(e) {
+            e.preventDefault();
+            const title = document.getElementById('task-title').value;
+            const assignee = document.getElementById('task-assignee').value;
+            const priority = document.getElementById('task-priority').value;
+
+            const newTask = {
+                id: Date.now(),
+                title,
+                assignee,
+                priority,
+                status: 'Pending'
+            };
+
+            state.tasks.unshift(newTask);
+            saveTasks();
+            renderTasks();
+            closeAddTaskModal();
+
+            document.getElementById('task-title').value = '';
+
+            addLog(`Assigned task: "${title}" to ${assignee}.`, 'success');
+            showToast(`Task successfully assigned.`, 'success');
+        }
+
+        // --- 13. AUDIT LOGS DISPLAY ---
+        function renderLogs() {
+            const container = document.getElementById('logs-container');
+            container.innerHTML = '';
+
+            state.eventLogs.forEach(log => {
+                let color = "text-slate-600 dark:text-zinc-400";
+                if (log.type === 'success') color = "text-emerald-600 dark:text-emerald-400 font-semibold";
+                if (log.type === 'error') color = "text-error-red dark:text-red-400 font-semibold";
+                if (log.type === 'warning') color = "text-amber-600 dark:text-amber-400";
+
+                const row = document.createElement('div');
+                row.className = `py-0.5 border-b border-slate-50 dark:border-zinc-900 last:border-none ${color}`;
+                row.innerHTML = `[${log.timestamp}] ${log.msg}`;
+                container.appendChild(row);
+            });
+        }
+
+        function filterLogs() {
+            const val = document.getElementById('log-search-input').value.toLowerCase();
+            const rows = document.getElementById('logs-container').children;
+
+            for (let i = 0; i < rows.length; i++) {
+                const text = rows[i].innerText.toLowerCase();
+                if (text.includes(val)) {
+                    rows[i].classList.remove('hidden');
+                } else {
+                    rows[i].classList.add('hidden');
+                }
+            }
+        }
+
+        // --- 14. OPERATIONAL ISSUE REPORT SYSTEM ---
+        function openReportModal() {
+            document.getElementById('modal-report-issue').classList.remove('hidden');
+        }
+
+        function closeReportModal() {
+            document.getElementById('modal-report-issue').classList.add('hidden');
+        }
+
+        // Role-based navigation restriction for Staff users
+        function applyRoleNavRestrictions(role) {
+            const adminOnlyNavs = ['nav-yield', 'nav-grow-log'];
+            const adminOnlyTabs = ['tab-yield', 'tab-grow-log'];
+
+            if (role === 'staff') {
+                adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+                adminOnlyTabs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+                // Hide target setpoints (sliders) for staff
+                ['slider-temp', 'slider-humidity', 'light-slider-wrapper', 'light-target-display'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('hidden');
+                });
+                const tempTarget = document.getElementById('val-temp-setpoint');
+                if (tempTarget) tempTarget.closest('.text-right') && tempTarget.closest('.text-right').classList.add('hidden');
+                const humTarget = document.getElementById('val-humidity-setpoint');
+                if (humTarget) humTarget.closest('.text-right') && humTarget.closest('.text-right').classList.add('hidden');
+                // Show report button for staff home
+                const staffReport = document.getElementById('staff-report-btn');
+                if (staffReport) staffReport.classList.remove('hidden');
+                // Hide report button from admin home
+                const adminReport = document.getElementById('admin-report-btn');
+                if (adminReport) adminReport.classList.add('hidden');
+            } else {
+                adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
+                adminOnlyTabs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
+                // Show target setpoints for admin
+                ['slider-temp', 'slider-humidity', 'light-slider-wrapper', 'light-target-display'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.remove('hidden');
+                });
+                const tempTarget = document.getElementById('val-temp-setpoint');
+                if (tempTarget) tempTarget.closest('.text-right') && tempTarget.closest('.text-right').classList.remove('hidden');
+                const humTarget = document.getElementById('val-humidity-setpoint');
+                if (humTarget) humTarget.closest('.text-right') && humTarget.closest('.text-right').classList.remove('hidden');
+                // Hide report from staff, show nothing in admin home (report is staff-only)
+                const staffReport = document.getElementById('staff-report-btn');
+                if (staffReport) staffReport.classList.add('hidden');
+                const adminReport = document.getElementById('admin-report-btn');
+                if (adminReport) adminReport.classList.add('hidden');
+            }
+        }
+
+        function submitIssueReport(e) {
+            e.preventDefault();
+            const title = document.getElementById('report-title').value;
+            const category = document.getElementById('report-category').value;
+            const severity = document.getElementById('report-severity').value;
+            const sector = document.getElementById('report-sector').value;
+            const bag = document.getElementById('report-bag').value;
+            const desc = document.getElementById('report-desc').value;
+
+            // Log report entry in Event log
+            const logMsg = `[REPORTED ISSUE] ${title} (${category} | ${severity} | ${sector} ${bag ? '| Bag ' + bag : ''}): ${desc}`;
+            addLog(logMsg, severity === 'Critical' || severity === 'High' ? 'error' : 'warning');
+
+            // Push notification banner trigger if critical
+            if (severity === 'Critical' || severity === 'High') {
+                triggerSystemAlert(`Reported Issue: ${title}`, `High severity report in ${sector}. ${desc}`, 'critical');
+            }
+
+            closeReportModal();
+            showToast('Issue report logged and sent to Administrator queue.', 'success');
+
+            // Reset Form fields
+            document.getElementById('report-title').value = '';
+            document.getElementById('report-bag').value = '';
+            document.getElementById('report-desc').value = '';
+        }
+    </script>
+</body>
+
+
+</html>
