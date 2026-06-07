@@ -511,6 +511,7 @@
                                         Temperature</p>
                                     <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                         id="sensor-temp">24.2°C</p>
+                                    <canvas id="spark-temp" height="24" class="w-full mt-1 opacity-60"></canvas>
                                 </div>
                             </div>
                             <!-- Humidity -->
@@ -533,10 +534,10 @@
                                     </span>
                                 </div>
                                 <div class="relative z-10">
-                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">Humidity
-                                    </p>
+                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">Humidity</p>
                                     <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                         id="sensor-humidity">68%</p>
+                                    <canvas id="spark-humidity" height="24" class="w-full mt-1 opacity-60"></canvas>
                                 </div>
                             </div>
                             <!-- Light -->
@@ -558,10 +559,10 @@
                                     </span>
                                 </div>
                                 <div class="relative z-10">
-                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">Light
-                                        Intensity</p>
+                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">Light Intensity</p>
                                     <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                         id="sensor-light">420 µmol</p>
+                                    <canvas id="spark-light" height="24" class="w-full mt-1 opacity-60"></canvas>
                                 </div>
                             </div>
                             <!-- CO2 -->
@@ -579,17 +580,22 @@
                                     <span id="co2-trend"
                                         class="flex items-center text-on-surface-variant dark:text-zinc-400 text-caption bg-surface-variant dark:bg-zinc-800 px-1.5 py-0.5 rounded-full">
                                         <span
-                                            class="material-symbols-outlined text-[12px] mr-0.5">horizontal_rule</span><span
-                                            class="co2-trend-val">0%</span>
+                                            class="material-symbols-outlined text-[12px] mr-0.5">horizontal_rule</span><span class="co2-trend-val">0%</span>
                                     </span>
                                 </div>
                                 <div class="relative z-10">
-                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">CO2 Level
-                                    </p>
+                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">CO2 Level</p>
                                     <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                         id="sensor-co2">420 ppm</p>
+                                    <canvas id="spark-co2" height="24" class="w-full mt-1 opacity-60"></canvas>
                                 </div>
                             </div>
+                        </div>
+
+                        <!-- Last Updated Timestamp -->
+                        <div class="flex items-center justify-end gap-1 -mt-1">
+                            <span class="material-symbols-outlined text-[11px] text-on-surface-variant dark:text-zinc-500">update</span>
+                            <span class="text-[10px] text-on-surface-variant dark:text-zinc-500 font-medium">Updated <span id="last-updated-ts">just now</span></span>
                         </div>
 
                         <!-- Manual Overrides Quick Panel -->
@@ -614,6 +620,7 @@
                                     <span class="text-[10px] font-bold">Fans</span>
                                     <span id="status-quick-fans"
                                         class="text-[9px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
+                                    <span id="uptime-quick-fans" class="text-[8px] text-on-surface-variant dark:text-zinc-500"></span>
                                 </button>
                                 <!-- Misters -->
                                 <button id="btn-quick-misters" onclick="toggleQuickDevice('misters')"
@@ -626,6 +633,7 @@
                                     <span class="text-[10px] font-bold">Mister</span>
                                     <span id="status-quick-misters"
                                         class="text-[9px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
+                                    <span id="uptime-quick-misters" class="text-[8px] text-on-surface-variant dark:text-zinc-500"></span>
                                 </button>
                                 <!-- Lights -->
                                 <button id="btn-quick-lights" onclick="toggleQuickDevice('lights')"
@@ -638,6 +646,7 @@
                                     <span class="text-[10px] font-bold">Grow Light</span>
                                     <span id="status-quick-lights"
                                         class="text-[9px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
+                                    <span id="uptime-quick-lights" class="text-[8px] text-on-surface-variant dark:text-zinc-500"></span>
                                 </button>
                             </div>
                             <!-- Active Particle animations wrapper (only visible when Misting or Fans are spinning) -->
@@ -702,12 +711,17 @@
                                     parameters & rules.</p>
                             </div>
                             <!-- Mode Toggle Switch -->
-                            <div
-                                class="flex items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-700 rounded-full p-1 shadow-sm">
-                                <button id="mode-btn-auto" onclick="setSystemMode('auto')"
-                                    class="px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300">Auto</button>
-                                <button id="mode-btn-manual" onclick="setSystemMode('manual')"
-                                    class="px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300">Manual</button>
+                            <div class="flex flex-col items-end gap-1">
+                                <div
+                                    class="flex items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-700 rounded-full p-1 shadow-sm">
+                                    <button id="mode-btn-auto" onclick="setSystemMode('auto')"
+                                        class="px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300">Auto</button>
+                                    <button id="mode-btn-manual" onclick="confirmManualMode()"
+                                        class="px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300">Manual</button>
+                                </div>
+                                <span id="mode-warning-label" class="hidden text-[9px] font-bold text-warning-gold flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-[11px]">warning</span> Manual override active
+                                </span>
                             </div>
                         </div>
 
@@ -830,62 +844,51 @@
                                 </div>
                             </div>
 
-                            <!-- Light Setpoint -->
-                            <div id="light-setpoint-card"
-                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
-                                <div class="flex justify-between items-start">
-                                    <div class="flex items-center gap-2">
-                                        <div
-                                            class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
-                                            <span class="material-symbols-outlined text-[20px]"
-                                                style="font-variation-settings: 'FILL' 1;">wb_incandescent</span>
-                                        </div>
-                                        <div>
-                                            <h3 class="text-body-md font-bold text-on-background dark:text-white">
-                                                Light Intensity</h3>
-                                            <span
-                                                class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Grow
-                                                Lights</span>
-                                        </div>
+                        <!-- Light Setpoint -->
+                        <div id="light-setpoint-card"
+                            class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
+                                        <span class="material-symbols-outlined text-[20px]"
+                                            style="font-variation-settings: 'FILL' 1;">wb_incandescent</span>
                                     </div>
-                                </div>
-                                <div
-                                    class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
                                     <div>
-                                        <p
-                                            class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
-                                            CURRENT LIGHT</p>
-                                        <div class="flex items-baseline gap-0.5">
-                                            <span
-                                                class="text-headline-md font-extrabold text-on-background dark:text-white"
-                                                id="ctrl-current-light">420</span>
-                                            <span
-                                                class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">µmol</span>
-                                        </div>
+                                        <h3 class="text-body-md font-bold text-on-background dark:text-white">
+                                            Light Intensity</h3>
+                                        <span
+                                            class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Grow Lights</span>
                                     </div>
-                                    <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
-                                    <div class="text-right" id="light-target-display">
-                                        <p
-                                            class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
-                                            TARGET SETPOINT</p>
-                                        <div class="flex items-baseline gap-0.5 justify-end">
-                                            <span
-                                                class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
-                                                id="val-light-setpoint">500</span>
-                                            <span
-                                                class="text-body-sm font-bold text-primary dark:text-primary-fixed">µmol</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col gap-1.5 pt-1" id="light-slider-wrapper">
-                                    <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
-                                        <span>100 µmol</span>
-                                        <span>1000 µmol</span>
-                                    </div>
-                                    <input id="slider-light" class="w-full h-1" max="1000" min="100" step="10"
-                                        type="range" value="500" oninput="updateLightSetpoint(this.value)">
                                 </div>
                             </div>
+                            <div
+                                class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
+                                <div>
+                                    <p class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">CURRENT LIGHT</p>
+                                    <div class="flex items-baseline gap-0.5">
+                                        <span class="text-headline-md font-extrabold text-on-background dark:text-white" id="ctrl-current-light">420</span>
+                                        <span class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">µmol</span>
+                                    </div>
+                                </div>
+                                <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
+                                <div class="text-right" id="light-target-display">
+                                    <p class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">TARGET SETPOINT</p>
+                                    <div class="flex items-baseline gap-0.5 justify-end">
+                                        <span class="text-headline-md font-extrabold text-primary dark:text-primary-fixed" id="val-light-setpoint">500</span>
+                                        <span class="text-body-sm font-bold text-primary dark:text-primary-fixed">µmol</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5 pt-1" id="light-slider-wrapper">
+                                <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
+                                    <span>100 µmol</span>
+                                    <span>1000 µmol</span>
+                                </div>
+                                <input id="slider-light" class="w-full h-1" max="1000" min="100" step="10"
+                                    type="range" value="500" oninput="updateLightSetpoint(this.value)">
+                            </div>
+                        </div>
                         </div>
 
                         <!-- Control Strategy Info Panel -->
@@ -1144,11 +1147,9 @@
                     <div id="tab-grow-log" class="hidden space-y-4">
                         <div class="flex justify-between items-center">
                             <div>
-                                <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Oyster
-                                    Mushroom Batches
+                                <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Oyster Mushroom Batches
                                 </h2>
-                                <p class="text-caption text-on-surface-variant dark:text-zinc-400">Track active racks &
-                                    substrate batches.</p>
+                                <p class="text-caption text-on-surface-variant dark:text-zinc-400">Track active racks & substrate batches.</p>
                             </div>
                             <button onclick="openAddBatchModal()"
                                 class="bg-primary dark:bg-primary-container text-on-primary dark:text-white text-caption font-bold px-3 py-1.5 rounded-full flex items-center gap-1 active:scale-95 transition-all shadow-sm">
@@ -1164,15 +1165,24 @@
 
                     <!-- TAB E: DIAGNOSTICS & ALERTS CENTER -->
                     <div id="tab-diagnostics" class="hidden space-y-4">
-                        <div>
-                            <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Diagnostics &
-                                Alerts</h2>
-                            <p class="text-caption text-on-surface-variant dark:text-zinc-400">Trigger simulated
-                                environment anomalies & view alerts.</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-headline-sm font-bold text-on-background dark:text-white">Diagnostics & Alerts</h2>
+                                <p class="text-caption text-on-surface-variant dark:text-zinc-400">Monitor anomalies & system alerts.</p>
+                            </div>
+                            <span id="alerts-count-badge" class="hidden text-[10px] font-extrabold bg-error text-white px-2 py-0.5 rounded-full">0 Active</span>
+                        </div>
+
+                        <!-- Alert Severity Filter -->
+                        <div class="flex gap-1 bg-surface-soft dark:bg-zinc-800 rounded-xl p-1">
+                            <button onclick="filterAlerts('all')" id="alert-filter-all" class="flex-1 text-[10px] font-bold py-1 rounded-lg bg-white dark:bg-zinc-700 text-primary dark:text-primary-fixed shadow-sm transition-all">All</button>
+                            <button onclick="filterAlerts('active')" id="alert-filter-active" class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Active</button>
+                            <button onclick="filterAlerts('critical')" id="alert-filter-critical" class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Critical</button>
+                            <button onclick="filterAlerts('resolved')" id="alert-filter-resolved" class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Resolved</button>
                         </div>
 
                         <!-- SIMULATION TRIGGER CONSOLE -->
-                        <div
+                        <div id="simulation-console"
                             class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
                             <h3
                                 class="text-body-md font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
@@ -1207,9 +1217,6 @@
                             <div class="flex justify-between items-center">
                                 <h3 class="text-body-md font-bold text-brand-deep dark:text-primary-fixed">Alerts &
                                     System Logs</h3>
-                                <button onclick="clearResolvedAlerts()"
-                                    class="text-[10px] text-primary dark:text-primary-fixed font-bold hover:underline">Clear
-                                    Resolved</button>
                             </div>
                             <div id="alerts-list-container" class="space-y-2 max-h-60 overflow-y-auto pr-1">
                                 <!-- Alerts populated dynamically -->
@@ -1240,6 +1247,47 @@
                             </button>
                         </div>
 
+                        <!-- Farm Health Score -->
+                        <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <div class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
+                                    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1">monitor_heart</span>
+                                </div>
+                                <div>
+                                    <p class="text-body-sm font-bold text-on-background dark:text-white">Farm Health Score</p>
+                                    <p class="text-[10px] text-on-surface-variant dark:text-zinc-400" id="health-score-breakdown">Temp • Humidity • CO2 • Alerts</p>
+                                </div>
+                            </div>
+                            <div id="farm-health-score" class="flex items-baseline gap-0.5">
+                                <span class="text-success-green dark:text-emerald-400 font-extrabold text-headline-sm">100</span>
+                                <span class="text-on-surface-variant dark:text-zinc-400 text-caption">/100</span>
+                            </div>
+                        </div>
+
+                        <!-- Shift Summary -->
+                        <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
+                            <h3 class="text-body-md font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[18px]">today</span> Today's Summary
+                            </h3>
+                            <div class="grid grid-cols-3 gap-2" id="shift-summary-grid">
+                                <div class="flex flex-col items-center bg-surface-soft dark:bg-zinc-800 rounded-xl p-2.5 gap-0.5">
+                                    <span class="material-symbols-outlined text-[18px] text-success-green" style="font-variation-settings:'FILL' 1">task_alt</span>
+                                    <span class="text-headline-sm font-extrabold text-on-background dark:text-white" id="summary-tasks-done">0</span>
+                                    <span class="text-[9px] text-on-surface-variant dark:text-zinc-400 text-center">Tasks Done</span>
+                                </div>
+                                <div class="flex flex-col items-center bg-surface-soft dark:bg-zinc-800 rounded-xl p-2.5 gap-0.5">
+                                    <span class="material-symbols-outlined text-[18px] text-error-red" style="font-variation-settings:'FILL' 1">warning</span>
+                                    <span class="text-headline-sm font-extrabold text-on-background dark:text-white" id="summary-alerts">0</span>
+                                    <span class="text-[9px] text-on-surface-variant dark:text-zinc-400 text-center">Alerts Fired</span>
+                                </div>
+                                <div class="flex flex-col items-center bg-surface-soft dark:bg-zinc-800 rounded-xl p-2.5 gap-0.5">
+                                    <span class="material-symbols-outlined text-[18px] text-primary dark:text-primary-fixed" style="font-variation-settings:'FILL' 1">eco</span>
+                                    <span class="text-headline-sm font-extrabold text-on-background dark:text-white" id="summary-batches">0</span>
+                                    <span class="text-[9px] text-on-surface-variant dark:text-zinc-400 text-center">Active Racks</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Operations Tasks Checklist -->
                         <div
                             class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
@@ -1253,13 +1301,20 @@
                                     class="text-[10px] bg-primary dark:bg-primary-container text-on-primary dark:text-white font-bold py-1 px-2.5 rounded-full hover:shadow-sm">Assign
                                     Task</button>
                             </div>
+                            <!-- Task filter tabs -->
+                            <div class="flex gap-1 bg-surface-soft dark:bg-zinc-800 rounded-xl p-1">
+                                <button onclick="filterTasks('all')" id="task-filter-all" class="flex-1 text-[10px] font-bold py-1 rounded-lg bg-white dark:bg-zinc-700 text-primary dark:text-primary-fixed shadow-sm transition-all">All</button>
+                                <button onclick="filterTasks('Pending')" id="task-filter-pending" class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Pending</button>
+                                <button onclick="filterTasks('In Progress')" id="task-filter-inprogress" class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Active</button>
+                                <button onclick="filterTasks('Completed')" id="task-filter-completed" class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Done</button>
+                            </div>
                             <div id="tasks-container" class="space-y-2">
                                 <!-- Tasks generated dynamically -->
                             </div>
                         </div>
 
                         <!-- System Audit Trails / Event Logs -->
-                        <div
+                        <div id="system-audit-logs"
                             class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
                             <div class="flex justify-between items-center">
                                 <h3
@@ -1296,12 +1351,12 @@
                         <span class="material-symbols-outlined text-[22px]">settings_input_component</span>
                         <span class="text-[10px] font-semibold mt-0.5">Controls</span>
                     </button>
-                    <button id="nav-yield" onclick="switchTab('yield')"
+                    <button id="nav-yield" onclick="switchTab('yield')" style="display:none"
                         class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150">
                         <span class="material-symbols-outlined text-[22px]">trending_up</span>
                         <span class="text-[10px] font-semibold mt-0.5">Yield AI</span>
                     </button>
-                    <button id="nav-grow-log" onclick="switchTab('grow-log')"
+                    <button id="nav-grow-log" onclick="switchTab('grow-log')" style="display:none"
                         class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150">
                         <span class="material-symbols-outlined text-[22px]">psychology</span>
                         <span class="text-[10px] font-semibold mt-0.5">Crops</span>
@@ -1309,7 +1364,7 @@
                     <button id="nav-diagnostics" onclick="switchTab('diagnostics')"
                         class="flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 relative active:scale-95 transition-transform duration-150">
                         <span id="nav-alert-dot"
-                            class="hidden absolute top-1 right-5 w-2 h-2 bg-error rounded-full animate-ping"></span>
+                            class="hidden absolute top-0 right-3 min-w-[16px] h-4 bg-error text-white text-[8px] font-extrabold rounded-full flex items-center justify-center px-1">0</span>
                         <span class="material-symbols-outlined text-[22px]">warning</span>
                         <span class="text-[10px] font-semibold mt-0.5">Alerts</span>
                     </button>
@@ -1430,18 +1485,14 @@
 
             <form onsubmit="submitAddBatch(event)" class="flex flex-col gap-3">
                 <div class="flex flex-col gap-1">
-                    <label
-                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Mushroom
-                        Type</label>
-                    <div
-                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2.5 px-3 text-body-sm text-on-surface dark:text-white">
+                    <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Mushroom Type</label>
+                    <div class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2.5 px-3 text-body-sm text-on-surface dark:text-white">
                         🍄 Oyster Mushroom (Pleurotus ostreatus)
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-1">
-                    <label
-                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Rack</label>
+                    <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Rack</label>
                     <select id="batch-rack"
                         class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2.5 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
                         <option value="Rack A">Rack A</option>
@@ -1454,15 +1505,12 @@
 
                 <div class="grid grid-cols-2 gap-2">
                     <div class="flex flex-col gap-1">
-                        <label
-                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Bag
-                            Quantity</label>
+                        <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Bag Quantity</label>
                         <input id="batch-qty" type="number" required min="1" value="50"
                             class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label
-                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Substrate</label>
+                        <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Substrate</label>
                         <select id="batch-substrate"
                             class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
                             <option value="Sawdust + Bran">Sawdust + Bran</option>
@@ -1473,9 +1521,7 @@
                 </div>
 
                 <div class="flex flex-col gap-1">
-                    <label
-                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Inoculation
-                        Date</label>
+                    <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Inoculation Date</label>
                     <input id="batch-date" type="date" required
                         class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
                 </div>
@@ -1503,19 +1549,22 @@
 
             <form onsubmit="submitAddTask(event)" class="flex flex-col gap-3">
                 <div class="flex flex-col gap-1">
-                    <label
-                        class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Task
-                        Description</label>
+                    <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Task Title</label>
                     <input id="task-title" type="text" required
                         class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white"
                         placeholder="e.g. Harvest fruiting bags in Sector A">
                 </div>
 
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Description <span class="font-normal normal-case">(optional)</span></label>
+                    <textarea id="task-desc" rows="2"
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white resize-none"
+                        placeholder="Additional context or instructions..."></textarea>
+                </div>
+
                 <div class="grid grid-cols-2 gap-2">
                     <div class="flex flex-col gap-1">
-                        <label
-                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Assign
-                            To</label>
+                        <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Assign To</label>
                         <select id="task-assignee"
                             class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
                             <option value="Renz">Renz (Admin)</option>
@@ -1525,8 +1574,7 @@
                         </select>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <label
-                            class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Priority</label>
+                        <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Priority</label>
                         <select id="task-priority"
                             class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
                             <option value="Low">Low</option>
@@ -1534,6 +1582,12 @@
                             <option value="High">High</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Due Date <span class="font-normal normal-case">(optional)</span></label>
+                    <input id="task-due" type="date"
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
                 </div>
 
                 <button type="submit"
@@ -1569,6 +1623,7 @@
                 misters: false,
                 lights: false
             },
+            deviceUptimeStart: { fans: Date.now(), misters: null, lights: null },
 
             // Alerts
             alerts: [], // { id, severity, title, desc, time, acknowledged: bool }
@@ -2223,6 +2278,7 @@
             const activeAlerts = state.alerts.filter(a => !a.acknowledged);
             if (activeAlerts.length > 0) {
                 dot.classList.remove('hidden');
+                dot.innerText = activeAlerts.length;
 
                 // Show banner of the highest severity alert
                 const topAlert = activeAlerts[0];
@@ -2274,6 +2330,12 @@
             addLog('Alerts cleared and acknowledged by operator.', 'info');
         }
 
+        function confirmManualMode() {
+            if (state.systemMode === 'manual') return;
+            if (!confirm('Switch to Manual Override?\n\nThis disables the auto control loop. You will be responsible for managing devices manually.')) return;
+            setSystemMode('manual');
+        }
+
         // --- 8. DEVICE OVERRIDES & AUTO SYNC ---
         function setSystemMode(mode) {
             state.systemMode = mode;
@@ -2282,15 +2344,18 @@
 
             const btnAuto = document.getElementById('mode-btn-auto');
             const btnManual = document.getElementById('mode-btn-manual');
+            const warnLabel = document.getElementById('mode-warning-label');
 
             if (mode === 'auto') {
                 btnAuto.className = "px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300";
                 btnManual.className = "px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300";
+                if (warnLabel) warnLabel.classList.add('hidden');
                 addLog('Environmental system Mode set to AUTO.', 'success');
                 showToast('Automatic control loop enabled.', 'info');
             } else {
-                btnManual.className = "px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300";
+                btnManual.className = "px-3 py-1 rounded-full bg-warning-gold text-white font-bold text-caption transition-all duration-300";
                 btnAuto.className = "px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300";
+                if (warnLabel) warnLabel.classList.remove('hidden');
                 addLog('Environmental system Mode set to MANUAL override.', 'warning');
                 showToast('Manual device controls enabled.', 'warning');
             }
@@ -2303,6 +2368,10 @@
             }
 
             state.deviceStates[device] = !state.deviceStates[device];
+            if (state.deviceStates[device]) {
+                if (!state.deviceUptimeStart) state.deviceUptimeStart = {};
+                state.deviceUptimeStart[device] = Date.now();
+            }
 
             // Check mister jammed anomaly block
             if (device === 'misters' && state.anomalies.misterJammed) {
@@ -2328,26 +2397,27 @@
                 const status = document.getElementById(`status-quick-${d}`);
                 const icon = document.getElementById(`icon-quick-${d}`);
                 const dot = document.getElementById(`sim-${d}-dot`);
+                const uptime = document.getElementById(`uptime-quick-${d}`);
 
                 if (state.deviceStates[d]) {
                     btn.className = "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-primary bg-surface-soft dark:bg-emerald-950/20 dark:border-primary-fixed transition-all glow-green select-none";
                     status.className = "text-[9px] text-primary dark:text-primary-fixed font-bold uppercase tracking-wide";
                     status.innerText = "Active";
                     dot.className = "w-1.5 h-1.5 rounded-full bg-success-green animate-ping";
-
-                    if (d === 'fans') {
-                        icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-spin-slow";
-                    } else if (d === 'misters') {
-                        icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-pulse";
-                    } else {
-                        icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-pulse";
+                    if (uptime && state.deviceUptimeStart && state.deviceUptimeStart[d]) {
+                        const mins = Math.floor((Date.now() - state.deviceUptimeStart[d]) / 60000);
+                        uptime.innerText = mins < 1 ? 'just now' : `${mins}m`;
                     }
+                    if (d === 'fans') icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-spin-slow";
+                    else icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-pulse";
                 } else {
                     btn.className = "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-muted dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-all select-none";
                     status.className = "text-[9px] text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide";
                     status.innerText = "Off";
                     icon.className = "material-symbols-outlined text-[20px] text-on-surface-variant dark:text-zinc-400";
                     dot.className = "w-1.5 h-1.5 rounded-full bg-slate-300";
+                    if (uptime) uptime.innerText = '';
+                    if (state.deviceUptimeStart) state.deviceUptimeStart[d] = null;
                 }
             });
 
@@ -2366,12 +2436,14 @@
             state.tempSetpoint = parseFloat(val);
             document.getElementById('val-temp-setpoint').innerText = state.tempSetpoint.toFixed(1);
             saveSetpoints();
+            showToast(`Temperature target set to ${state.tempSetpoint.toFixed(1)}°C`, 'info');
         }
 
         function updateHumiditySetpoint(val) {
             state.humiditySetpoint = parseInt(val);
             document.getElementById('val-humidity-setpoint').innerText = state.humiditySetpoint;
             saveSetpoints();
+            showToast(`Humidity target set to ${state.humiditySetpoint}%`, 'info');
         }
 
         function updateLightSetpoint(val) {
@@ -2400,42 +2472,76 @@
             const container = document.getElementById('active-batches-list');
             container.innerHTML = '';
 
-            state.growBatches.forEach(batch => {
-                let statusColor = "bg-primary/10 border-primary/20 text-primary dark:bg-emerald-950 dark:text-emerald-400";
-                if (batch.stage === 'Harvested') statusColor = "bg-slate-100 border-slate-200 text-slate-600 dark:bg-zinc-800 dark:text-zinc-400";
+            if (state.growBatches.length === 0) {
+                container.innerHTML = `<div class="flex flex-col items-center justify-center py-8 gap-2 text-slate-400 dark:text-zinc-500"><span class="material-symbols-outlined text-[36px]">eco</span><p class="text-[11px] font-semibold">No active batches. Add one to start.</p></div>`;
+                return;
+            }
 
-                let icon = "eco";
+            state.growBatches.forEach(batch => {
+                const stages = ['Inoculation', 'Spawn Run', 'Primordia', 'Fruiting', 'Harvested'];
+                const stageIdx = stages.indexOf(batch.stage);
+                const progress = Math.round((stageIdx / (stages.length - 1)) * 100);
+                const days = getDaysElapsed(batch.inocDate);
+                const estHarvest = getHarvestEstimate(batch.inocDate);
+                const isContaminated = batch.contaminated || false;
+                const isHarvested = batch.stage === 'Harvested';
+
+                let stagePillColor = "bg-primary/10 border-primary/20 text-primary dark:bg-emerald-950 dark:text-emerald-400";
+                if (isHarvested) stagePillColor = "bg-slate-100 border-slate-200 text-slate-500 dark:bg-zinc-800 dark:text-zinc-400";
+                if (isContaminated) stagePillColor = "bg-red-100 border-red-200 text-red-600 dark:bg-red-950/40 dark:text-red-400";
 
                 const card = document.createElement('div');
-                card.className = "bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-3 relative";
+                card.className = `bg-surface-container-lowest dark:bg-zinc-900 border ${isContaminated ? 'border-red-300 dark:border-red-900' : 'border-muted dark:border-zinc-800'} rounded-2xl p-4 shadow-sm flex flex-col gap-3 relative`;
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed">
-                                <span class="material-symbols-outlined text-[18px]">${icon}</span>
+                            <div class="w-8 h-8 rounded-full ${isContaminated ? 'bg-red-100 dark:bg-red-950/40' : 'bg-surface-soft dark:bg-zinc-800'} flex items-center justify-center ${isContaminated ? 'text-red-500' : 'text-primary dark:text-primary-fixed'}">
+                                <span class="material-symbols-outlined text-[18px]">${isContaminated ? 'warning' : 'eco'}</span>
                             </div>
                             <div>
                                 <h4 class="text-body-sm font-bold text-on-background dark:text-white">${batch.rack || 'Rack A'} — Oyster Mushroom</h4>
                                 <p class="text-[10px] text-on-surface-variant dark:text-zinc-400">Batch #${batch.id} • ${batch.bags} bags • ${batch.substrate}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-[9px] font-bold text-primary dark:text-primary-fixed bg-surface dark:bg-emerald-950/30 px-1.5 py-0.5 rounded-full border border-border-muted dark:border-emerald-800">Day ${days}</span>
+                                    ${!isHarvested ? `<span class="text-[9px] text-on-surface-variant dark:text-zinc-500">Est. harvest ${estHarvest}</span>` : `<span class="text-[9px] text-success-green dark:text-emerald-400 font-bold">${batch.harvestKg ? batch.harvestKg + ' kg harvested' : 'Cycle Complete'}</span>`}
+                                </div>
                             </div>
                         </div>
-                        <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded border ${statusColor}">${batch.stage}</span>
+                        <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded border ${stagePillColor}">${isContaminated ? 'Contaminated' : batch.stage}</span>
                     </div>
-                    
+
+                    ${!isHarvested && !isContaminated ? `
+                    <div class="flex flex-col gap-1">
+                        <div class="flex justify-between text-[9px] font-bold text-on-surface-variant dark:text-zinc-500">
+                            <span>${batch.stage}</span><span>${progress}%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-surface-variant dark:bg-zinc-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary dark:bg-primary-fixed rounded-full transition-all duration-500" style="width:${progress}%"></div>
+                        </div>
+                        <div class="flex justify-between text-[8px] text-slate-400 dark:text-zinc-600 pt-0.5">
+                            ${stages.map((s,i) => `<span class="${i <= stageIdx ? 'text-primary dark:text-primary-fixed font-bold' : ''}">${s.split(' ')[0]}</span>`).join('')}
+                        </div>
+                    </div>` : ''}
+
                     <div class="flex justify-between items-center text-[10px] text-slate-500 font-bold border-t border-slate-50 dark:border-zinc-800 pt-2 mt-1">
                         <span>Inoculated: ${batch.inocDate}</span>
-                        ${batch.stage !== 'Harvested' ? `
-                            <div class="flex gap-1.5">
+                        <div class="flex gap-2">
+                            ${!isContaminated && !isHarvested ? `
                                 <button onclick="advanceBatchStage(${batch.id})" class="text-primary dark:text-primary-fixed hover:underline flex items-center gap-0.5">
-                                    <span class="material-symbols-outlined text-[12px]">arrow_circle_right</span> Next Stage
+                                    <span class="material-symbols-outlined text-[12px]">arrow_circle_right</span> Next
                                 </button>
-                                <button onclick="markBatchHarvested(${batch.id})" class="text-secondary dark:text-emerald-400 hover:underline flex items-center gap-0.5">
-                                    <span class="material-symbols-outlined text-[12px]">done_all</span> Harvested
+                                <button onclick="openHarvestModal(${batch.id})" class="text-secondary dark:text-emerald-400 hover:underline flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-[12px]">done_all</span> Harvest
                                 </button>
-                            </div>
-                        ` : `
-                            <span class="text-slate-400">Cycle Complete</span>
-                        `}
+                                <button onclick="flagContamination(${batch.id})" class="text-error-red hover:underline flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-[12px]">bug_report</span> Flag
+                                </button>
+                            ` : isHarvested ? `<span class="text-slate-400">Cycle Complete</span>` : `
+                                <button onclick="removeBatch(${batch.id})" class="text-error-red hover:underline flex items-center gap-0.5">
+                                    <span class="material-symbols-outlined text-[12px]">delete</span> Remove
+                                </button>
+                            `}
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -2457,15 +2563,53 @@
             }
         }
 
-        function markBatchHarvested(id) {
+        function flagContamination(id) {
+            if (!confirm('Flag this batch as contaminated? This will mark it for removal.')) return;
             const batch = state.growBatches.find(b => b.id === id);
             if (!batch) return;
+            batch.contaminated = true;
+            saveBatches(); renderBatches();
+            addLog(`Batch #${id} (${batch.rack}) flagged as CONTAMINATED.`, 'error');
+            showToast(`Batch #${id} flagged as contaminated.`, 'error');
+            triggerSystemAlert(`Contamination Detected: ${batch.rack}`, `Batch #${id} flagged for contamination. Immediate removal recommended.`, 'critical');
+        }
 
+        function removeBatch(id) {
+            if (!confirm('Permanently remove this batch from the system?')) return;
+            state.growBatches = state.growBatches.filter(b => b.id !== id);
+            saveBatches(); renderBatches();
+            addLog(`Contaminated Batch #${id} removed from system.`, 'warning');
+            showToast('Batch removed.', 'info');
+        }
+
+        function openHarvestModal(id) {
+            document.getElementById('harvest-batch-id').value = id;
+            const batch = state.growBatches.find(b => b.id === id);
+            document.getElementById('harvest-modal-rack').innerText = batch ? `${batch.rack} — Batch #${id}` : `Batch #${id}`;
+            document.getElementById('modal-harvest').classList.remove('hidden');
+        }
+
+        function closeHarvestModal() {
+            document.getElementById('modal-harvest').classList.add('hidden');
+            document.getElementById('harvest-kg').value = '';
+        }
+
+        function submitHarvest(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('harvest-batch-id').value);
+            const kg = parseFloat(document.getElementById('harvest-kg').value);
+            const batch = state.growBatches.find(b => b.id === id);
+            if (!batch) return;
             batch.stage = 'Harvested';
-            saveBatches();
-            renderBatches();
-            addLog(`Batch #${id} (${batch.variety}) marked harvested. Final yield logged to statistics.`, 'success');
-            showToast(`Batch #${id} successfully harvested!`, 'success');
+            batch.harvestKg = kg;
+            saveBatches(); renderBatches();
+            closeHarvestModal();
+            addLog(`Batch #${id} (${batch.rack}) harvested. Yield: ${kg} kg.`, 'success');
+            showToast(`Harvest logged: ${kg} kg from ${batch.rack}`, 'success');
+        }
+
+        function markBatchHarvested(id) {
+            openHarvestModal(id);
         }
 
         function openAddBatchModal() {
@@ -2544,43 +2688,61 @@
             showToast('All anomaly states cleared.', 'success');
         }
 
+        let currentAlertFilter = 'all';
+        function filterAlerts(filter) {
+            currentAlertFilter = filter;
+            const map = { all: 'alert-filter-all', active: 'alert-filter-active', critical: 'alert-filter-critical', resolved: 'alert-filter-resolved' };
+            Object.values(map).forEach(id => {
+                const b = document.getElementById(id);
+                if (b) b.className = 'flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all';
+            });
+            const active = document.getElementById(map[filter]);
+            if (active) active.className = 'flex-1 text-[10px] font-bold py-1 rounded-lg bg-white dark:bg-zinc-700 text-primary dark:text-primary-fixed shadow-sm transition-all';
+            renderAlertsList();
+        }
+
         function renderAlertsList() {
             const container = document.getElementById('alerts-list-container');
             container.innerHTML = '';
 
-            const unacknowledged = state.alerts.filter(a => !a.acknowledged);
-            const acknowledged = state.alerts.filter(a => a.acknowledged);
+            let alerts = [...state.alerts.filter(a => !a.acknowledged), ...state.alerts.filter(a => a.acknowledged)];
+            if (currentAlertFilter === 'active') alerts = alerts.filter(a => !a.acknowledged);
+            else if (currentAlertFilter === 'critical') alerts = alerts.filter(a => a.severity === 'critical');
+            else if (currentAlertFilter === 'resolved') alerts = alerts.filter(a => a.acknowledged);
 
-            const displayAlerts = [...unacknowledged, ...acknowledged];
+            // Update count badge
+            const activeCount = state.alerts.filter(a => !a.acknowledged).length;
+            const badge = document.getElementById('alerts-count-badge');
+            if (badge) { badge.innerText = `${activeCount} Active`; badge.classList.toggle('hidden', activeCount === 0); }
 
-            if (displayAlerts.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-6 text-slate-400 dark:text-zinc-500 font-bold text-caption flex flex-col items-center justify-center gap-1">
-                        <span class="material-symbols-outlined text-[32px] text-success-green">check_circle</span>
-                        No active anomalies detected
-                    </div>
-                `;
+            if (alerts.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-slate-400 dark:text-zinc-500 font-bold text-caption flex flex-col items-center justify-center gap-1"><span class="material-symbols-outlined text-[32px] text-success-green">check_circle</span>No alerts in this filter</div>`;
                 return;
             }
 
-            displayAlerts.forEach(alert => {
+            alerts.forEach(alert => {
                 let colorClass = "bg-warning-gold/15 border-warning-gold/30 text-warning-gold";
                 if (alert.severity === 'critical') colorClass = "bg-error/15 border-error/30 text-error-red dark:text-red-400";
                 if (alert.acknowledged) colorClass = "bg-slate-50 dark:bg-zinc-800/40 border-slate-200 dark:border-zinc-800 text-slate-400 dark:text-zinc-500";
-
                 const div = document.createElement('div');
-                div.className = `p-3 rounded-xl border flex items-start justify-between ${colorClass}`;
+                div.className = `p-3 rounded-xl border flex flex-col gap-2 ${colorClass}`;
                 div.innerHTML = `
-                    <div class="space-y-1 pr-4">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-body-sm font-extrabold">${alert.title}</span>
-                            ${alert.acknowledged ? `<span class="text-[8px] bg-slate-200 dark:bg-zinc-800 px-1 py-0.5 rounded font-bold uppercase">ACK</span>` : `<span class="text-[8px] bg-red-600 text-white px-1 py-0.5 rounded font-bold uppercase">ACTIVE</span>`}
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="space-y-1 flex-1 min-w-0">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-body-sm font-extrabold">${alert.title}</span>
+                                ${alert.acknowledged ? `<span class="text-[8px] bg-slate-200 dark:bg-zinc-800 px-1 py-0.5 rounded font-bold uppercase">ACK</span>` : `<span class="text-[8px] bg-red-600 text-white px-1 py-0.5 rounded font-bold uppercase animate-pulse">ACTIVE</span>`}
+                            </div>
+                            <p class="text-[11px] leading-normal opacity-90">${alert.desc}</p>
+                            <p class="text-[9px] font-bold opacity-60">Fired at ${alert.time}</p>
+                            ${alert.resolutionNote ? `<p class="text-[9px] italic opacity-70">Note: ${alert.resolutionNote}</p>` : ''}
                         </div>
-                        <p class="text-[11px] leading-normal opacity-90">${alert.desc}</p>
-                        <p class="text-[9px] font-bold opacity-60">Fired at ${alert.time}</p>
                     </div>
                     ${!alert.acknowledged ? `
-                        <button onclick="acknowledgeSingleAlert(${alert.id})" class="text-[9px] uppercase font-bold shrink-0 bg-white/20 hover:bg-white/40 dark:bg-zinc-800 dark:hover:bg-zinc-700 py-1 px-2 rounded-lg border border-current">Acknowledge</button>
+                        <div class="flex gap-2 items-center">
+                            <input id="note-${alert.id}" type="text" placeholder="Resolution note (optional)" class="flex-1 text-[10px] bg-white/30 dark:bg-zinc-800 border border-current/20 rounded-lg py-1 px-2 outline-none placeholder:opacity-60 text-inherit">
+                            <button onclick="acknowledgeSingleAlert(${alert.id})" class="text-[9px] uppercase font-bold shrink-0 bg-white/20 hover:bg-white/40 dark:bg-zinc-800 dark:hover:bg-zinc-700 py-1 px-2 rounded-lg border border-current whitespace-nowrap">Acknowledge</button>
+                        </div>
                     ` : ''}
                 `;
                 container.appendChild(div);
@@ -2588,14 +2750,14 @@
         }
 
         function acknowledgeSingleAlert(id) {
+            const note = document.getElementById(`note-${id}`) ? document.getElementById(`note-${id}`).value : '';
             const alert = state.alerts.find(a => a.id === id);
             if (alert) {
                 alert.acknowledged = true;
-                saveAlerts();
-                renderAlertsList();
-                checkAlertThresholds();
+                alert.resolutionNote = note || null;
+                saveAlerts(); renderAlertsList(); checkAlertThresholds();
                 showToast(`Alert "${alert.title}" acknowledged.`, 'info');
-                addLog(`Alert resolved: "${alert.title}"`, 'success');
+                addLog(`Alert resolved: "${alert.title}"${note ? ' — ' + note : ''}`, 'success');
             }
         }
 
@@ -2709,22 +2871,17 @@
             const title = document.getElementById('task-title').value;
             const assignee = document.getElementById('task-assignee').value;
             const priority = document.getElementById('task-priority').value;
+            const due = document.getElementById('task-due').value;
+            const desc = document.getElementById('task-desc').value;
 
-            const newTask = {
-                id: Date.now(),
-                title,
-                assignee,
-                priority,
-                status: 'Pending'
-            };
-
+            const newTask = { id: Date.now(), title, assignee, priority, status: 'Pending', due: due || null, desc: desc || null };
             state.tasks.unshift(newTask);
             saveTasks();
             renderTasks();
             closeAddTaskModal();
-
             document.getElementById('task-title').value = '';
-
+            document.getElementById('task-desc').value = '';
+            document.getElementById('task-due').value = '';
             addLog(`Assigned task: "${title}" to ${assignee}.`, 'success');
             showToast(`Task successfully assigned.`, 'success');
         }
@@ -2776,7 +2933,7 @@
             const adminOnlyTabs = ['tab-yield', 'tab-grow-log'];
 
             if (role === 'staff') {
-                adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
+                adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
                 adminOnlyTabs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
                 // Hide target setpoints (sliders) for staff
                 ['slider-temp', 'slider-humidity', 'light-slider-wrapper', 'light-target-display'].forEach(id => {
@@ -2793,8 +2950,12 @@
                 // Hide report button from admin home
                 const adminReport = document.getElementById('admin-report-btn');
                 if (adminReport) adminReport.classList.add('hidden');
+                // Hide admin-only sections
+                ['simulation-console', 'system-audit-logs', 'btn-add-task-modal'].forEach(id => {
+                    const el = document.getElementById(id); if (el) el.classList.add('hidden');
+                });
             } else {
-                adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
+                adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'flex'; });
                 adminOnlyTabs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
                 // Show target setpoints for admin
                 ['slider-temp', 'slider-humidity', 'light-slider-wrapper', 'light-target-display'].forEach(id => {
@@ -2810,6 +2971,10 @@
                 if (staffReport) staffReport.classList.add('hidden');
                 const adminReport = document.getElementById('admin-report-btn');
                 if (adminReport) adminReport.classList.add('hidden');
+                // Show admin-only sections
+                ['simulation-console', 'system-audit-logs', 'btn-add-task-modal'].forEach(id => {
+                    const el = document.getElementById(id); if (el) el.classList.remove('hidden');
+                });
             }
         }
 
@@ -2839,8 +3004,167 @@
             document.getElementById('report-bag').value = '';
             document.getElementById('report-desc').value = '';
         }
-    </script>
-</body>
 
+        // --- SPARKLINES ---
+        const sparkHistory = { temp: [], humidity: [], light: [], co2: [] };
+        const SPARK_MAX = 20;
+        function pushSparkData() {
+            sparkHistory.temp.push(state.currentTemp);
+            sparkHistory.humidity.push(state.currentHumidity);
+            sparkHistory.light.push(state.currentLight);
+            sparkHistory.co2.push(state.currentCO2);
+            ['temp','humidity','light','co2'].forEach(k => { if (sparkHistory[k].length > SPARK_MAX) sparkHistory[k].shift(); });
+        }
+        function drawSparkline(canvasId, data, color) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas || data.length < 2) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth || 120;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const min = Math.min(...data), max = Math.max(...data), range = max - min || 1;
+            const w = canvas.width, h = canvas.height, pad = 2;
+            ctx.beginPath();
+            data.forEach((v, i) => {
+                const x = pad + (i / (data.length - 1)) * (w - pad * 2);
+                const y = h - pad - ((v - min) / range) * (h - pad * 2);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.stroke();
+        }
+        function updateSparklines() {
+            pushSparkData();
+            const isDark = document.documentElement.classList.contains('dark');
+            const green = isDark ? '#6ee7b7' : '#166534';
+            drawSparkline('spark-temp', sparkHistory.temp, green);
+            drawSparkline('spark-humidity', sparkHistory.humidity, green);
+            drawSparkline('spark-light', sparkHistory.light, green);
+            drawSparkline('spark-co2', sparkHistory.co2, state.currentCO2 > 800 ? '#dc2626' : green);
+        }
+        setInterval(() => { updateSparklines(); updateLastUpdated(); updateFarmHealthScore(); }, 3000);
+
+        // --- LAST UPDATED TIMESTAMP ---
+        function updateLastUpdated() {
+            const el = document.getElementById('last-updated-ts');
+            if (el) el.innerText = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        // --- TASK FILTER ---
+        let currentTaskFilter = 'all';
+        function filterTasks(filter) {
+            currentTaskFilter = filter;
+            const map = { all: 'task-filter-all', Pending: 'task-filter-pending', 'In Progress': 'task-filter-inprogress', Completed: 'task-filter-completed' };
+            Object.values(map).forEach(id => {
+                const b = document.getElementById(id);
+                if (b) { b.className = 'flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all'; }
+            });
+            const active = document.getElementById(map[filter]);
+            if (active) active.className = 'flex-1 text-[10px] font-bold py-1 rounded-lg bg-white dark:bg-zinc-700 text-primary dark:text-primary-fixed shadow-sm transition-all';
+            renderTasks();
+        }
+
+        // Wrap renderTasks to support filter
+        const _baseRenderTasks = renderTasks;
+        renderTasks = function() {
+            const container = document.getElementById('tasks-container');
+            container.innerHTML = '';
+            let tasks = currentTaskFilter === 'all' ? state.tasks : state.tasks.filter(t => t.status === currentTaskFilter);
+            if (tasks.length === 0) {
+                container.innerHTML = `<div class="flex flex-col items-center justify-center py-6 gap-2 text-slate-400 dark:text-zinc-500"><span class="material-symbols-outlined text-[32px]">task_alt</span><p class="text-[11px] font-semibold">No tasks here.</p></div>`;
+                return;
+            }
+            const isAdmin = state.currentUser && state.currentUser.role === 'admin';
+            tasks.forEach(task => {
+                let statusIcon = "radio_button_unchecked", statusColor = "text-slate-300 dark:text-zinc-600 hover:text-primary", cardAccent = "border-slate-100 dark:border-zinc-800", titleClass = "text-body-sm font-semibold text-on-surface dark:text-white";
+                if (task.status === 'In Progress') { statusIcon = "pending"; statusColor = "text-warning-gold"; cardAccent = "border-l-2 border-l-warning-gold border-t border-r border-b border-slate-100 dark:border-zinc-800"; }
+                else if (task.status === 'Completed') { statusIcon = "check_circle"; statusColor = "text-success-green dark:text-emerald-500"; cardAccent = "border-slate-100 dark:border-zinc-800 opacity-60"; titleClass = "text-body-sm font-medium line-through text-slate-400 dark:text-zinc-500"; }
+                const priority = task.priority || 'Normal';
+                const pillColors = { High: 'bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400', Normal: 'bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400', Low: 'bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400' };
+                const priorityPill = `<span class="text-[8px] font-extrabold uppercase tracking-wide ${pillColors[priority]||pillColors.Normal} px-1.5 py-0.5 rounded-full">${priority}</span>`;
+                const dueBadge = task.due ? `<span class="text-slate-300 dark:text-zinc-700">•</span><span class="text-[8px] text-on-surface-variant dark:text-zinc-500 font-medium">Due ${task.due}</span>` : '';
+                const item = document.createElement('div');
+                item.className = `flex items-center gap-3 p-3 rounded-2xl border bg-white dark:bg-zinc-900 ${cardAccent} transition-all`;
+                item.innerHTML = `
+                    <button onclick="cycleTaskStatus(${task.id})" class="shrink-0 transition-colors ${statusColor}"><span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">${statusIcon}</span></button>
+                    <div class="flex-1 min-w-0">
+                        <p class="${titleClass} truncate">${task.title}</p>
+                        ${task.desc ? `<p class="text-[10px] text-on-surface-variant dark:text-zinc-500 mt-0.5 line-clamp-1">${task.desc}</p>` : ''}
+                        <div class="flex items-center gap-1.5 mt-1 flex-wrap">
+                            <span class="text-[9px] text-slate-400 dark:text-zinc-500 font-medium">${task.assignee}</span>
+                            <span class="text-slate-300 dark:text-zinc-700">•</span>
+                            ${priorityPill}${dueBadge}
+                        </div>
+                    </div>
+                    ${isAdmin ? `<button onclick="deleteTask(${task.id})" class="shrink-0 text-slate-200 dark:text-zinc-700 hover:text-error-red dark:hover:text-red-400 transition-colors p-1 rounded-full"><span class="material-symbols-outlined text-[16px]">delete</span></button>` : ''}
+                `;
+                container.appendChild(item);
+            });
+        };
+
+        // --- DAYS ELAPSED + HARVEST ESTIMATE helpers ---
+        function getDaysElapsed(inocDate) {
+            return Math.max(0, Math.floor((new Date() - new Date(inocDate)) / 86400000));
+        }
+        function getHarvestEstimate(inocDate) {
+            const d = new Date(inocDate); d.setDate(d.getDate() + 28);
+            return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+        }
+
+        // --- FARM HEALTH SCORE ---
+        function updateFarmHealthScore() {
+            const el = document.getElementById('farm-health-score');
+            if (!el) return;
+            const tempOk = state.currentTemp >= 18 && state.currentTemp <= 28;
+            const humOk = state.currentHumidity >= 60 && state.currentHumidity <= 90;
+            const co2Ok = state.currentCO2 < 800;
+            const activeAlerts = state.alerts.filter(a => !a.acknowledged).length;
+            let score = 100;
+            if (!tempOk) score -= 25; if (!humOk) score -= 25; if (!co2Ok) score -= 25;
+            score -= Math.min(25, activeAlerts * 10);
+            const color = score >= 80 ? 'text-success-green dark:text-emerald-400' : score >= 50 ? 'text-warning-gold' : 'text-error-red';
+            el.innerHTML = `<span class="${color} font-extrabold text-headline-sm">${score}</span><span class="text-on-surface-variant dark:text-zinc-400 text-caption">/100</span>`;
+            const breakdown = document.getElementById('health-score-breakdown');
+            if (breakdown) {
+                const parts = [
+                    `<span class="${tempOk ? 'text-success-green dark:text-emerald-400' : 'text-error-red'}">Temp</span>`,
+                    `<span class="${humOk ? 'text-success-green dark:text-emerald-400' : 'text-error-red'}">Humidity</span>`,
+                    `<span class="${co2Ok ? 'text-success-green dark:text-emerald-400' : 'text-error-red'}">CO2</span>`,
+                    `<span class="${activeAlerts === 0 ? 'text-success-green dark:text-emerald-400' : 'text-error-red'}">Alerts</span>`
+                ];
+                breakdown.innerHTML = parts.join(' • ');
+            }
+            // Shift summary
+            const tasksDone = document.getElementById('summary-tasks-done');
+            const alertsCount = document.getElementById('summary-alerts');
+            const batchesCount = document.getElementById('summary-batches');
+            if (tasksDone) tasksDone.innerText = state.tasks.filter(t => t.status === 'Completed').length;
+            if (alertsCount) alertsCount.innerText = state.alerts.length;
+            if (batchesCount) batchesCount.innerText = state.growBatches.filter(b => b.stage !== 'Harvested' && !b.contaminated).length;
+        }
+    </script>
+    <!-- Modal: Harvest Weight -->
+    <div id="modal-harvest" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-3xl p-5 w-full max-w-[340px] shadow-2xl flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+                <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">done_all</span> Log Harvest
+                </h3>
+                <button onclick="closeHarvestModal()" class="text-slate-400 p-1 rounded-full"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <p class="text-body-sm text-on-surface-variant dark:text-zinc-400 -mt-2" id="harvest-modal-rack">Rack A — Batch #400</p>
+            <form onsubmit="submitHarvest(event)" class="flex flex-col gap-3">
+                <input type="hidden" id="harvest-batch-id">
+                <div class="flex flex-col gap-1">
+                    <label class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Harvest Yield (kg)</label>
+                    <input id="harvest-kg" type="number" step="0.1" min="0" required placeholder="e.g. 2.4"
+                        class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2.5 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white">
+                </div>
+                <button type="submit" class="bg-primary dark:bg-primary-container text-on-primary dark:text-white py-2.5 rounded-xl font-bold active:scale-95 transition-all">
+                    Confirm Harvest
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
 
 </html>
