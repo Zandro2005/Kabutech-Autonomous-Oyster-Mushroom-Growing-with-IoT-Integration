@@ -494,8 +494,7 @@
                             </div>
                             <div id="reg-email-error"
                                 class="hidden w-full bg-error/10 border border-error/30 text-error-red rounded-xl px-3 py-2 flex items-center gap-2 text-[12px] font-semibold">
-                                <span class="material-symbols-outlined text-[16px] shrink-0"
-                                    style="font-variation-settings:'FILL' 1">error</span>
+                                <span class="material-symbols-outlined text-[16px] shrink-0" style="font-variation-settings:'FILL' 1">error</span>
                                 Email already registered.
                             </div>
                         </div>
@@ -528,8 +527,7 @@
                             </div>
                             <div id="reg-confirm-error"
                                 class="hidden w-full bg-error/10 border border-error/30 text-error-red rounded-xl px-3 py-2 flex items-center gap-2 text-[12px] font-semibold">
-                                <span class="material-symbols-outlined text-[16px] shrink-0"
-                                    style="font-variation-settings:'FILL' 1">error</span>
+                                <span class="material-symbols-outlined text-[16px] shrink-0" style="font-variation-settings:'FILL' 1">error</span>
                                 Passwords do not match.
                             </div>
                         </div>
@@ -1515,10 +1513,8 @@
                         <div id="staff-account-mgmt-widget"
                             class="hidden bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
                             <div class="flex items-center justify-between">
-                                <h3
-                                    class="text-body-md font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
-                                    <span class="material-symbols-outlined text-[18px]"
-                                        style="font-variation-settings:'FILL' 1">manage_accounts</span>
+                                <h3 class="text-body-md font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">manage_accounts</span>
                                     Staff Accounts
                                 </h3>
                                 <button onclick="openStaffAccountModal(null)"
@@ -1528,10 +1524,8 @@
                             </div>
                             <!-- Search -->
                             <div class="relative">
-                                <span
-                                    class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] text-outline dark:text-zinc-500">search</span>
-                                <input type="text" id="staff-search-input" oninput="renderStaffAccountsList()"
-                                    placeholder="Search staff..."
+                                <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] text-outline dark:text-zinc-500">search</span>
+                                <input type="text" id="staff-search-input" oninput="renderStaffAccountsList()" placeholder="Search staff..."
                                     class="w-full text-[10px] bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 py-1.5 pl-7 pr-3 rounded-full outline-none focus:border-primary dark:text-white">
                             </div>
                             <!-- List -->
@@ -1874,20 +1868,17 @@
 
     <!-- Staff Account Modal — outside app-wrapper so overflow:hidden doesn't clip it -->
     <div id="modal-staff-account" onclick="if(event.target===this)closeStaffAccountModal()"
-        class="hidden fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
+        class="fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
         style="display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
         <div class="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-2xl shadow-2xl flex flex-col overflow-y-auto"
             style="width:90%; max-height:90%; box-sizing:border-box; padding:14px; gap:10px;">
             <!-- Header -->
             <div class="flex justify-between items-center">
-                <h3 id="staff-modal-title"
-                    class="text-[13px] font-extrabold text-brand-deep dark:text-primary-fixed flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[17px]"
-                        style="font-variation-settings:'FILL' 1">person_add</span>
+                <h3 id="staff-modal-title" class="text-[13px] font-extrabold text-brand-deep dark:text-primary-fixed flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[17px]" style="font-variation-settings:'FILL' 1">person_add</span>
                     Add Staff Account
                 </h3>
-                <button onclick="closeStaffAccountModal()"
-                    class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
+                <button onclick="closeStaffAccountModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
             </div>
@@ -1895,56 +1886,43 @@
             <div class="flex flex-col" style="gap:8px;">
                 <!-- Name -->
                 <div class="flex flex-col" style="gap:3px;">
-                    <label class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wide">Full
-                        Name</label>
+                    <label class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wide">Full Name</label>
                     <div class="relative flex items-center">
-                        <span
-                            class="material-symbols-outlined absolute left-2.5 text-[15px] text-slate-400 dark:text-zinc-500">badge</span>
+                        <span class="material-symbols-outlined absolute left-2.5 text-[15px] text-slate-400 dark:text-zinc-500">badge</span>
                         <input id="staff-modal-name" type="text" placeholder="e.g. Maria Santos"
                             class="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg py-2 pl-8 pr-3 text-[12px] text-slate-800 dark:text-white focus:border-primary outline-none transition-all placeholder:text-slate-400">
                     </div>
                 </div>
                 <!-- Email -->
                 <div class="flex flex-col" style="gap:3px;">
-                    <label class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wide">Email
-                        Address</label>
+                    <label class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wide">Email Address</label>
                     <div class="relative flex items-center">
-                        <span
-                            class="material-symbols-outlined absolute left-2.5 text-[15px] text-slate-400 dark:text-zinc-500">mail</span>
+                        <span class="material-symbols-outlined absolute left-2.5 text-[15px] text-slate-400 dark:text-zinc-500">mail</span>
                         <input id="staff-modal-email" type="email" placeholder="you@kabutech.com"
                             class="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg py-2 pl-8 pr-3 text-[12px] text-slate-800 dark:text-white focus:border-primary outline-none transition-all placeholder:text-slate-400">
                     </div>
-                    <div id="staff-modal-email-error"
-                        class="hidden w-full bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-[11px] font-semibold">
-                        <span class="material-symbols-outlined text-[13px] shrink-0"
-                            style="font-variation-settings:'FILL' 1">error</span>
+                    <div id="staff-modal-email-error" class="hidden w-full bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-[11px] font-semibold">
+                        <span class="material-symbols-outlined text-[13px] shrink-0" style="font-variation-settings:'FILL' 1">error</span>
                         Email already in use.
                     </div>
                 </div>
                 <!-- Password -->
                 <div class="flex flex-col" style="gap:3px;" id="staff-modal-password-row">
-                    <label
-                        class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wide">Password</label>
+                    <label class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wide">Password</label>
                     <div class="relative flex items-center">
-                        <span
-                            class="material-symbols-outlined absolute left-2.5 text-[15px] text-slate-400 dark:text-zinc-500">lock</span>
+                        <span class="material-symbols-outlined absolute left-2.5 text-[15px] text-slate-400 dark:text-zinc-500">lock</span>
                         <input id="staff-modal-password" type="password" placeholder="Min. 6 characters"
                             class="w-full bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg py-2 pl-8 pr-9 text-[12px] text-slate-800 dark:text-white focus:border-primary outline-none transition-all placeholder:text-slate-400">
-                        <button type="button" onclick="toggleStaffModalPw()"
-                            class="absolute right-2.5 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-white transition-colors">
-                            <span class="material-symbols-outlined text-[17px]"
-                                id="staff-modal-pw-icon">visibility_off</span>
+                        <button type="button" onclick="toggleStaffModalPw()" class="absolute right-2.5 text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-white transition-colors">
+                            <span class="material-symbols-outlined text-[17px]" id="staff-modal-pw-icon">visibility_off</span>
                         </button>
                     </div>
-                    <p id="staff-modal-edit-hint" class="hidden text-[10px] text-slate-400 dark:text-zinc-500 ml-0.5">
-                        Leave blank to keep existing password.</p>
+                    <p id="staff-modal-edit-hint" class="hidden text-[10px] text-slate-400 dark:text-zinc-500 ml-0.5">Leave blank to keep existing password.</p>
                 </div>
             </div>
             <!-- General error -->
-            <div id="staff-modal-general-error"
-                class="hidden w-full bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-[11px] font-semibold">
-                <span class="material-symbols-outlined text-[14px] shrink-0"
-                    style="font-variation-settings:'FILL' 1">error</span>
+            <div id="staff-modal-general-error" class="hidden w-full bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-[11px] font-semibold">
+                <span class="material-symbols-outlined text-[14px] shrink-0" style="font-variation-settings:'FILL' 1">error</span>
                 <span id="staff-modal-general-error-text">Please fill in all required fields.</span>
             </div>
             <!-- Save button -->
@@ -1958,26 +1936,47 @@
 
     <!-- Staff Delete Confirm Modal — outside app-wrapper -->
     <div id="modal-staff-delete" onclick="if(event.target===this)closeStaffDeleteModal()"
-        class="hidden fixed z-[200] bg-slate-900/70 backdrop-blur-sm items-center justify-center" style="display:none;">
-        <div
-            class="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-3xl p-5 shadow-2xl flex flex-col gap-4 mx-4">
+        class="fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
+        style="display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+        <div class="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-2xl shadow-2xl flex flex-col gap-4"
+            style="width:80%; box-sizing:border-box; padding:18px;">
             <div class="flex flex-col items-center text-center gap-2">
-                <div class="w-14 h-14 bg-red-100 dark:bg-red-950/40 rounded-full flex items-center justify-center">
-                    <span class="material-symbols-outlined text-red-500 text-[28px]"
-                        style="font-variation-settings:'FILL' 1">person_remove</span>
+                <div class="w-12 h-12 bg-red-100 dark:bg-red-950/40 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-red-500 text-[26px]" style="font-variation-settings:'FILL' 1">person_remove</span>
                 </div>
-                <h3 class="text-[15px] font-extrabold text-slate-800 dark:text-white">Remove Staff Account?</h3>
-                <p class="text-[12px] text-slate-500 dark:text-zinc-400 leading-relaxed">This will permanently delete
-                    <strong id="staff-delete-name" class="text-slate-800 dark:text-white"></strong>'s account. This
-                    cannot be undone.</p>
+                <h3 class="text-[14px] font-extrabold text-slate-800 dark:text-white">Remove Staff Account?</h3>
+                <p class="text-[11px] text-slate-500 dark:text-zinc-400 leading-relaxed">This will permanently delete <strong id="staff-delete-name" class="text-slate-800 dark:text-white"></strong>'s account. This cannot be undone.</p>
             </div>
             <input type="hidden" id="staff-delete-email">
             <div class="flex gap-2">
-                <button onclick="closeStaffDeleteModal()"
-                    class="flex-1 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-white py-3 rounded-xl font-bold text-[13px] active:scale-95 transition-all">Cancel</button>
-                <button onclick="confirmDeleteStaff()"
-                    class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl font-bold text-[13px] active:scale-95 transition-all flex items-center justify-center gap-1.5">
-                    <span class="material-symbols-outlined text-[16px]">delete</span> Remove
+                <button onclick="closeStaffDeleteModal()" class="flex-1 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-white py-2.5 rounded-xl font-bold text-[12px] active:scale-95 transition-all">Cancel</button>
+                <button onclick="confirmDeleteStaff()" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl font-bold text-[12px] active:scale-95 transition-all flex items-center justify-center gap-1.5">
+                    <span class="material-symbols-outlined text-[15px]">delete</span> Remove
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reusable Confirm Modal — replaces all JS confirm() dialogs -->
+    <div id="modal-confirm" onclick="if(event.target===this)_confirmCancel()"
+        class="fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
+        style="display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+        <div class="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-2xl shadow-2xl flex flex-col gap-4"
+            style="width:80%; box-sizing:border-box; padding:18px;">
+            <!-- Icon + title + body -->
+            <div class="flex flex-col items-center text-center gap-2">
+                <div id="confirm-icon-wrap" class="w-12 h-12 rounded-full flex items-center justify-center bg-amber-100 dark:bg-amber-950/40">
+                    <span id="confirm-icon" class="material-symbols-outlined text-[26px] text-amber-500" style="font-variation-settings:'FILL' 1">warning</span>
+                </div>
+                <h3 id="confirm-title" class="text-[14px] font-extrabold text-slate-800 dark:text-white leading-snug"></h3>
+                <p id="confirm-body" class="text-[11px] text-slate-500 dark:text-zinc-400 leading-relaxed"></p>
+            </div>
+            <!-- Buttons -->
+            <div class="flex gap-2">
+                <button onclick="_confirmCancel()" class="flex-1 border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-white py-2.5 rounded-xl font-bold text-[12px] active:scale-95 transition-all">Cancel</button>
+                <button id="confirm-ok-btn" onclick="_confirmOk()" class="flex-1 py-2.5 rounded-xl font-bold text-[12px] active:scale-95 transition-all flex items-center justify-center gap-1.5 text-white bg-amber-500 hover:bg-amber-600">
+                    <span id="confirm-ok-icon" class="material-symbols-outlined text-[15px]">check</span>
+                    <span id="confirm-ok-label">Confirm</span>
                 </button>
             </div>
         </div>
@@ -2056,7 +2055,7 @@
         let prevReadings = { temp: 24.2, humidity: 68.0, co2: 420, light: 420 };
 
         window.addEventListener('resize', () => {
-            ['modal-staff-account', 'modal-staff-delete'].forEach(id => {
+            ['modal-staff-account', 'modal-staff-delete', 'modal-confirm'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el && el.style.display === 'flex') positionModalOverApp(id);
             });
@@ -2817,8 +2816,17 @@
 
         function confirmManualMode() {
             if (state.systemMode === 'manual') return;
-            if (!confirm('Switch to Manual Override?\n\nThis disables the auto control loop. You will be responsible for managing devices manually.')) return;
-            setSystemMode('manual');
+            showConfirm({
+                title: 'Switch to Manual Override?',
+                body: 'This disables the auto control loop. You will be fully responsible for managing all devices manually.',
+                icon: 'tune',
+                iconBg: 'bg-orange-100 dark:bg-orange-950/40',
+                iconColor: 'text-orange-500',
+                okLabel: 'Enable Manual',
+                okIcon: 'tune',
+                okBg: 'bg-orange-500 hover:bg-orange-600',
+                onConfirm: () => setSystemMode('manual')
+            });
         }
 
         // --- 8. DEVICE OVERRIDES & AUTO SYNC ---
@@ -3042,22 +3050,44 @@
         }
 
         function flagContamination(id) {
-            if (!confirm('Flag this batch as contaminated? This will mark it for removal.')) return;
-            const batch = state.growBatches.find(b => b.id === id);
-            if (!batch) return;
-            batch.contaminated = true;
-            saveBatches(); renderBatches();
-            addLog(`Batch #${id} (${batch.rack}) flagged as CONTAMINATED.`, 'error');
-            showToast(`Batch #${id} flagged as contaminated.`, 'error');
-            triggerSystemAlert(`Contamination Detected: ${batch.rack}`, `Batch #${id} flagged for contamination. Immediate removal recommended.`, 'critical');
+            showConfirm({
+                title: 'Flag as Contaminated?',
+                body: 'This will mark the batch for removal. A critical system alert will be triggered immediately.',
+                icon: 'biotech',
+                iconBg: 'bg-red-100 dark:bg-red-950/40',
+                iconColor: 'text-red-500',
+                okLabel: 'Flag Batch',
+                okIcon: 'flag',
+                okBg: 'bg-red-500 hover:bg-red-600',
+                onConfirm: () => {
+                    const batch = state.growBatches.find(b => b.id === id);
+                    if (!batch) return;
+                    batch.contaminated = true;
+                    saveBatches(); renderBatches();
+                    addLog(`Batch #${id} (${batch.rack}) flagged as CONTAMINATED.`, 'error');
+                    showToast(`Batch #${id} flagged as contaminated.`, 'error');
+                    triggerSystemAlert(`Contamination Detected: ${batch.rack}`, `Batch #${id} flagged for contamination. Immediate removal recommended.`, 'critical');
+                }
+            });
         }
 
         function removeBatch(id) {
-            if (!confirm('Permanently remove this batch from the system?')) return;
-            state.growBatches = state.growBatches.filter(b => b.id !== id);
-            saveBatches(); renderBatches();
-            addLog(`Contaminated Batch #${id} removed from system.`, 'warning');
-            showToast('Batch removed.', 'info');
+            showConfirm({
+                title: 'Remove Batch Permanently?',
+                body: 'This will permanently delete the batch from the system. This action cannot be undone.',
+                icon: 'delete_forever',
+                iconBg: 'bg-red-100 dark:bg-red-950/40',
+                iconColor: 'text-red-500',
+                okLabel: 'Remove Batch',
+                okIcon: 'delete',
+                okBg: 'bg-red-500 hover:bg-red-600',
+                onConfirm: () => {
+                    state.growBatches = state.growBatches.filter(b => b.id !== id);
+                    saveBatches(); renderBatches();
+                    addLog(`Contaminated Batch #${id} removed from system.`, 'warning');
+                    showToast('Batch removed.', 'info');
+                }
+            });
         }
 
         function openHarvestModal(id) {
@@ -3456,18 +3486,24 @@
         }
 
         function getAppRect() {
-            return document.getElementById('app-wrapper').getBoundingClientRect();
+            const wrapper = document.getElementById('app-wrapper');
+            const r = wrapper ? wrapper.getBoundingClientRect() : null;
+            // If app-wrapper is not visible or has no size, fall back to full viewport
+            if (!r || r.width === 0 || r.height === 0) {
+                return { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
+            }
+            return r;
         }
 
         function positionModalOverApp(modalId) {
             const r = getAppRect();
             const el = document.getElementById(modalId);
-            el.style.left = r.left + 'px';
-            el.style.top = r.top + 'px';
-            el.style.width = r.width + 'px';
-            el.style.height = r.height + 'px';
-            el.style.display = 'flex';
-            el.classList.remove('hidden');
+            el.style.position = 'fixed';
+            el.style.left     = r.left   + 'px';
+            el.style.top      = r.top    + 'px';
+            el.style.width    = r.width  + 'px';
+            el.style.height   = r.height + 'px';
+            el.style.display  = 'flex';
         }
 
         function openStaffAccountModal(editEmail) {
@@ -3510,9 +3546,7 @@
         }
 
         function closeStaffAccountModal() {
-            const el = document.getElementById('modal-staff-account');
-            el.style.display = 'none';
-            el.classList.add('hidden');
+            document.getElementById('modal-staff-account').style.display = 'none';
         }
 
         function toggleStaffModalPw() {
@@ -3577,9 +3611,7 @@
         }
 
         function closeStaffDeleteModal() {
-            const el = document.getElementById('modal-staff-delete');
-            el.style.display = 'none';
-            el.classList.add('hidden');
+            document.getElementById('modal-staff-delete').style.display = 'none';
         }
 
         function confirmDeleteStaff() {
@@ -3590,6 +3622,37 @@
             showToast('Staff account removed.', 'success');
             closeStaffDeleteModal();
             renderStaffAccountsList();
+        }
+
+        // --- REUSABLE CONFIRM MODAL (replaces all native confirm()) ---
+        let _confirmCallback = null;
+
+        function showConfirm({ title, body, icon = 'warning', iconBg = 'bg-amber-100 dark:bg-amber-950/40', iconColor = 'text-amber-500', okLabel = 'Confirm', okIcon = 'check', okBg = 'bg-amber-500 hover:bg-amber-600', onConfirm }) {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-body').textContent = body;
+            document.getElementById('confirm-icon').textContent = icon;
+            document.getElementById('confirm-icon').className = `material-symbols-outlined text-[26px] ${iconColor}`;
+            document.getElementById('confirm-icon-wrap').className = `w-12 h-12 rounded-full flex items-center justify-center ${iconBg}`;
+            document.getElementById('confirm-ok-label').textContent = okLabel;
+            document.getElementById('confirm-ok-icon').textContent = okIcon;
+            document.getElementById('confirm-ok-btn').className = `flex-1 py-2.5 rounded-xl font-bold text-[12px] active:scale-95 transition-all flex items-center justify-center gap-1.5 text-white ${okBg}`;
+            _confirmCallback = onConfirm;
+            positionModalOverApp('modal-confirm');
+        }
+
+        function _confirmOk() {
+            _closeConfirmModal();
+            if (typeof _confirmCallback === 'function') _confirmCallback();
+            _confirmCallback = null;
+        }
+
+        function _confirmCancel() {
+            _closeConfirmModal();
+            _confirmCallback = null;
+        }
+
+        function _closeConfirmModal() {
+            document.getElementById('modal-confirm').style.display = 'none';
         }
 
         function applyRoleNavRestrictions(role) {
