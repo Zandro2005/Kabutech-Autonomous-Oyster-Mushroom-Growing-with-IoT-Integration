@@ -14,21 +14,27 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
-    <script>
+   <script>
         // This wrapper forces the script to wait for the HTML body to load
         document.addEventListener('DOMContentLoaded', () => {
             console.log("HTML and Tailwind are fully parsed!");
 
-            // Put ALL of your button click logic inside this block
-            const brokenButton = document.getElementById('YOUR_BUTTON_ID_HERE');
+            // Targeting the Mode Toggle Switch
+            const modeToggle = document.getElementById('mode-toggle');
 
-            if (brokenButton) {
-                brokenButton.addEventListener('click', () => {
-                    // Your button action happens here
-                    console.log("Button clicked successfully on first load!");
+            if (modeToggle) {
+                modeToggle.addEventListener('change', (event) => {
+                    // event.target.checked is true when switched to Manual
+                    if (event.target.checked) {
+                        console.log("System switched to Manual Mode 🛠️");
+                        // Put your Manual Mode logic here
+                    } else {
+                        console.log("System switched to Auto Mode 🤖");
+                        // Put your Auto Mode logic here
+                    }
                 });
             } else {
-                console.error("Could not find the button! Check if the ID matches your HTML.");
+                console.error("Could not find the 'mode-toggle' element! Double-check your dashboard HTML below.");
             }
         });
     </script>
