@@ -292,6 +292,242 @@
             background: #cce5d6;
             border-radius: 2px;
         }
+
+        /* Tab switch transition */
+        @keyframes tab-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-animate-in {
+            animation: tab-fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes tab-fade-out {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-8px) scale(0.99);
+            }
+        }
+
+        .tab-exit-out {
+            animation: tab-fade-out 0.25s ease forwards;
+        }
+
+        /* Staggered child entrance for elements inside a freshly-shown tab */
+        @keyframes child-rise-in {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .tab-animate-in>* {
+            animation: child-rise-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .tab-animate-in>*:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .tab-animate-in>*:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .tab-animate-in>*:nth-child(3) {
+            animation-delay: 0.25s;
+        }
+
+        .tab-animate-in>*:nth-child(4) {
+            animation-delay: 0.35s;
+        }
+
+        .tab-animate-in>*:nth-child(5) {
+            animation-delay: 0.45s;
+        }
+
+        .tab-animate-in>*:nth-child(6) {
+            animation-delay: 0.55s;
+        }
+
+        .tab-animate-in>*:nth-child(7) {
+            animation-delay: 0.65s;
+        }
+
+        .tab-animate-in>*:nth-child(8) {
+            animation-delay: 0.75s;
+        }
+
+        .tab-animate-in>*:nth-child(n+9) {
+            animation-delay: 0.85s;
+        }
+
+        /* Batch / list item stagger (applied via JS to dynamically-rendered cards) */
+        @keyframes item-pop-in {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .item-animate-in {
+            animation: item-pop-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes gentle-shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        /* Ripple effect for interactive elements */
+        .ripple-surface {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.45);
+            transform: scale(0);
+            animation: ripple-anim 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        .dark .ripple-effect,
+        .ripple-effect.ripple-dark {
+            background: rgba(0, 69, 33, 0.18);
+        }
+
+        @keyframes ripple-anim {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        /* Sensor card tap-to-expand */
+        .sensor-card {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .sensor-card:active {
+            transform: scale(0.97);
+        }
+
+        .sensor-card.expanded {
+            box-shadow: 0px 8px 24px rgba(15, 31, 20, 0.12);
+        }
+
+        .sensor-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.35s ease;
+            opacity: 0;
+        }
+
+        .sensor-detail.open {
+            max-height: 120px;
+            opacity: 1;
+            margin-top: 8px;
+        }
+
+        /* Confidence breakdown panel (Yield AI tab) */
+        .confidence-detail {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+        }
+
+        .confidence-detail.open {
+            max-height: 260px;
+            opacity: 1;
+        }
+
+        /* Grow Log batch card expandable timeline */
+        .batch-detail {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+        }
+
+        .batch-detail.open {
+            max-height: 200px;
+            opacity: 1;
+        }
+
+        /* Scroll-to-top FAB */
+        #scroll-top-fab {
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        #scroll-top-fab.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        /* Toast slide/swipe */
+        .toast-item {
+            animation: toast-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        @keyframes toast-slide-in {
+            from {
+                opacity: 0;
+                transform: translateY(-16px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .toast-item.toast-dismiss {
+            opacity: 0;
+            transform: translateX(60px) scale(0.9);
+        }
     </style>
 </head>
 
@@ -605,7 +841,14 @@
                 </header>
 
                 <!-- SCROLLABLE PAGE CANVAS -->
-                <div class="flex-1 overflow-y-auto hide-scrollbar bg-app-bg dark:bg-zinc-950 relative">
+                <div id="app-scroll-area"
+                    class="flex-1 overflow-y-auto hide-scrollbar bg-app-bg dark:bg-zinc-950 relative">
+                    <!-- Scroll-to-top FAB -->
+                    <button id="scroll-top-fab"
+                        onclick="document.getElementById('app-scroll-area').scrollTo({top:0,behavior:'smooth'})"
+                        class="fixed bottom-24 right-5 z-30 w-10 h-10 rounded-full bg-primary dark:bg-primary-container text-on-primary dark:text-white shadow-lg flex items-center justify-center active:scale-90 transition-all">
+                        <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+                    </button>
                     <div class="min-h-full p-4 pb-28 relative">
                         <div class="fixed inset-0 ambient-glow-1 pointer-events-none z-0"></div>
                         <div class="fixed inset-0 ambient-glow-2 pointer-events-none z-0"></div>
@@ -632,7 +875,7 @@
                         <!-- --- PAGE TABS --- -->
 
                         <!-- TAB A: HOME / DASHBOARD -->
-                        <div id="tab-home" class="space-y-4">
+                        <div id="tab-home" class="hidden space-y-4">
                             <div class="flex justify-between items-center">
                                 <div>
                                     <h2 class="text-headline-sm font-bold text-on-background dark:text-white"
@@ -652,7 +895,7 @@
                             <div class="grid grid-cols-2 gap-3.5">
                                 <!-- Temp -->
                                 <div
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -675,11 +918,25 @@
                                         <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                             id="sensor-temp">24.2°C</p>
                                         <canvas id="spark-temp" height="24" class="w-full mt-1 opacity-60"></canvas>
+                                        <div class="sensor-detail">
+                                            <div
+                                                class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
+                                                <div class="flex justify-between"><span>Optimal range</span><span
+                                                        class="font-bold text-on-surface dark:text-white">22°C –
+                                                        26°C</span></div>
+                                                <div class="flex justify-between"><span>Sensor</span><span
+                                                        class="font-bold text-on-surface dark:text-white">DHT22 – Sector
+                                                        A</span></div>
+                                                <div class="flex justify-between"><span>Status</span><span
+                                                        class="font-bold text-success-green dark:text-emerald-400">Nominal</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- Humidity -->
                                 <div
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -703,11 +960,25 @@
                                         <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                             id="sensor-humidity">68%</p>
                                         <canvas id="spark-humidity" height="24" class="w-full mt-1 opacity-60"></canvas>
+                                        <div class="sensor-detail">
+                                            <div
+                                                class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
+                                                <div class="flex justify-between"><span>Optimal range</span><span
+                                                        class="font-bold text-on-surface dark:text-white">65% –
+                                                        80%</span></div>
+                                                <div class="flex justify-between"><span>Sensor</span><span
+                                                        class="font-bold text-on-surface dark:text-white">DHT22 – Sector
+                                                        A</span></div>
+                                                <div class="flex justify-between"><span>Status</span><span
+                                                        class="font-bold text-success-green dark:text-emerald-400">Nominal</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- Light -->
                                 <div
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -730,11 +1001,25 @@
                                         <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                             id="sensor-light">420 µmol</p>
                                         <canvas id="spark-light" height="24" class="w-full mt-1 opacity-60"></canvas>
+                                        <div class="sensor-detail">
+                                            <div
+                                                class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
+                                                <div class="flex justify-between"><span>Optimal range</span><span
+                                                        class="font-bold text-on-surface dark:text-white">300 – 500
+                                                        µmol</span></div>
+                                                <div class="flex justify-between"><span>Sensor</span><span
+                                                        class="font-bold text-on-surface dark:text-white">LUX-100 –
+                                                        Sector A</span></div>
+                                                <div class="flex justify-between"><span>Status</span><span
+                                                        class="font-bold text-success-green dark:text-emerald-400">Nominal</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- CO2 -->
                                 <div id="sensor-co2-card"
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
+                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -758,6 +1043,20 @@
                                         <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
                                             id="sensor-co2">420 ppm</p>
                                         <canvas id="spark-co2" height="24" class="w-full mt-1 opacity-60"></canvas>
+                                        <div class="sensor-detail">
+                                            <div
+                                                class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
+                                                <div class="flex justify-between"><span>Optimal range</span><span
+                                                        class="font-bold text-on-surface dark:text-white">400 – 800
+                                                        ppm</span></div>
+                                                <div class="flex justify-between"><span>Sensor</span><span
+                                                        class="font-bold text-on-surface dark:text-white">MH-Z19 –
+                                                        Sector A</span></div>
+                                                <div class="flex justify-between"><span>Status</span><span
+                                                        class="font-bold text-success-green dark:text-emerald-400">Nominal</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1251,8 +1550,8 @@
                                     </div>
                                 </div>
                                 <!-- Confidence Arc Card -->
-                                <div
-                                    class="col-span-2 bg-surface-container-lowest dark:bg-zinc-900 rounded-2xl p-4 border border-muted dark:border-zinc-800 flex flex-col items-center justify-center text-center shadow-sm relative">
+                                <div id="confidence-card" onclick="toggleConfidenceDetail()"
+                                    class="confidence-card-tap col-span-2 bg-surface-container-lowest dark:bg-zinc-900 rounded-2xl p-4 border border-muted dark:border-zinc-800 flex flex-col items-center justify-center text-center shadow-sm relative cursor-pointer transition-all duration-200 active:scale-[0.97]">
                                     <svg class="w-20 h-20 transform -rotate-90" viewBox="0 0 100 100">
                                         <circle cx="50" cy="50" fill="transparent" r="40" stroke="#daeddb"
                                             stroke-width="8" class="dark:stroke-zinc-800"></circle>
@@ -1267,6 +1566,60 @@
                                         <span
                                             class="text-[8px] font-bold text-slate-400 uppercase tracking-wide">Confidence</span>
                                     </div>
+                                    <span
+                                        class="absolute bottom-1.5 right-1.5 material-symbols-outlined text-[12px] text-slate-300 dark:text-zinc-600">info</span>
+                                </div>
+                            </div>
+
+                            <!-- Confidence breakdown detail (tap-to-reveal) -->
+                            <div id="confidence-detail-panel" class="confidence-detail">
+                                <div
+                                    class="bg-surface-container-lowest dark:bg-zinc-900 rounded-2xl p-4 border border-muted dark:border-zinc-800 shadow-sm space-y-2.5">
+                                    <h4
+                                        class="text-body-sm font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[16px]">analytics</span>
+                                        Confidence Breakdown
+                                    </h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 w-20 shrink-0">Sensor
+                                                data</span>
+                                            <div class="flex-1 bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5">
+                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full"
+                                                    data-width="96" style="width:0%"></div>
+                                            </div>
+                                            <span
+                                                class="text-[10px] font-extrabold text-on-background dark:text-white w-8 text-right">96%</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 w-20 shrink-0">Historical
+                                                match</span>
+                                            <div class="flex-1 bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5">
+                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full"
+                                                    data-width="89" style="width:0%"></div>
+                                            </div>
+                                            <span
+                                                class="text-[10px] font-extrabold text-on-background dark:text-white w-8 text-right">89%</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 w-20 shrink-0">Substrate
+                                                health</span>
+                                            <div class="flex-1 bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5">
+                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full"
+                                                    data-width="91" style="width:0%"></div>
+                                            </div>
+                                            <span
+                                                class="text-[10px] font-extrabold text-on-background dark:text-white w-8 text-right">91%</span>
+                                        </div>
+                                    </div>
+                                    <p
+                                        class="text-[10px] text-on-surface-variant dark:text-zinc-400 leading-relaxed pt-1 border-t border-muted dark:border-zinc-800">
+                                        The model weighs live sensor accuracy, similarity to past successful batches,
+                                        and substrate condition to produce the overall confidence score.
+                                    </p>
                                 </div>
                             </div>
 
@@ -1313,48 +1666,48 @@
                                         <!-- Batch 398 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[60%] rounded-t-sm"
-                                                    title="Pred: 1.80kg"></div>
-                                                <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[65%] rounded-t-sm"
-                                                    title="Actual: 1.95kg"></div>
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="60" style="height:0%" title="Pred: 1.80kg"></div>
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="65" style="height:0%" title="Actual: 1.95kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#398</span>
                                         </div>
                                         <!-- Batch 399 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[70%] rounded-t-sm"
-                                                    title="Pred: 2.10kg"></div>
-                                                <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[68%] rounded-t-sm"
-                                                    title="Actual: 2.05kg"></div>
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="70" style="height:0%" title="Pred: 2.10kg"></div>
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="68" style="height:0%" title="Actual: 2.05kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#399</span>
                                         </div>
                                         <!-- Batch 400 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[75%] rounded-t-sm"
-                                                    title="Pred: 2.25kg"></div>
-                                                <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[78%] rounded-t-sm"
-                                                    title="Actual: 2.34kg"></div>
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="75" style="height:0%" title="Pred: 2.25kg"></div>
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="78" style="height:0%" title="Actual: 2.34kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#400</span>
                                         </div>
                                         <!-- Batch 401 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="w-2.5 bg-surface-variant dark:bg-zinc-700 h-[80%] rounded-t-sm"
-                                                    title="Pred: 2.40kg"></div>
-                                                <div class="w-2.5 bg-secondary dark:bg-emerald-700 h-[75%] rounded-t-sm"
-                                                    title="Actual: 2.25kg"></div>
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="80" style="height:0%" title="Pred: 2.40kg"></div>
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="75" style="height:0%" title="Actual: 2.25kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#401</span>
                                         </div>
                                         <!-- Batch 402 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center relative">
-                                                <div class="w-2.5 bg-primary dark:bg-primary-fixed h-[82%] rounded-t-sm"
-                                                    title="Current Pred: 2.45kg">
+                                                <div class="yield-bar w-2.5 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                    data-height="82" style="height:0%" title="Current Pred: 2.45kg">
                                                     <div
                                                         class="absolute -top-5 left-1/2 -translate-x-1/2 bg-surface dark:bg-zinc-800 border border-primary dark:border-primary-fixed px-1 py-0.5 rounded text-[8px] text-primary dark:text-primary-fixed font-bold whitespace-nowrap shadow-sm">
                                                         2.45kg</div>
@@ -1392,9 +1745,10 @@
 
                                 <!-- Recommendation Cards -->
                                 <div class="space-y-2">
-                                    <div class="bg-surface-soft dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-3 flex items-start gap-3 hover:border-primary transition-colors cursor-pointer group"
+                                    <div id="ai-rec-mist"
+                                        class="bg-surface-soft dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-3 flex items-start gap-3 hover:border-primary transition-all cursor-pointer group active:scale-[0.98]"
                                         onclick="applyAIOptimization('mist')">
-                                        <div
+                                        <div id="ai-rec-mist-icon"
                                             class="w-8 h-8 rounded-full bg-surface-container-high dark:bg-zinc-800 text-secondary dark:text-primary-fixed flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">water_drop</span>
                                         </div>
@@ -1403,7 +1757,7 @@
                                                 <h4 class="text-body-sm font-bold text-on-surface dark:text-white">
                                                     Optimize
                                                     Misting Targets</h4>
-                                                <span
+                                                <span id="ai-rec-mist-badge"
                                                     class="text-[8px] font-extrabold bg-secondary-container text-on-secondary-container dark:bg-emerald-950 dark:text-emerald-400 px-1.5 py-0.5 rounded">HIGH</span>
                                             </div>
                                             <p
@@ -1411,7 +1765,7 @@
                                                 Current humidity falls during peak illumination. Increase target to 80%
                                                 to
                                                 accelerate growth (+0.12 kg prediction boost).</p>
-                                            <span
+                                            <span id="ai-rec-mist-action"
                                                 class="text-caption font-bold text-primary dark:text-primary-fixed flex items-center gap-0.5 mt-2">
                                                 Apply target setpoint <span
                                                     class="material-symbols-outlined text-[14px]">arrow_forward</span>
@@ -1419,9 +1773,10 @@
                                         </div>
                                     </div>
 
-                                    <div class="bg-surface-soft dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-3 flex items-start gap-3 hover:border-primary transition-colors cursor-pointer group"
+                                    <div id="ai-rec-temp"
+                                        class="bg-surface-soft dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-3 flex items-start gap-3 hover:border-primary transition-all cursor-pointer group active:scale-[0.98]"
                                         onclick="applyAIOptimization('temp')">
-                                        <div
+                                        <div id="ai-rec-temp-icon"
                                             class="w-8 h-8 rounded-full bg-surface-container-high dark:bg-zinc-800 text-secondary dark:text-primary-fixed flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-on-primary transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">thermostat</span>
                                         </div>
@@ -1430,14 +1785,14 @@
                                                 <h4 class="text-body-sm font-bold text-on-surface dark:text-white">
                                                     Reduce
                                                     Peak Temperature</h4>
-                                                <span
+                                                <span id="ai-rec-temp-badge"
                                                     class="text-[8px] font-extrabold bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400 px-1.5 py-0.5 rounded">MEDIUM</span>
                                             </div>
                                             <p
                                                 class="text-[11px] text-on-surface-variant dark:text-zinc-400 leading-normal">
                                                 Reduce target temperature to 22.0°C to lock in substrate nutrients and
                                                 prevent moisture loss.</p>
-                                            <span
+                                            <span id="ai-rec-temp-action"
                                                 class="text-caption font-bold text-primary dark:text-primary-fixed flex items-center gap-0.5 mt-2">
                                                 Apply target setpoint <span
                                                     class="material-symbols-outlined text-[14px]">arrow_forward</span>
@@ -2276,7 +2631,63 @@
                     }, 700);
                 }, 3500);
             }
+
+            // Scroll-to-top FAB visibility
+            const scrollArea = document.getElementById('app-scroll-area');
+            const scrollFab = document.getElementById('scroll-top-fab');
+            if (scrollArea && scrollFab) {
+                scrollArea.addEventListener('scroll', () => {
+                    if (scrollArea.scrollTop > 200) scrollFab.classList.add('visible');
+                    else scrollFab.classList.remove('visible');
+                });
+            }
+
+            // Global ripple effect on buttons and clickable cards
+            document.addEventListener('click', (e) => {
+                const target = e.target.closest('button, .ripple-surface');
+                if (!target) return;
+                if (target.disabled) return;
+                const computed = getComputedStyle(target).position;
+                if (computed === 'static') target.style.position = 'relative';
+                if (!target.classList.contains('ripple-surface')) {
+                    target.classList.add('ripple-surface');
+                }
+                const rect = target.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple-effect';
+                const isDarkBg = ['bg-primary', 'primary-container', 'error', 'success-green'].some(c => target.className.includes(c));
+                if (!isDarkBg) ripple.classList.add('ripple-dark');
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+                ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+                target.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+
+            // Sensor card tap-to-expand
+            initSensorCardExpand();
         });
+
+        // Toggle expanded detail view on dashboard sensor cards
+        function initSensorCardExpand() {
+            document.querySelectorAll('.sensor-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const detail = card.querySelector('.sensor-detail');
+                    const wasOpen = card.classList.contains('expanded');
+                    // Close all other sensor cards
+                    document.querySelectorAll('.sensor-card').forEach(c => {
+                        c.classList.remove('expanded');
+                        const d = c.querySelector('.sensor-detail');
+                        if (d) d.classList.remove('open');
+                    });
+                    if (!wasOpen) {
+                        card.classList.add('expanded');
+                        if (detail) detail.classList.add('open');
+                    }
+                });
+            });
+        }
 
         // Dynamic time-based greeting
         function updateGreeting() {
@@ -2404,28 +2815,81 @@
                 return;
             }
 
-            // Hide all tabs
             const tabs = ['home', 'controls', 'yield', 'grow-log', 'diagnostics', 'profile'];
-            tabs.forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`nav-${t}`).className = "flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150";
+            const currentTabEl = document.getElementById(`tab-${state.currentTab}`);
+            const activeTabEl = document.getElementById(`tab-${tabId}`);
 
-                // Remove FILL attribute from icons
-                const icon = document.getElementById(`nav-${t}`).querySelector('.material-symbols-outlined');
-                if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+            // Don't re-trigger if same tab clicked
+            if (state.currentTab === tabId && !activeTabEl.classList.contains('hidden')) return;
+
+            const doSwitch = () => {
+                // Hide all tabs
+                tabs.forEach(t => {
+                    document.getElementById(`tab-${t}`).classList.add('hidden');
+                    document.getElementById(`tab-${t}`).classList.remove('tab-exit-out');
+                    document.getElementById(`nav-${t}`).className = "flex flex-col items-center justify-center flex-1 text-on-surface-variant dark:text-zinc-400 py-1 active:scale-95 transition-transform duration-150";
+
+                    // Remove FILL attribute from icons
+                    const icon = document.getElementById(`nav-${t}`).querySelector('.material-symbols-outlined');
+                    if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+                });
+
+                // Show active tab
+                activeTabEl.classList.remove('hidden');
+                activeTabEl.classList.remove('tab-animate-in');
+                // restart animation
+                void activeTabEl.offsetWidth;
+                activeTabEl.classList.add('tab-animate-in');
+
+                document.getElementById(`nav-${tabId}`).className = "flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed py-1 active:scale-95 transition-transform duration-150";
+
+                const activeIcon = document.getElementById(`nav-${tabId}`).querySelector('.material-symbols-outlined');
+                if (activeIcon) activeIcon.style.fontVariationSettings = "'FILL' 1";
+
+                state.currentTab = tabId;
+
+                // Scroll content area back to top on tab change
+                const scrollArea = document.getElementById('app-scroll-area');
+                if (scrollArea) scrollArea.scrollTo({ top: 0, behavior: 'instant' });
+
+                // Refresh staff accounts list when More/Profile tab is opened
+                if (tabId === 'profile') renderStaffAccountsList();
+
+                // Re-trigger stagger animations on dynamically-rendered lists
+                triggerTabContentAnimations(tabId);
+            };
+
+            // Brief exit animation on the currently visible tab before swapping
+            if (currentTabEl && !currentTabEl.classList.contains('hidden')) {
+                currentTabEl.classList.add('tab-exit-out');
+                setTimeout(doSwitch, 250);
+            } else {
+                doSwitch();
+            }
+        }
+
+        // Apply staggered entrance animation to dynamically-rendered list items per tab
+        function triggerTabContentAnimations(tabId) {
+            let containerIds = [];
+            if (tabId === 'grow-log') containerIds = ['active-batches-list'];
+            else if (tabId === 'diagnostics') containerIds = ['alerts-list-container'];
+            else if (tabId === 'profile') containerIds = ['more-staff-reports-container', 'staff-accounts-list'];
+
+            containerIds.forEach(id => {
+                const container = document.getElementById(id);
+                if (!container) return;
+                Array.from(container.children).forEach((child, i) => {
+                    child.classList.remove('item-animate-in');
+                    void child.offsetWidth;
+                    child.style.animationDelay = `${Math.min(i * 0.06, 0.4)}s`;
+                    child.classList.add('item-animate-in');
+                });
             });
 
-            // Show active tab
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            document.getElementById(`nav-${tabId}`).className = "flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed py-1 active:scale-95 transition-transform duration-150";
-
-            const activeIcon = document.getElementById(`nav-${tabId}`).querySelector('.material-symbols-outlined');
-            if (activeIcon) activeIcon.style.fontVariationSettings = "'FILL' 1";
-
-            state.currentTab = tabId;
-
-            // Refresh staff accounts list when More/Profile tab is opened
-            if (tabId === 'profile') renderStaffAccountsList();
+            // Yield tab: animate progress bars, confidence ring, and chart bars
+            if (tabId === 'yield') {
+                animateYieldTabEntrance();
+            }
         }
 
         // Phone Frame Toggle Logic
@@ -2700,7 +3164,7 @@
                 icon = "info";
             }
 
-            toast.className = `flex items-center gap-2 px-4 py-3 rounded-2xl shadow-xl transition-all duration-300 transform translate-y-[-20px] opacity-0 pointer-events-auto ${bgClass}`;
+            toast.className = `toast-item pointer-events-auto flex items-center gap-2 px-4 py-3 rounded-2xl shadow-xl cursor-pointer ${bgClass}`;
             toast.innerHTML = `
                 <span class="material-symbols-outlined text-[18px] shrink-0">${icon}</span>
                 <span class="text-caption font-bold">${msg}</span>
@@ -2708,18 +3172,32 @@
 
             container.appendChild(toast);
 
-            // Trigger animation
-            setTimeout(() => {
-                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
-            }, 50);
+            // Tap-to-dismiss
+            const dismiss = () => {
+                toast.classList.add('toast-dismiss');
+                setTimeout(() => toast.remove(), 250);
+            };
+            toast.addEventListener('click', dismiss);
+
+            // Swipe-to-dismiss (touch)
+            let startX = 0;
+            toast.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+            toast.addEventListener('touchmove', (e) => {
+                const dx = e.touches[0].clientX - startX;
+                if (dx > 0) toast.style.transform = `translateX(${dx}px)`;
+            }, { passive: true });
+            toast.addEventListener('touchend', (e) => {
+                const dx = e.changedTouches[0].clientX - startX;
+                if (dx > 60) {
+                    dismiss();
+                } else {
+                    toast.style.transform = '';
+                }
+            });
 
             // Hide and remove
-            setTimeout(() => {
-                toast.classList.add('translate-y-[-20px]', 'opacity-0');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 3000);
+            const autoTimer = setTimeout(dismiss, 3000);
+            toast.addEventListener('mouseenter', () => clearTimeout(autoTimer));
         }
 
         // --- 7. SENSOR SIMULATION ENGINE ---
@@ -2887,12 +3365,12 @@
             const co2Card = document.getElementById('sensor-co2-card');
             const co2Icon = document.getElementById('sensor-co2-icon-bg');
             if (state.currentCO2 > 800) {
-                co2Card.className = "bg-surface-container-lowest dark:bg-zinc-900 border border-error/50 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group glow-red transition-all duration-300";
+                co2Card.className = "sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-error/50 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group glow-red transition-all duration-300";
                 co2Icon.className = "bg-error-container p-2 rounded-lg text-error-red";
                 document.getElementById('co2-trend').className = "flex items-center text-error-red font-caption text-caption bg-error-container px-1.5 py-0.5 rounded-full";
                 document.getElementById('co2-trend').innerHTML = `<span class="material-symbols-outlined text-[12px] mr-0.5 animate-bounce">arrow_upward</span> DANGER`;
             } else {
-                co2Card.className = "bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300";
+                co2Card.className = "sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300";
                 co2Icon.className = "bg-surface-soft dark:bg-zinc-800 p-2 rounded-lg text-primary dark:text-primary-fixed";
                 const co2Trend = document.getElementById('co2-trend');
                 if (co2Trend) {
@@ -2900,6 +3378,8 @@
                     co2Trend.innerHTML = `<span class="material-symbols-outlined text-[12px] mr-0.5">horizontal_rule</span><span class="co2-trend-val">0%</span>`;
                 }
             }
+            // Re-apply expanded state if it was open before className was overwritten
+            if (co2Card.querySelector('.sensor-detail.open')) co2Card.classList.add('expanded');
         }
 
         // Dynamic system status message
@@ -3214,7 +3694,80 @@
         }
 
         // --- 9. AI OPTIMIZATION RECOMMENDATIONS ---
+        // Animate Yield AI tab visuals on entrance: bars grow, progress fills, ring draws in
+        function animateYieldTabEntrance() {
+            // Reset and animate chart bars
+            document.querySelectorAll('.yield-bar').forEach(bar => {
+                const target = bar.getAttribute('data-height');
+                bar.style.height = '0%';
+                void bar.offsetWidth;
+                setTimeout(() => { bar.style.height = target + '%'; }, 200);
+            });
+
+            // Reset and animate predicted yield progress bar
+            const progressBar = document.getElementById('predicted-yield-progress');
+            if (progressBar) {
+                const targetWidth = progressBar.style.width || progressBar.getAttribute('data-target') || '81.6%';
+                progressBar.setAttribute('data-target', targetWidth);
+                progressBar.style.width = '0%';
+                void progressBar.offsetWidth;
+                setTimeout(() => { progressBar.style.width = targetWidth; }, 250);
+            }
+
+            // Animate confidence ring drawing in
+            const ring = document.getElementById('confidence-score-circle');
+            if (ring) {
+                const targetOffset = ring.getAttribute('stroke-dashoffset') || '18';
+                ring.setAttribute('data-target-offset', targetOffset);
+                ring.style.transition = 'none';
+                ring.setAttribute('stroke-dashoffset', '251.2');
+                void ring.getBoundingClientRect();
+                ring.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1)';
+                setTimeout(() => { ring.setAttribute('stroke-dashoffset', targetOffset); }, 300);
+            }
+
+            // If the confidence breakdown panel is open, re-animate its sub-bars
+            const detailPanel = document.getElementById('confidence-detail-panel');
+            if (detailPanel && detailPanel.classList.contains('open')) {
+                animateConfidenceSubBars();
+            }
+        }
+
+        // Animate the small progress bars inside the confidence breakdown panel
+        function animateConfidenceSubBars() {
+            document.querySelectorAll('.confidence-sub-bar').forEach(bar => {
+                const target = bar.getAttribute('data-width');
+                bar.style.width = '0%';
+                void bar.offsetWidth;
+                setTimeout(() => { bar.style.width = target + '%'; }, 200);
+            });
+        }
+
+        // Toggle the confidence breakdown panel on tap
+        function toggleConfidenceDetail() {
+            const panel = document.getElementById('confidence-detail-panel');
+            const card = document.getElementById('confidence-card');
+            if (!panel) return;
+            const opening = !panel.classList.contains('open');
+            panel.classList.toggle('open');
+            if (card) card.classList.toggle('expanded');
+            if (opening) animateConfidenceSubBars();
+        }
+
         function applyAIOptimization(type) {
+            const card = document.getElementById(`ai-rec-${type}`);
+            const action = document.getElementById(`ai-rec-${type}-action`);
+            const icon = document.getElementById(`ai-rec-${type}-icon`);
+            const badge = document.getElementById(`ai-rec-${type}-badge`);
+
+            // Already applied — give a gentle shake instead of re-applying
+            if (card && card.classList.contains('ai-rec-applied')) {
+                card.style.animation = 'none';
+                void card.offsetWidth;
+                card.style.animation = 'gentle-shake 0.35s ease';
+                return;
+            }
+
             if (type === 'mist') {
                 updateHumiditySetpoint(80);
                 addLog('AI Optimization applied: target humidity set to 80%.', 'success');
@@ -3225,6 +3778,26 @@
                 showToast('Temperature target set to 22.0°C (AI Optimized)', 'success');
             }
             syncControlsUI();
+
+            // Visual "applied" feedback
+            if (card) {
+                card.classList.add('ai-rec-applied');
+                card.classList.add('border-success-green', 'dark:border-emerald-700');
+                card.style.animation = 'item-pop-in 0.3s ease';
+            }
+            if (icon) {
+                icon.classList.remove('bg-surface-container-high', 'dark:bg-zinc-800', 'text-secondary', 'dark:text-primary-fixed');
+                icon.classList.add('bg-success-green', 'text-white');
+                icon.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span>';
+            }
+            if (badge) {
+                badge.className = "text-[8px] font-extrabold bg-success-green/10 text-success-green dark:bg-emerald-950 dark:text-emerald-400 px-1.5 py-0.5 rounded";
+                badge.innerText = "APPLIED";
+            }
+            if (action) {
+                action.innerHTML = '<span class="material-symbols-outlined text-[14px]">check_circle</span> Setpoint applied';
+                action.classList.add('text-success-green', 'dark:text-emerald-400');
+            }
         }
 
         // --- 10. GROW BATCHES / CROPS LOG MANAGER ---
@@ -3248,9 +3821,16 @@
                 if (isContaminated) pillColor = "bg-red-100 border-red-200 text-red-600 dark:bg-red-950/40 dark:text-red-400";
 
                 const card = document.createElement('div');
-                card.className = `bg-surface-container-lowest dark:bg-zinc-900 border ${isContaminated ? 'border-red-300 dark:border-red-900' : 'border-muted dark:border-zinc-800'} rounded-2xl p-4 shadow-sm flex flex-col gap-2.5`;
+                card.className = `batch-card bg-surface-container-lowest dark:bg-zinc-900 border ${isContaminated ? 'border-red-300 dark:border-red-900' : 'border-muted dark:border-zinc-800'} rounded-2xl p-4 shadow-sm flex flex-col gap-2.5 transition-all duration-200 active:scale-[0.99]`;
+
+                // Compute timeline progress percentage (0-100) across the grow cycle
+                let timelinePct = 0;
+                if (isHarvested) timelinePct = 100;
+                else if (fruitDays !== null) timelinePct = Math.min(100, Math.round((fruitDays / 14) * 100));
+                else timelinePct = 8;
+
                 card.innerHTML = `
-                    <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center justify-between gap-2 cursor-pointer batch-card-header">
                         <div class="flex items-center gap-2.5 min-w-0">
                             <div class="w-8 h-8 shrink-0 rounded-xl ${isContaminated ? 'bg-red-100 dark:bg-red-950/40 text-red-500' : 'bg-surface-soft dark:bg-zinc-800 text-primary dark:text-primary-fixed'} flex items-center justify-center">
                                 <span class="material-symbols-outlined text-[18px]">${isContaminated ? 'warning' : 'eco'}</span>
@@ -3260,7 +3840,10 @@
                                 <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 leading-tight">Oyster Mushroom • ${batch.bags} bags</p>
                             </div>
                         </div>
-                        <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-lg border shrink-0 ${pillColor}">${isContaminated ? 'Contaminated' : isHarvested ? 'Harvested' : 'Fruiting'}</span>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-lg border ${pillColor}">${isContaminated ? 'Contaminated' : isHarvested ? 'Harvested' : 'Fruiting'}</span>
+                            <span class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-400 batch-expand-chevron transition-transform duration-300">expand_more</span>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-3 text-[10px] text-on-surface-variant dark:text-zinc-400 bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-3 py-2">
@@ -3273,29 +3856,53 @@
 
                     ${!isHarvested && !isContaminated ? `<p class="text-[9px] text-on-surface-variant dark:text-zinc-500 px-1">Est. harvest: <span class="font-bold">${estHarvest}</span></p>` : isHarvested ? `<p class="text-[9px] text-success-green dark:text-emerald-400 font-bold px-1">${batch.harvestKg ? '✓ ' + batch.harvestKg + ' kg harvested' : '✓ Cycle Complete'}</p>` : ''}
 
+                    <!-- Expandable growth timeline -->
+                    <div class="batch-detail">
+                        <div class="border-t border-slate-100 dark:border-zinc-800 pt-3 mt-1 space-y-2.5">
+                            <div class="flex items-center justify-between text-[9px] font-bold text-on-surface-variant dark:text-zinc-400">
+                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">science</span>Inoculation</span>
+                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">eco</span>Fruiting</span>
+                                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">done_all</span>Harvest</span>
+                            </div>
+                            <div class="w-full bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
+                                <div class="batch-timeline-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full transition-all duration-[1100ms] ease-out" data-width="${timelinePct}" style="width:0%"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                                <div class="bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-2.5 py-2">
+                                    <p class="text-[9px] text-on-surface-variant dark:text-zinc-400">Inoculated</p>
+                                    <p class="font-bold text-on-background dark:text-white">${batch.inocDate || '—'}</p>
+                                </div>
+                                <div class="bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-2.5 py-2">
+                                    <p class="text-[9px] text-on-surface-variant dark:text-zinc-400">Fruiting since</p>
+                                    <p class="font-bold text-on-background dark:text-white">${batch.fruitingDate || '—'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-zinc-800">
                         <span class="text-[9px] text-on-surface-variant dark:text-zinc-500">Started: ${batch.fruitingDate || batch.inocDate}</span>
                         <div class="flex gap-3">
                             ${!isContaminated && !isHarvested ? `
-                                <button onclick="openEditBatchModal(${batch.id})" class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 flex items-center gap-0.5 hover:underline">
+                                <button onclick="event.stopPropagation(); openEditBatchModal(${batch.id})" class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 flex items-center gap-0.5 hover:underline">
                                     <span class="material-symbols-outlined text-[13px]">edit</span>Edit
                                 </button>
-                                <button onclick="openHarvestModal(${batch.id})" class="text-[10px] font-bold text-success-green dark:text-emerald-400 flex items-center gap-0.5 hover:underline">
+                                <button onclick="event.stopPropagation(); openHarvestModal(${batch.id})" class="text-[10px] font-bold text-success-green dark:text-emerald-400 flex items-center gap-0.5 hover:underline">
                                     <span class="material-symbols-outlined text-[13px]">done_all</span>Harvest
                                 </button>
-                                <button onclick="flagContamination(${batch.id})" class="text-[10px] font-bold text-error-red flex items-center gap-0.5 hover:underline">
+                                <button onclick="event.stopPropagation(); flagContamination(${batch.id})" class="text-[10px] font-bold text-error-red flex items-center gap-0.5 hover:underline">
                                     <span class="material-symbols-outlined text-[13px]">bug_report</span>Flag
                                 </button>
-                                <button onclick="createTaskFromBatch(${batch.id})" class="text-[10px] font-bold text-primary dark:text-primary-fixed flex items-center gap-0.5 hover:underline">
+                                <button onclick="event.stopPropagation(); createTaskFromBatch(${batch.id})" class="text-[10px] font-bold text-primary dark:text-primary-fixed flex items-center gap-0.5 hover:underline">
                                     <span class="material-symbols-outlined text-[13px]">add_task</span>Task
                                 </button>
                             ` : isContaminated ? `
-                                <button onclick="removeBatch(${batch.id})" class="text-[10px] font-bold text-error-red flex items-center gap-0.5 hover:underline">
+                                <button onclick="event.stopPropagation(); removeBatch(${batch.id})" class="text-[10px] font-bold text-error-red flex items-center gap-0.5 hover:underline">
                                     <span class="material-symbols-outlined text-[13px]">delete</span>Remove
                                 </button>
                             ` : `
                                 <span class="text-[9px] text-slate-400 dark:text-zinc-500">Cycle Complete</span>
-                                <button onclick="removeBatch(${batch.id})" class="text-[10px] font-bold text-error-red flex items-center gap-0.5 hover:underline">
+                                <button onclick="event.stopPropagation(); removeBatch(${batch.id})" class="text-[10px] font-bold text-error-red flex items-center gap-0.5 hover:underline">
                                     <span class="material-symbols-outlined text-[13px]">delete</span>Delete
                                 </button>
                             `}
@@ -3303,6 +3910,23 @@
                     </div>
                 `;
                 container.appendChild(card);
+
+                // Wire up tap-to-expand on the header
+                const header = card.querySelector('.batch-card-header');
+                const detail = card.querySelector('.batch-detail');
+                const chevron = card.querySelector('.batch-expand-chevron');
+                const timelineBar = card.querySelector('.batch-timeline-bar');
+                header.addEventListener('click', () => {
+                    const opening = !detail.classList.contains('open');
+                    detail.classList.toggle('open');
+                    if (chevron) chevron.style.transform = opening ? 'rotate(180deg)' : 'rotate(0deg)';
+                    if (opening && timelineBar) {
+                        const target = timelineBar.getAttribute('data-width');
+                        timelineBar.style.width = '0%';
+                        void timelineBar.offsetWidth;
+                        setTimeout(() => { timelineBar.style.width = target + '%'; }, 150);
+                    }
+                });
             });
         }
 
