@@ -309,7 +309,7 @@
             animation: mist-flow 1.5s infinite ease-out;
         }
 
-        /* Range Slider */
+        /* Range Slider (legacy / generic) */
         input[type=range] {
             -webkit-appearance: none;
             background: transparent;
@@ -333,6 +333,97 @@
             cursor: pointer;
             background: #cce5d6;
             border-radius: 2px;
+        }
+
+        /* Compact control slider (controls tab) */
+        input.ctrl-slider {
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            background: #cce5d6;
+            transition: none;
+            display: block;
+            width: 100%;
+        }
+
+        .dark input.ctrl-slider {
+            background: #27272a;
+        }
+
+        input.ctrl-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #004521;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 6px rgba(0, 69, 33, 0.30);
+            cursor: pointer;
+            margin-top: -7px;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+        }
+
+        .dark input.ctrl-slider::-webkit-slider-thumb {
+            background: #adf2bc;
+            border-color: #18181b;
+            box-shadow: 0 2px 6px rgba(173, 242, 188, 0.25);
+        }
+
+        input.ctrl-slider::-webkit-slider-runnable-track {
+            height: 6px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        input.ctrl-slider:active::-webkit-slider-thumb {
+            transform: scale(1.25);
+            box-shadow: 0 0 0 5px rgba(0, 69, 33, 0.13);
+        }
+
+        .dark input.ctrl-slider:active::-webkit-slider-thumb {
+            box-shadow: 0 0 0 5px rgba(173, 242, 188, 0.15);
+        }
+
+        /* iOS-style toggle */
+        .ctrl-toggle {
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .ctrl-toggle .ctrl-toggle-knob {
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+        }
+
+        .ctrl-toggle.is-on {
+            background: #004521 !important;
+            border-color: #004521 !important;
+            opacity: 1 !important;
+            cursor: pointer !important;
+        }
+
+        .dark .ctrl-toggle.is-on {
+            background: #adf2bc !important;
+            border-color: #adf2bc !important;
+        }
+
+        .ctrl-toggle.is-on .ctrl-toggle-knob {
+            transform: translateX(24px);
+            background: #fff !important;
+        }
+
+        .dark .ctrl-toggle.is-on .ctrl-toggle-knob {
+            background: #004521 !important;
+        }
+
+        .ctrl-toggle:not(.opacity-50) {
+            cursor: pointer;
+            opacity: 1;
         }
 
         /* Tab switch transition */
@@ -612,11 +703,7 @@
         <!-- Toast Notifications Layer -->
         <div id="toast-container" class="absolute top-10 left-4 right-4 z-[99] flex flex-col gap-2 pointer-events-none">
         </div>
-        <!-- Slider debounce toast -->
-        <div id="slider-applying-toast"
-            class="hidden absolute bottom-28 left-1/2 -translate-x-1/2 z-[99] bg-zinc-800/90 dark:bg-zinc-700/90 text-white text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 pointer-events-none whitespace-nowrap shadow-lg">
-            <span class="material-symbols-outlined text-[13px] animate-spin">progress_activity</span>Applying in 3s…
-        </div>
+
 
         <!-- APP SHELL SCENE CONTAINER -->
         <div class="flex-1 flex flex-col overflow-hidden relative">
@@ -1222,327 +1309,339 @@
 
                         <!-- TAB B: ENVIRONMENT CONTROLS -->
                         <div id="tab-controls" class="hidden space-y-4">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h2 class="text-headline-sm font-bold text-on-background dark:text-white">
-                                        Environment
-                                        Controls</h2>
-                                    <p class="text-caption text-on-surface-variant dark:text-zinc-400">Greenhouse
-                                        setpoint
-                                        parameters & rules.</p>
-                                </div>
-                                <!-- Mode Toggle Switch -->
-                                <div class="flex flex-col items-end gap-1">
-                                    <div
-                                        class="flex items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-700 rounded-full p-1 shadow-sm">
-                                        <button id="mode-btn-auto" onclick="setSystemMode('auto')"
-                                            class="px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300">Auto</button>
-                                        <button id="mode-btn-manual" onclick="confirmManualMode()"
-                                            class="px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300">Manual</button>
-                                    </div>
-                                    <span id="mode-warning-label"
-                                        class="hidden text-[9px] font-bold text-warning-gold flex items-center gap-0.5">
-                                        <span class="material-symbols-outlined text-[11px]">warning</span> Manual
-                                        override
-                                        active
-                                    </span>
-                                </div>
+
+                            <!-- Header -->
+                            <div>
+                                <h2 class="text-headline-sm font-extrabold text-on-background dark:text-white">
+                                    Environment Controls</h2>
+                                <p class="text-caption text-on-surface-variant dark:text-zinc-400 mt-0.5">Set targets
+                                    and manage greenhouse devices</p>
                             </div>
 
-                            <!-- Setpoint Sliders Grid -->
-                            <div class="space-y-4">
-                                <!-- Temp Setpoint -->
-                                <div
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
-                                    <div class="flex justify-between items-start">
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
-                                                <span class="material-symbols-outlined text-[20px]"
-                                                    style="font-variation-settings: 'FILL' 1;">thermostat</span>
-                                            </div>
-                                            <div>
-                                                <h3 class="text-body-md font-bold text-on-background dark:text-white">
-                                                    Temperature target</h3>
-                                                <span
-                                                    class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Zone
-                                                    1 & 2</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div
-                                        class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
-                                        <div>
-                                            <p
-                                                class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
-                                                CURRENT TEMP</p>
-                                            <div class="flex items-baseline gap-0.5">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-on-background dark:text-white"
-                                                    id="ctrl-current-temp">24.2</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">°C</span>
-                                            </div>
-                                        </div>
-                                        <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
-                                        <div class="text-right">
-                                            <p
-                                                class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
-                                                TARGET SETPOINT</p>
-                                            <div class="flex items-baseline gap-0.5 justify-end">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
-                                                    id="val-temp-setpoint">23.5</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-primary dark:text-primary-fixed">°C</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex flex-col gap-1.5 pt-1">
-                                        <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
-                                            <span>15.0°C</span>
-                                            <span>35.0°C</span>
-                                        </div>
-                                        <input id="slider-temp" class="w-full h-1" max="35" min="15" step="0.5"
-                                            type="range" value="23.5" onchange="updateTempSetpoint(this.value)"
-                                            oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1)">
-                                    </div>
-                                    <!-- Device toggle -->
-                                    <div
-                                        class="flex items-center justify-between bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-3 py-2 border border-surface-variant dark:border-zinc-800">
-                                        <span
-                                            class="text-[11px] font-bold text-on-background dark:text-white flex items-center gap-1.5"><span
-                                                class="material-symbols-outlined text-[15px]">mode_fan</span>Ventilation
-                                            Fan</span>
-                                        <button id="btn-device-fans" onclick="toggleDeviceManual('fans')"
-                                            class="text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-surface-container-lowest dark:bg-zinc-900 border-muted dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400 opacity-50 cursor-not-allowed">OFF</button>
+                            <!-- Mode Banner -->
+                            <div id="ctrl-mode-banner"
+                                class="rounded-2xl border px-4 py-3 flex items-center justify-between gap-3 bg-surface-soft dark:bg-zinc-900 border-border-muted dark:border-zinc-700">
+                                <div class="flex items-center gap-2.5">
+                                    <span id="ctrl-mode-icon"
+                                        class="material-symbols-outlined text-[22px] text-primary dark:text-primary-fixed"
+                                        style="font-variation-settings:'FILL' 1">smart_toy</span>
+                                    <div>
+                                        <p class="text-[12px] font-extrabold text-on-background dark:text-white"
+                                            id="ctrl-mode-title">Auto Mode</p>
+                                        <p class="text-[10px] text-on-surface-variant dark:text-zinc-400"
+                                            id="ctrl-mode-desc">System adjusts devices automatically</p>
                                     </div>
                                 </div>
-
-                                <!-- Humidity Setpoint -->
                                 <div
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
-                                    <div class="flex justify-between items-start">
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
-                                                <span class="material-symbols-outlined text-[20px]"
-                                                    style="font-variation-settings: 'FILL' 1;">humidity_mid</span>
-                                            </div>
-                                            <div>
-                                                <h3 class="text-body-md font-bold text-on-background dark:text-white">
-                                                    Humidity target</h3>
-                                                <span
-                                                    class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Misters</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div
-                                        class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
-                                        <div>
-                                            <p
-                                                class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
-                                                CURRENT HUMIDITY</p>
-                                            <div class="flex items-baseline gap-0.5">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-on-background dark:text-white"
-                                                    id="ctrl-current-humidity">68</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">%</span>
-                                            </div>
-                                        </div>
-                                        <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
-                                        <div class="text-right">
-                                            <p
-                                                class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
-                                                TARGET SETPOINT</p>
-                                            <div class="flex items-baseline gap-0.5 justify-end">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
-                                                    id="val-humidity-setpoint">75</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-primary dark:text-primary-fixed">%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex flex-col gap-1.5 pt-1">
-                                        <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
-                                            <span>40%</span>
-                                            <span>90%</span>
-                                        </div>
-                                        <input id="slider-humidity" class="w-full h-1" max="90" min="40" step="1"
-                                            type="range" value="75" onchange="updateHumiditySetpoint(this.value)"
-                                            oninput="document.getElementById('val-humidity-setpoint').innerText=this.value">
-                                    </div>
-                                    <!-- Device toggle -->
-                                    <div
-                                        class="flex items-center justify-between bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-3 py-2 border border-surface-variant dark:border-zinc-800">
-                                        <span
-                                            class="text-[11px] font-bold text-on-background dark:text-white flex items-center gap-1.5"><span
-                                                class="material-symbols-outlined text-[15px]">water_drop</span>Misters</span>
-                                        <button id="btn-device-misters" onclick="toggleDeviceManual('misters')"
-                                            class="text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-surface-container-lowest dark:bg-zinc-900 border-muted dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400 opacity-50 cursor-not-allowed">OFF</button>
-                                    </div>
-                                </div>
-
-                                <!-- Light Setpoint -->
-                                <div id="light-setpoint-card"
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
-                                    <div class="flex justify-between items-start">
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
-                                                <span class="material-symbols-outlined text-[20px]"
-                                                    style="font-variation-settings: 'FILL' 1;">wb_incandescent</span>
-                                            </div>
-                                            <div>
-                                                <h3 class="text-body-md font-bold text-on-background dark:text-white">
-                                                    Light Intensity</h3>
-                                                <span
-                                                    class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Grow
-                                                    Lights</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
-                                        <div>
-                                            <p
-                                                class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
-                                                CURRENT LIGHT</p>
-                                            <div class="flex items-baseline gap-0.5">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-on-background dark:text-white"
-                                                    id="ctrl-current-light">420</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">µmol</span>
-                                            </div>
-                                        </div>
-                                        <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
-                                        <div class="text-right" id="light-target-display">
-                                            <p
-                                                class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
-                                                TARGET SETPOINT</p>
-                                            <div class="flex items-baseline gap-0.5 justify-end">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
-                                                    id="val-light-setpoint">500</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-primary dark:text-primary-fixed">µmol</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-col gap-1.5 pt-1" id="light-slider-wrapper">
-                                        <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
-                                            <span>100 µmol</span>
-                                            <span>1000 µmol</span>
-                                        </div>
-                                        <input id="slider-light" class="w-full h-1" max="1000" min="100" step="10"
-                                            type="range" value="500" onchange="updateLightSetpoint(this.value)"
-                                            oninput="document.getElementById('val-light-setpoint').innerText=this.value">
-                                    </div>
-                                    <!-- Device toggle -->
-                                    <div
-                                        class="flex items-center justify-between bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-3 py-2 border border-surface-variant dark:border-zinc-800">
-                                        <span
-                                            class="text-[11px] font-bold text-on-background dark:text-white flex items-center gap-1.5"><span
-                                                class="material-symbols-outlined text-[15px]">wb_incandescent</span>Grow
-                                            Lights</span>
-                                        <button id="btn-device-lights" onclick="toggleDeviceManual('lights')"
-                                            class="text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-surface-container-lowest dark:bg-zinc-900 border-muted dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400 opacity-50 cursor-not-allowed">OFF</button>
-                                    </div>
-                                </div>
-
-                                <!-- CO2 Setpoint -->
-                                <div
-                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm flex flex-col gap-4">
-                                    <div class="flex justify-between items-start">
-                                        <div class="flex items-center gap-2">
-                                            <div
-                                                class="w-9 h-9 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
-                                                <span class="material-symbols-outlined text-[20px]"
-                                                    style="font-variation-settings: 'FILL' 1;">air</span>
-                                            </div>
-                                            <div>
-                                                <h3 class="text-body-md font-bold text-on-background dark:text-white">
-                                                    CO2 Target</h3>
-                                                <span
-                                                    class="text-[10px] text-secondary bg-surface dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-border-muted dark:border-emerald-800 mt-0.5 inline-block">Ventilation
-                                                    Fan</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="flex items-center justify-between bg-app-bg dark:bg-zinc-800/50 rounded-xl p-3 border border-surface-variant dark:border-zinc-800">
-                                        <div>
-                                            <p
-                                                class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 tracking-wider">
-                                                CURRENT CO2</p>
-                                            <div class="flex items-baseline gap-0.5">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-on-background dark:text-white"
-                                                    id="ctrl-current-co2">420</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-on-surface-variant dark:text-zinc-400">ppm</span>
-                                            </div>
-                                        </div>
-                                        <div class="w-px h-8 bg-border-muted dark:bg-zinc-700"></div>
-                                        <div class="text-right">
-                                            <p
-                                                class="text-[9px] font-bold text-primary dark:text-primary-fixed tracking-wider">
-                                                TARGET SETPOINT</p>
-                                            <div class="flex items-baseline gap-0.5 justify-end">
-                                                <span
-                                                    class="text-headline-md font-extrabold text-primary dark:text-primary-fixed"
-                                                    id="val-co2-setpoint">600</span>
-                                                <span
-                                                    class="text-body-sm font-bold text-primary dark:text-primary-fixed">ppm</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="co2-slider-wrapper" class="flex flex-col gap-1.5 pt-1">
-                                        <div class="flex justify-between text-[11px] text-slate-500 font-semibold">
-                                            <span>300 ppm</span>
-                                            <span>1200 ppm</span>
-                                        </div>
-                                        <input id="slider-co2" class="w-full h-1" max="1200" min="300" step="10"
-                                            type="range" value="600" onchange="commitCO2Setpoint(this.value)"
-                                            oninput="document.getElementById('val-co2-setpoint').innerText=this.value">
-                                    </div>
-                                    <!-- Ventilation toggle -->
-                                    <div
-                                        class="flex items-center justify-between bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-3 py-2 border border-surface-variant dark:border-zinc-800">
-                                        <span
-                                            class="text-[11px] font-bold text-on-background dark:text-white flex items-center gap-1.5"><span
-                                                class="material-symbols-outlined text-[15px]">mode_fan</span>Ventilation
-                                            Fan</span>
-                                        <button id="btn-vent-fan" onclick="toggleDeviceManual('ventFan')"
-                                            class="text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-surface-container-lowest dark:bg-zinc-900 border-muted dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400 opacity-50 cursor-not-allowed">OFF</button>
-                                    </div>
+                                    class="flex items-center bg-surface-container-lowest dark:bg-zinc-800 border border-border-muted dark:border-zinc-700 rounded-full p-1 gap-0.5 shrink-0">
+                                    <button id="mode-btn-auto" onclick="setSystemMode('auto')"
+                                        class="px-3 py-1.5 rounded-full bg-primary text-on-primary font-bold text-[11px] transition-all duration-300">Auto</button>
+                                    <button id="mode-btn-manual" onclick="confirmManualMode()"
+                                        class="px-3 py-1.5 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-[11px] transition-all duration-300">Manual</button>
                                 </div>
                             </div>
+                            <span id="mode-warning-label"
+                                class="hidden text-[10px] font-bold text-warning-gold flex items-center gap-1 -mt-2 px-1">
+                                <span class="material-symbols-outlined text-[12px]">warning</span> Manual override
+                                active — you control all devices
+                            </span>
 
-                            <!-- Control Strategy Info Panel -->
-                            <div
-                                class="bg-surface-soft dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 text-body-sm text-on-surface-variant dark:text-zinc-300 space-y-2">
-                                <h4 class="font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
-                                    <span class="material-symbols-outlined text-[18px]">info</span> Control Logic
-                                </h4>
-                                <ul class="list-disc pl-4 space-y-1 text-caption">
-                                    <li><strong>Cooling circulation fans</strong> engage if temperature rises 0.5°C
-                                        above
-                                        setpoint.</li>
-                                    <li><strong>High pressure misters</strong> turn on if humidity falls 3% below target
-                                        and
-                                        turn off once target is reached.</li>
-                                    <li><strong>Lighting cycle</strong> operates on automated schedules matching harvest
-                                        predictions.</li>
-                                </ul>
+                            <!-- Section label -->
+                            <p
+                                class="text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant dark:text-zinc-500 px-1">
+                                Setpoint Targets</p>
+
+                            <!-- 4 Control Cards -->
+                            <div class="space-y-3">
+
+                                <!-- Temperature -->
+                                <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm"
+                                    id="ctrl-row-temp">
+                                    <!-- Top row: icon + name + live reading + target -->
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div
+                                            class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-orange-100 dark:border-zinc-700">
+                                            <span class="material-symbols-outlined text-[22px] text-orange-500"
+                                                style="font-variation-settings:'FILL' 1">thermostat</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-1.5">
+                                                    <p
+                                                        class="text-[13px] font-extrabold text-on-background dark:text-white">
+                                                        Temperature</p>
+                                                    <span id="saving-dot-temp"
+                                                        class="hidden text-[9px] text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
+                                                            class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                </div>
+                                                <div
+                                                    class="flex items-center gap-1.5 bg-surface-soft dark:bg-zinc-800 rounded-full px-2.5 py-1 border border-border-muted dark:border-zinc-700">
+                                                    <span
+                                                        class="text-[10px] text-on-surface-variant dark:text-zinc-400">Now
+                                                        <span class="font-bold text-on-background dark:text-white"
+                                                            id="ctrl-current-temp">24.2</span>°C</span>
+                                                    <span class="text-slate-300 dark:text-zinc-600">›</span>
+                                                    <span
+                                                        class="text-[10px] font-extrabold text-primary dark:text-primary-fixed">Target
+                                                        <span id="val-temp-setpoint">23.5</span>°C</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                                Keeps mushrooms at optimal growing temperature</p>
+                                        </div>
+                                    </div>
+                                    <!-- Slider -->
+                                    <input id="slider-temp" class="ctrl-slider w-full" type="range" min="15" max="35"
+                                        step="0.5" value="23.5" onchange="updateTempSetpoint(this.value)"
+                                        oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
+                                    <div
+                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                        <span>15°C Cool</span><span>35°C Hot</span>
+                                    </div>
+                                    <!-- Device toggle row -->
+                                    <div
+                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">mode_fan</span>
+                                            <div>
+                                                <p class="text-[11px] font-bold text-on-background dark:text-white">
+                                                    Ventilation Fan</p>
+                                                <p class="text-[9px] text-on-surface-variant dark:text-zinc-500">Blows
+                                                    cool air to lower temperature</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span id="lbl-device-fans"
+                                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
+                                            <button id="btn-device-fans" onclick="toggleDeviceManual('fans')"
+                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                aria-label="Toggle fan">
+                                                <span
+                                                    class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Humidity -->
+                                <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm"
+                                    id="ctrl-row-humidity">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div
+                                            class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-blue-100 dark:border-zinc-700">
+                                            <span class="material-symbols-outlined text-[22px] text-blue-500"
+                                                style="font-variation-settings:'FILL' 1">humidity_mid</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-1.5">
+                                                    <p
+                                                        class="text-[13px] font-extrabold text-on-background dark:text-white">
+                                                        Humidity</p>
+                                                    <span id="saving-dot-humidity"
+                                                        class="hidden text-[9px] text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
+                                                            class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                </div>
+                                                <div
+                                                    class="flex items-center gap-1.5 bg-surface-soft dark:bg-zinc-800 rounded-full px-2.5 py-1 border border-border-muted dark:border-zinc-700">
+                                                    <span
+                                                        class="text-[10px] text-on-surface-variant dark:text-zinc-400">Now
+                                                        <span class="font-bold text-on-background dark:text-white"
+                                                            id="ctrl-current-humidity">68</span>%</span>
+                                                    <span class="text-slate-300 dark:text-zinc-600">›</span>
+                                                    <span
+                                                        class="text-[10px] font-extrabold text-primary dark:text-primary-fixed">Target
+                                                        <span id="val-humidity-setpoint">75</span>%</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                                Moisture level in the air for healthy fruiting</p>
+                                        </div>
+                                    </div>
+                                    <input id="slider-humidity" class="ctrl-slider w-full" type="range" min="40"
+                                        max="90" step="1" value="75" onchange="updateHumiditySetpoint(this.value)"
+                                        oninput="document.getElementById('val-humidity-setpoint').innerText=this.value; updateSliderFill(this)">
+                                    <div
+                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                        <span>40% Dry</span><span>90% Wet</span>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">water_drop</span>
+                                            <div>
+                                                <p class="text-[11px] font-bold text-on-background dark:text-white">
+                                                    Misting System</p>
+                                                <p class="text-[9px] text-on-surface-variant dark:text-zinc-500">Sprays
+                                                    fine water mist to raise humidity</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span id="lbl-device-misters"
+                                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
+                                            <button id="btn-device-misters" onclick="toggleDeviceManual('misters')"
+                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                aria-label="Toggle misters">
+                                                <span
+                                                    class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Light -->
+                                <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm"
+                                    id="light-setpoint-card">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div
+                                            class="w-10 h-10 rounded-xl bg-yellow-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-yellow-100 dark:border-zinc-700">
+                                            <span class="material-symbols-outlined text-[22px] text-yellow-500"
+                                                style="font-variation-settings:'FILL' 1">wb_incandescent</span>
+                                        </div>
+                                        <div class="flex-1" id="light-target-display">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-1.5">
+                                                    <p
+                                                        class="text-[13px] font-extrabold text-on-background dark:text-white">
+                                                        Light Intensity</p><span id="saving-dot-light"
+                                                        class="hidden text-[9px] text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
+                                                            class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                </div>
+                                                <div
+                                                    class="flex items-center gap-1.5 bg-surface-soft dark:bg-zinc-800 rounded-full px-2.5 py-1 border border-border-muted dark:border-zinc-700">
+                                                    <span
+                                                        class="text-[10px] text-on-surface-variant dark:text-zinc-400">Now
+                                                        <span class="font-bold text-on-background dark:text-white"
+                                                            id="ctrl-current-light">420</span></span>
+                                                    <span class="text-slate-300 dark:text-zinc-600">›</span>
+                                                    <span
+                                                        class="text-[10px] font-extrabold text-primary dark:text-primary-fixed">Target
+                                                        <span id="val-light-setpoint">500</span> µmol</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                                Brightness of grow lights (higher = brighter)</p>
+                                        </div>
+                                    </div>
+                                    <div id="light-slider-wrapper">
+                                        <input id="slider-light" class="ctrl-slider w-full" type="range" min="100"
+                                            max="1000" step="10" value="500" onchange="updateLightSetpoint(this.value)"
+                                            oninput="document.getElementById('val-light-setpoint').innerText=this.value; updateSliderFill(this)">
+                                        <div
+                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                            <span>100 Dim</span><span>1000 Bright</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">wb_incandescent</span>
+                                            <div>
+                                                <p class="text-[11px] font-bold text-on-background dark:text-white">Grow
+                                                    Lights</p>
+                                                <p class="text-[9px] text-on-surface-variant dark:text-zinc-500">LED
+                                                    lights that help mushrooms grow</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span id="lbl-device-lights"
+                                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
+                                            <button id="btn-device-lights" onclick="toggleDeviceManual('lights')"
+                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                aria-label="Toggle grow lights">
+                                                <span
+                                                    class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- CO2 -->
+                                <div
+                                    class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div
+                                            class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-zinc-700">
+                                            <span class="material-symbols-outlined text-[22px] text-emerald-600"
+                                                style="font-variation-settings:'FILL' 1">air</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center gap-1.5">
+                                                    <p
+                                                        class="text-[13px] font-extrabold text-on-background dark:text-white">
+                                                        CO₂ Level</p><span id="saving-dot-co2"
+                                                        class="hidden text-[9px] text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
+                                                            class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                </div>
+                                                <div
+                                                    class="flex items-center gap-1.5 bg-surface-soft dark:bg-zinc-800 rounded-full px-2.5 py-1 border border-border-muted dark:border-zinc-700">
+                                                    <span
+                                                        class="text-[10px] text-on-surface-variant dark:text-zinc-400">Now
+                                                        <span class="font-bold text-on-background dark:text-white"
+                                                            id="ctrl-current-co2">420</span></span>
+                                                    <span class="text-slate-300 dark:text-zinc-600">›</span>
+                                                    <span
+                                                        class="text-[10px] font-extrabold text-primary dark:text-primary-fixed">Target
+                                                        <span id="val-co2-setpoint">600</span> ppm</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                                Carbon dioxide concentration — affects mushroom size</p>
+                                        </div>
+                                    </div>
+                                    <div id="co2-slider-wrapper">
+                                        <input id="slider-co2" class="ctrl-slider w-full" type="range" min="300"
+                                            max="1200" step="10" value="600" onchange="commitCO2Setpoint(this.value)"
+                                            oninput="document.getElementById('val-co2-setpoint').innerText=this.value; updateSliderFill(this)">
+                                        <div
+                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                            <span>300 Low</span><span>1200 High</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        <div class="flex items-center gap-2">
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">mode_fan</span>
+                                            <div>
+                                                <p class="text-[11px] font-bold text-on-background dark:text-white">
+                                                    Ventilation Fan (CO₂)</p>
+                                                <p class="text-[9px] text-on-surface-variant dark:text-zinc-500">Flushes
+                                                    out excess CO₂ with fresh air</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span id="lbl-vent-fan"
+                                                class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
+                                            <button id="btn-vent-fan" onclick="toggleDeviceManual('ventFan')"
+                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                aria-label="Toggle vent fan">
+                                                <span
+                                                    class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div><!-- /cards -->
+
+                            <!-- Manual mode locked hint -->
+                            <div id="ctrl-locked-hint"
+                                class="flex gap-2.5 items-center bg-surface-soft dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-xl px-3.5 py-3">
+                                <span
+                                    class="material-symbols-outlined text-[18px] text-primary dark:text-primary-fixed shrink-0">lock</span>
+                                <p class="text-[11px] text-on-surface-variant dark:text-zinc-400 leading-relaxed">
+                                    Device toggles are <strong class="text-on-background dark:text-white">locked in Auto
+                                        mode.</strong> Switch to <strong
+                                        class="text-on-background dark:text-white">Manual</strong> above to control
+                                    devices yourself.
+                                </p>
                             </div>
+
                         </div>
 
                         <!-- TAB C: YIELD AI -->
@@ -2735,6 +2834,14 @@
             setSensorDOMStatic();
             updateGreeting();
 
+            // Init ctrl-slider fill tracks
+            setTimeout(() => {
+                ['slider-temp', 'slider-humidity', 'slider-light', 'slider-co2'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) updateSliderFill(el);
+                });
+            }, 100);
+
             // Set current date in inoculation form
             document.getElementById('batch-date').value = new Date().toISOString().substring(0, 10);
 
@@ -3088,6 +3195,14 @@
                 state.theme = 'dark';
                 addLog('Switched interface to Dark Mode.', 'info');
             }
+
+            // Re-paint slider fills with updated dark/light colors
+            setTimeout(() => {
+                ['slider-temp', 'slider-humidity', 'slider-light', 'slider-co2'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) updateSliderFill(el);
+                });
+            }, 50);
 
             // Remove the transition/animation classes once finished, so they
             // don't interfere with other animations/transitions afterward
@@ -3817,25 +3932,25 @@
             if (co2Sp) co2Sp.innerText = state.co2Setpoint || 600;
             if (co2Slider) co2Slider.value = state.co2Setpoint || 600;
             if (co2Cur) co2Cur.innerText = Math.round(state.currentCO2);
-            const ventBtn = document.getElementById('btn-vent-fan');
-            if (ventBtn) {
-                ventBtn.textContent = state.deviceStates.ventFan ? 'ON' : 'OFF';
-                ventBtn.className = state.deviceStates.ventFan
-                    ? 'text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-primary text-on-primary border-primary'
-                    : 'text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-surface-container-lowest dark:bg-zinc-900 border-muted dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400';
-            }
+            // init slider fills
+            ['slider-temp', 'slider-humidity', 'slider-light', 'slider-co2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) updateSliderFill(el);
+            });
             syncDeviceButtons();
         }
 
         let _sliderDebounceTimers = {};
-        function _debouncedSetpoint(key, fn, delay) {
+        function _debouncedSetpoint(key, fn) {
             clearTimeout(_sliderDebounceTimers[key]);
-            const toast = document.getElementById('slider-applying-toast');
-            if (toast) { toast.classList.remove('hidden'); }
+            // Show inline saving dot on the relevant card
+            const dotId = 'saving-dot-' + key;
+            const dot = document.getElementById(dotId);
+            if (dot) dot.classList.remove('hidden');
             _sliderDebounceTimers[key] = setTimeout(() => {
                 fn();
-                if (toast) { toast.classList.add('hidden'); }
-            }, delay || 3000);
+                if (dot) dot.classList.add('hidden');
+            }, 800);
         }
 
         function updateTempSetpoint(val) {
@@ -3896,22 +4011,49 @@
 
         function syncDeviceButtons() {
             const isManual = state.systemMode === 'manual';
-            const map = { fans: 'btn-device-fans', misters: 'btn-device-misters', lights: 'btn-device-lights', ventFan: 'btn-vent-fan' };
-            Object.entries(map).forEach(([device, btnId]) => {
-                const btn = document.getElementById(btnId);
+            const map = {
+                fans: { btn: 'btn-device-fans', lbl: 'lbl-device-fans' },
+                misters: { btn: 'btn-device-misters', lbl: 'lbl-device-misters' },
+                lights: { btn: 'btn-device-lights', lbl: 'lbl-device-lights' },
+                ventFan: { btn: 'btn-vent-fan', lbl: 'lbl-vent-fan' }
+            };
+            Object.entries(map).forEach(([device, ids]) => {
+                const btn = document.getElementById(ids.btn);
+                const lbl = document.getElementById(ids.lbl);
                 if (!btn) return;
                 const on = !!state.deviceStates[device];
+                // Base toggle classes
+                btn.className = 'ctrl-toggle rounded-full border-2 relative transition-all duration-300';
                 if (!isManual) {
-                    btn.textContent = on ? 'ON' : 'OFF';
-                    btn.className = 'text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-surface-container-lowest dark:bg-zinc-900 border-muted dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400 opacity-50 cursor-not-allowed';
-                } else if (on) {
-                    btn.textContent = 'ON';
-                    btn.className = 'text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-primary text-on-primary border-primary cursor-pointer';
+                    btn.classList.add('border-slate-200', 'dark:border-zinc-700', 'bg-slate-200', 'dark:bg-zinc-700', 'opacity-50', 'cursor-not-allowed');
+                    btn.classList.toggle('is-on', on);
                 } else {
-                    btn.textContent = 'OFF';
-                    btn.className = 'text-[10px] font-bold px-3 py-1 rounded-full border transition-all active:scale-95 bg-surface-container-lowest dark:bg-zinc-900 border-muted dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400 cursor-pointer';
+                    btn.classList.add('border-slate-200', 'dark:border-zinc-700', 'bg-slate-200', 'dark:bg-zinc-700');
+                    btn.classList.toggle('is-on', on);
+                }
+                if (lbl) {
+                    lbl.innerText = on ? 'ON' : 'OFF';
+                    lbl.className = on
+                        ? 'text-[10px] font-extrabold text-primary dark:text-primary-fixed'
+                        : 'text-[10px] font-bold text-on-surface-variant dark:text-zinc-500';
                 }
             });
+            // Update mode banner
+            const modeTitle = document.getElementById('ctrl-mode-title');
+            const modeDesc = document.getElementById('ctrl-mode-desc');
+            const modeIcon = document.getElementById('ctrl-mode-icon');
+            const lockedHint = document.getElementById('ctrl-locked-hint');
+            if (isManual) {
+                if (modeTitle) modeTitle.innerText = 'Manual Mode';
+                if (modeDesc) modeDesc.innerText = 'You control devices directly';
+                if (modeIcon) modeIcon.innerText = 'tune';
+                if (lockedHint) lockedHint.classList.add('hidden');
+            } else {
+                if (modeTitle) modeTitle.innerText = 'Auto Mode';
+                if (modeDesc) modeDesc.innerText = 'System adjusts devices automatically';
+                if (modeIcon) modeIcon.innerText = 'smart_toy';
+                if (lockedHint) lockedHint.classList.remove('hidden');
+            }
         }
 
         // --- 9. AI OPTIMIZATION RECOMMENDATIONS ---
@@ -5146,6 +5288,17 @@
                     container.appendChild(div);
                 });
             });
+        }
+
+        // Sync the ctrl-slider filled-track CSS variable
+        function updateSliderFill(input) {
+            if (!input) return;
+            const min = parseFloat(input.min), max = parseFloat(input.max), val = parseFloat(input.value);
+            const pct = ((val - min) / (max - min) * 100).toFixed(1);
+            const isDark = document.documentElement.classList.contains('dark');
+            const filled = isDark ? '#adf2bc' : '#004521';
+            const track = isDark ? '#27272a' : '#cce5d6';
+            input.style.background = `linear-gradient(to right, ${filled} ${pct}%, ${track} ${pct}%)`;
         }
 
         function toggleAccordion(id) {
