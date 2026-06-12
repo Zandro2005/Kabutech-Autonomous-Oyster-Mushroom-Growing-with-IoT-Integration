@@ -113,6 +113,48 @@
         }
     </script>
     <style>
+        /* --- Smooth Light/Dark Mode Transition --- */
+        /* Applied temporarily while toggling theme so colors crossfade
+           gradually instead of switching instantly. */
+        .theme-transitioning,
+        .theme-transitioning * {
+            transition: background-color 0.7s ease, border-color 0.7s ease,
+                color 0.7s ease, fill 0.7s ease, stroke 0.7s ease,
+                box-shadow 0.7s ease, opacity 0.7s ease !important;
+        }
+
+        /* --- Sun ↔ Moon morph animation for theme toggle icons --- */
+        @keyframes theme-icon-morph-out {
+            0% {
+                transform: rotate(0deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+
+            50% {
+                transform: rotate(110deg) scale(0.4);
+                opacity: 0;
+                filter: blur(2px);
+            }
+
+            51% {
+                transform: rotate(-110deg) scale(0.4);
+                opacity: 0;
+                filter: blur(2px);
+            }
+
+            100% {
+                transform: rotate(0deg) scale(1);
+                opacity: 1;
+                filter: blur(0px);
+            }
+        }
+
+        .theme-icon-morph {
+            display: inline-block;
+            animation: theme-icon-morph-out 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
         /* Modern Scrollbars & Transitions */
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
@@ -1539,7 +1581,7 @@
                                     </div>
                                     <div>
                                         <div class="w-full bg-surface-variant dark:bg-zinc-800 rounded-full h-2">
-                                            <div class="bg-primary dark:bg-primary-fixed h-2 rounded-full transition-all"
+                                            <div class="bg-primary dark:bg-primary-fixed h-2 rounded-full transition-all duration-[2600ms] ease-out"
                                                 style="width: 81.6%" id="predicted-yield-progress"></div>
                                         </div>
                                         <div
@@ -1586,7 +1628,7 @@
                                                 class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 w-20 shrink-0">Sensor
                                                 data</span>
                                             <div class="flex-1 bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5">
-                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full"
+                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full transition-all duration-[2600ms] ease-out"
                                                     data-width="96" style="width:0%"></div>
                                             </div>
                                             <span
@@ -1597,7 +1639,7 @@
                                                 class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 w-20 shrink-0">Historical
                                                 match</span>
                                             <div class="flex-1 bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5">
-                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full"
+                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full transition-all duration-[2600ms] ease-out"
                                                     data-width="89" style="width:0%"></div>
                                             </div>
                                             <span
@@ -1608,7 +1650,7 @@
                                                 class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-400 w-20 shrink-0">Substrate
                                                 health</span>
                                             <div class="flex-1 bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5">
-                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full"
+                                                <div class="confidence-sub-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full transition-all duration-[2600ms] ease-out"
                                                     data-width="91" style="width:0%"></div>
                                             </div>
                                             <span
@@ -1666,9 +1708,9 @@
                                         <!-- Batch 398 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="60" style="height:0%" title="Pred: 1.80kg"></div>
-                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="65" style="height:0%" title="Actual: 1.95kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#398</span>
@@ -1676,9 +1718,9 @@
                                         <!-- Batch 399 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="70" style="height:0%" title="Pred: 2.10kg"></div>
-                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="68" style="height:0%" title="Actual: 2.05kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#399</span>
@@ -1686,9 +1728,9 @@
                                         <!-- Batch 400 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="75" style="height:0%" title="Pred: 2.25kg"></div>
-                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="78" style="height:0%" title="Actual: 2.34kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#400</span>
@@ -1696,9 +1738,9 @@
                                         <!-- Batch 401 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center">
-                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-surface-variant dark:bg-zinc-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="80" style="height:0%" title="Pred: 2.40kg"></div>
-                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-secondary dark:bg-emerald-700 rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="75" style="height:0%" title="Actual: 2.25kg"></div>
                                             </div>
                                             <span class="text-[8px] font-bold text-slate-400">#401</span>
@@ -1706,7 +1748,7 @@
                                         <!-- Batch 402 -->
                                         <div class="flex flex-col items-center gap-1 group w-8">
                                             <div class="flex items-end gap-0.5 h-28 justify-center relative">
-                                                <div class="yield-bar w-2.5 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-[1100ms] ease-out"
+                                                <div class="yield-bar w-2.5 bg-primary dark:bg-primary-fixed rounded-t-sm transition-all duration-[2600ms] ease-out"
                                                     data-height="82" style="height:0%" title="Current Pred: 2.45kg">
                                                     <div
                                                         class="absolute -top-5 left-1/2 -translate-x-1/2 bg-surface dark:bg-zinc-800 border border-primary dark:border-primary-fixed px-1 py-0.5 rounded text-[8px] text-primary dark:text-primary-fixed font-bold whitespace-nowrap shadow-sm">
@@ -2588,9 +2630,67 @@
             { timestamp: new Date(Date.now() - 3600000).toLocaleTimeString(), msg: 'System check complete. All sensors healthy.', type: 'info' }
         ];
 
+        // --- COUNT-UP ANIMATION UTILITY ---
+        // Animates a numeric value from 0 (or a start value) up to a target,
+        // calling onUpdate(currentValue) on each frame. Use for KPIs, scores,
+        // sensor readings, and progress bars to feel more "alive".
+        const countUpRegistry = new Map(); // element -> animation frame id, to avoid overlap
+
+        function animateCountUp({ key, from = 0, to, duration = 1000, decimals = 0, onUpdate, easing = (t) => 1 - Math.pow(1 - t, 3) }) {
+            if (to === undefined || isNaN(to)) return;
+            // Cancel any in-flight animation for this key
+            if (key && countUpRegistry.has(key)) {
+                cancelAnimationFrame(countUpRegistry.get(key));
+                countUpRegistry.delete(key);
+            }
+            const start = performance.now();
+            const diff = to - from;
+            // If the change is negligible, just snap to the value
+            if (Math.abs(diff) < Math.pow(10, -decimals) / 2) {
+                onUpdate(to);
+                return;
+            }
+            function frame(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easing(progress);
+                const value = from + diff * eased;
+                onUpdate(Number(value.toFixed(decimals)));
+                if (progress < 1) {
+                    const id = requestAnimationFrame(frame);
+                    if (key) countUpRegistry.set(key, id);
+                } else if (key) {
+                    countUpRegistry.delete(key);
+                }
+            }
+            const id = requestAnimationFrame(frame);
+            if (key) countUpRegistry.set(key, id);
+        }
+
+        // Convenience: animate the text content of an element from 0 to target,
+        // preserving a suffix (e.g. "°C", "%", " ppm", " µmol", "/100").
+        function countUpElement(el, target, { decimals = 0, suffix = '', duration = 1000, from, key } = {}) {
+            if (!el) return;
+            if (from === undefined) {
+                const parsed = parseFloat(el.innerText);
+                from = isNaN(parsed) ? 0 : parsed;
+            }
+            animateCountUp({
+                key: key || el.id,
+                from,
+                to: target,
+                duration,
+                decimals,
+                onUpdate: (val) => {
+                    el.innerText = `${decimals > 0 ? val.toFixed(decimals) : Math.round(val)}${suffix}`;
+                }
+            });
+        }
+
         // --- 2. INITIALIZATION ---
         // Track previous sensor readings for trend calculation
         let prevReadings = { temp: 24.2, humidity: 68.0, co2: 420, light: 420 };
+        let dashboardEnteredOnce = false; // ensures the "count up from 0" intro only happens once per session
 
         window.addEventListener('resize', () => {
             ['modal-staff-account', 'modal-staff-delete', 'modal-confirm'].forEach(id => {
@@ -2602,7 +2702,7 @@
         window.addEventListener('load', () => {
             initTime();
             loadStateFromStorage();
-            updateSensorDOM();
+            setSensorDOMStatic();
             updateGreeting();
 
             // Set current date in inoculation form
@@ -2890,6 +2990,13 @@
             if (tabId === 'yield') {
                 animateYieldTabEntrance();
             }
+
+            // Home/Dashboard tab: replay the sensor count-up-from-0 animation
+            if (tabId === 'home') {
+                const firstEntry = !dashboardEnteredOnce;
+                playSensorIntroAnimation();
+                updateFarmHealthScore(firstEntry);
+            }
         }
 
         // Phone Frame Toggle Logic
@@ -2918,19 +3025,46 @@
         function toggleDarkMode() {
             const html = document.documentElement;
             const isDark = html.classList.contains('dark');
+            const iconIds = ['theme-toggle-icon', 'login-theme-icon', 'reg-theme-icon'];
+            const labelIds = ['login-theme-label', 'reg-theme-label'];
+
+            // Enable the gradual crossfade transition just before switching
+            html.classList.add('theme-transitioning');
+
+            // Kick off the sun↔moon morph animation on each visible icon
+            iconIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.remove('theme-icon-morph');
+                void el.offsetWidth; // restart animation if clicked rapidly
+                el.classList.add('theme-icon-morph');
+            });
+
+            // Swap the icon glyph at the animation's midpoint, so it appears
+            // to morph from sun -> moon (or moon -> sun) mid-flip
+            const newIcon = isDark ? 'dark_mode' : 'light_mode';
+            const newLabel = isDark ? 'Dark Mode' : 'Light Mode';
+            setTimeout(() => {
+                iconIds.forEach(id => { const el = document.getElementById(id); if (el) el.innerText = newIcon; });
+                labelIds.forEach(id => { const el = document.getElementById(id); if (el) el.innerText = newLabel; });
+            }, 300);
+
             if (isDark) {
                 html.classList.remove('dark');
                 state.theme = 'light';
-                ['theme-toggle-icon', 'login-theme-icon', 'reg-theme-icon'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = 'dark_mode'; });
-                ['login-theme-label', 'reg-theme-label'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = 'Dark Mode'; });
                 addLog('Switched interface to Light Mode.', 'info');
             } else {
                 html.classList.add('dark');
                 state.theme = 'dark';
-                ['theme-toggle-icon', 'login-theme-icon', 'reg-theme-icon'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = 'light_mode'; });
-                ['login-theme-label', 'reg-theme-label'].forEach(id => { const el = document.getElementById(id); if (el) el.innerText = 'Light Mode'; });
                 addLog('Switched interface to Dark Mode.', 'info');
             }
+
+            // Remove the transition/animation classes once finished, so they
+            // don't interfere with other animations/transitions afterward
+            setTimeout(() => {
+                html.classList.remove('theme-transitioning');
+                iconIds.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('theme-icon-morph'); });
+            }, 750);
         }
 
         // --- 5. AUTHENTICATION LOGIC ---
@@ -3117,7 +3251,8 @@
                 applyRoleNavRestrictions(state.currentUser.role);
                 renderStaffAccountsList();
 
-                // Always land on dashboard
+                // Always land on dashboard — switchTab triggers the
+                // sensor count-up-from-0 intro animation automatically
                 switchTab('home');
 
                 setTimeout(() => {
@@ -3325,7 +3460,56 @@
             updateSystemStatusMsg();
         }
 
-        function updateSensorDOM() {
+        // Set sensor values instantly (no animation) — used before the dashboard
+        // is visible, so the count-up animation in updateSensorDOM() has a
+        // clean "from 0" start once the user actually sees the dashboard.
+        function setSensorDOMStatic() {
+            const t = document.getElementById('sensor-temp');
+            const h = document.getElementById('sensor-humidity');
+            const l = document.getElementById('sensor-light');
+            const c = document.getElementById('sensor-co2');
+            if (t) t.innerText = `${state.currentTemp.toFixed(1)}°C`;
+            if (h) h.innerText = `${state.currentHumidity.toFixed(0)}%`;
+            if (l) l.innerText = `${state.currentLight.toFixed(0)} µmol`;
+            if (c) c.innerText = `${state.currentCO2} ppm`;
+            const ct = document.getElementById('ctrl-current-temp');
+            const ch = document.getElementById('ctrl-current-humidity');
+            const cl = document.getElementById('ctrl-current-light');
+            const cc = document.getElementById('ctrl-current-co2');
+            if (ct) ct.innerText = state.currentTemp.toFixed(1);
+            if (ch) ch.innerText = state.currentHumidity.toFixed(0);
+            if (cl) cl.innerText = state.currentLight.toFixed(0);
+            if (cc) cc.innerText = state.currentCO2;
+        }
+
+        // Replay the "count up from 0 to current value" intro animation for the
+        // dashboard sensor widgets (and setpoint-page mirrors), without touching
+        // trend badges or prevReadings. Used whenever the Home/Dashboard tab
+        // becomes visible (initial login, or switching back to it).
+        function playSensorIntroAnimation() {
+            const duration = 2800;
+            const targets = {
+                temp: state.currentTemp,
+                humidity: state.currentHumidity,
+                light: state.currentLight,
+                co2: state.currentCO2
+            };
+            countUpElement(document.getElementById('sensor-temp'), targets.temp, { decimals: 1, suffix: '°C', duration, from: 0 });
+            countUpElement(document.getElementById('sensor-humidity'), targets.humidity, { decimals: 0, suffix: '%', duration, from: 0 });
+            countUpElement(document.getElementById('sensor-light'), targets.light, { decimals: 0, suffix: ' µmol', duration, from: 0 });
+            countUpElement(document.getElementById('sensor-co2'), targets.co2, { decimals: 0, suffix: ' ppm', duration, from: 0 });
+
+            countUpElement(document.getElementById('ctrl-current-temp'), targets.temp, { decimals: 1, duration, from: 0, key: 'ctrl-current-temp' });
+            countUpElement(document.getElementById('ctrl-current-humidity'), targets.humidity, { decimals: 0, duration, from: 0, key: 'ctrl-current-humidity' });
+            const ctrlLight = document.getElementById('ctrl-current-light');
+            if (ctrlLight) countUpElement(ctrlLight, targets.light, { decimals: 0, duration, from: 0, key: 'ctrl-current-light' });
+            const ctrlCO2 = document.getElementById('ctrl-current-co2');
+            if (ctrlCO2) countUpElement(ctrlCO2, targets.co2, { decimals: 0, duration, from: 0, key: 'ctrl-current-co2' });
+
+            dashboardEnteredOnce = true;
+        }
+
+        function updateSensorDOM(forceFromZero) {
             // Calculate trends vs previous reading
             function getTrendHTML(current, previous, unit, higherIsBad) {
                 const diff = current - previous;
@@ -3341,25 +3525,32 @@
                 return `<span class="flex items-center ${color} text-caption px-1.5 py-0.5 rounded-full"><span class="material-symbols-outlined text-[12px] mr-0.5">${arrow}</span>${pct}%</span>`;
             }
 
-            // Update sensor metric displays
-            document.getElementById('sensor-temp').innerText = `${state.currentTemp.toFixed(1)}°C`;
-            document.getElementById('sensor-humidity').innerText = `${state.currentHumidity.toFixed(0)}%`;
-            document.getElementById('sensor-light').innerText = `${state.currentLight.toFixed(0)} µmol`;
-            document.getElementById('sensor-co2').innerText = `${state.currentCO2} ppm`;
+            // Update sensor metric displays (animated count-up)
+            const playIntro = forceFromZero || !dashboardEnteredOnce;
+            const introDuration = playIntro ? 2800 : 1200;
+            const animFrom = playIntro ? { temp: 0, humidity: 0, light: 0, co2: 0 } : prevReadings;
+            countUpElement(document.getElementById('sensor-temp'), state.currentTemp, { decimals: 1, suffix: '°C', duration: introDuration, from: animFrom.temp });
+            countUpElement(document.getElementById('sensor-humidity'), state.currentHumidity, { decimals: 0, suffix: '%', duration: introDuration, from: animFrom.humidity });
+            countUpElement(document.getElementById('sensor-light'), state.currentLight, { decimals: 0, suffix: ' µmol', duration: introDuration, from: animFrom.light });
+            countUpElement(document.getElementById('sensor-co2'), state.currentCO2, { decimals: 0, suffix: ' ppm', duration: introDuration, from: animFrom.co2 });
 
             // Update live trend badges
             document.getElementById('temp-trend').outerHTML = getTrendHTML(state.currentTemp, prevReadings.temp, '°C', false).replace('<span class="flex', '<span id="temp-trend" class="flex');
             document.getElementById('humidity-trend').outerHTML = getTrendHTML(state.currentHumidity, prevReadings.humidity, '%', false).replace('<span class="flex', '<span id="humidity-trend" class="flex');
             document.getElementById('light-trend').outerHTML = getTrendHTML(state.currentLight, prevReadings.light, 'µmol', false).replace('<span class="flex', '<span id="light-trend" class="flex');
 
-            // Store current as previous for next tick
+            // Set stats elements in setpoint page too (animated)
+            countUpElement(document.getElementById('ctrl-current-temp'), state.currentTemp, { decimals: 1, duration: introDuration, from: animFrom.temp, key: 'ctrl-current-temp' });
+            countUpElement(document.getElementById('ctrl-current-humidity'), state.currentHumidity, { decimals: 0, duration: introDuration, from: animFrom.humidity, key: 'ctrl-current-humidity' });
+            const ctrlLight = document.getElementById('ctrl-current-light');
+            if (ctrlLight) countUpElement(ctrlLight, state.currentLight, { decimals: 0, duration: introDuration, from: animFrom.light, key: 'ctrl-current-light' });
+            const ctrlCO2 = document.getElementById('ctrl-current-co2');
+            if (ctrlCO2) countUpElement(ctrlCO2, state.currentCO2, { decimals: 0, duration: introDuration, from: animFrom.co2, key: 'ctrl-current-co2' });
+
+            // Store current as previous for next tick (after using prevReadings above)
             prevReadings = { temp: state.currentTemp, humidity: state.currentHumidity, co2: state.currentCO2, light: state.currentLight };
 
-            // Set stats elements in setpoint page too
-            document.getElementById('ctrl-current-temp').innerText = state.currentTemp.toFixed(1);
-            document.getElementById('ctrl-current-humidity').innerText = state.currentHumidity.toFixed(0);
-            const ctrlLight = document.getElementById('ctrl-current-light');
-            if (ctrlLight) ctrlLight.innerText = state.currentLight.toFixed(0);
+            dashboardEnteredOnce = true;
 
             // Sync visual alert state for CO2 card borders
             const co2Card = document.getElementById('sensor-co2-card');
@@ -3704,26 +3895,61 @@
                 setTimeout(() => { bar.style.height = target + '%'; }, 200);
             });
 
+            // Animate the predicted yield number counting up from 0
+            const yieldValEl = document.getElementById('val-predicted-yield');
+            if (yieldValEl) {
+                let target = parseFloat(yieldValEl.getAttribute('data-target'));
+                if (isNaN(target)) target = parseFloat(yieldValEl.textContent) || 0;
+                yieldValEl.setAttribute('data-target', target);
+                countUpElement(yieldValEl, target, { decimals: 2, duration: 2400, from: 0, key: 'val-predicted-yield' });
+            }
+
             // Reset and animate predicted yield progress bar
             const progressBar = document.getElementById('predicted-yield-progress');
             if (progressBar) {
-                const targetWidth = progressBar.style.width || progressBar.getAttribute('data-target') || '81.6%';
+                let targetWidth = progressBar.getAttribute('data-target');
+                if (!targetWidth) targetWidth = progressBar.style.width || '81.6%';
                 progressBar.setAttribute('data-target', targetWidth);
                 progressBar.style.width = '0%';
                 void progressBar.offsetWidth;
                 setTimeout(() => { progressBar.style.width = targetWidth; }, 250);
             }
 
-            // Animate confidence ring drawing in
+            // Animate confidence ring drawing in (JS-driven, so it's perfectly
+            // in sync with the percentage count-up and never flashes/jumps)
             const ring = document.getElementById('confidence-score-circle');
-            if (ring) {
-                const targetOffset = ring.getAttribute('stroke-dashoffset') || '18';
+            const confEl = document.getElementById('val-confidence-score');
+            if (ring && confEl) {
+                const circumference = parseFloat(ring.getAttribute('stroke-dasharray')) || 251.2;
+
+                // Determine the target confidence % (cache it on first run)
+                let confTarget = parseInt(confEl.getAttribute('data-target'), 10);
+                if (isNaN(confTarget)) confTarget = parseInt(confEl.textContent, 10) || 0;
+                confEl.setAttribute('data-target', confTarget);
+
+                // Target ring offset corresponds to the confidence percentage
+                const targetOffset = circumference * (1 - confTarget / 100);
                 ring.setAttribute('data-target-offset', targetOffset);
+
+                // Reset ring to empty (no transition) then animate via rAF
                 ring.style.transition = 'none';
-                ring.setAttribute('stroke-dashoffset', '251.2');
+                ring.setAttribute('stroke-dashoffset', circumference);
                 void ring.getBoundingClientRect();
-                ring.style.transition = 'stroke-dashoffset 1.4s cubic-bezier(0.16, 1, 0.3, 1)';
-                setTimeout(() => { ring.setAttribute('stroke-dashoffset', targetOffset); }, 300);
+
+                animateCountUp({
+                    key: 'confidence-ring',
+                    from: 0,
+                    to: confTarget,
+                    duration: 2600,
+                    decimals: 2,
+                    onUpdate: (pct) => {
+                        const offset = circumference * (1 - pct / 100);
+                        ring.setAttribute('stroke-dashoffset', offset.toFixed(2));
+                    }
+                });
+
+                // Count up the confidence percentage label in sync with the ring
+                countUpElement(confEl, confTarget, { decimals: 0, suffix: '%', duration: 2600, from: 0, key: 'val-confidence-score' });
             }
 
             // If the confidence breakdown panel is open, re-animate its sub-bars
@@ -3865,7 +4091,7 @@
                                 <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">done_all</span>Harvest</span>
                             </div>
                             <div class="w-full bg-surface-variant dark:bg-zinc-800 rounded-full h-1.5 overflow-hidden">
-                                <div class="batch-timeline-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full transition-all duration-[1100ms] ease-out" data-width="${timelinePct}" style="width:0%"></div>
+                                <div class="batch-timeline-bar bg-primary dark:bg-primary-fixed h-1.5 rounded-full transition-all duration-[2600ms] ease-out" data-width="${timelinePct}" style="width:0%"></div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-[10px]">
                                 <div class="bg-surface-soft dark:bg-zinc-800/50 rounded-xl px-2.5 py-2">
@@ -4681,13 +4907,34 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const min = Math.min(...data), max = Math.max(...data), range = max - min || 1;
             const w = canvas.width, h = canvas.height, pad = 2;
+            const points = data.map((v, i) => ({
+                x: pad + (i / (data.length - 1)) * (w - pad * 2),
+                y: h - pad - ((v - min) / range) * (h - pad * 2)
+            }));
+
+            // Subtle gradient fill under the line for a richer, more "alive" look
+            const gradient = ctx.createLinearGradient(0, 0, 0, h);
+            gradient.addColorStop(0, color + '33');
+            gradient.addColorStop(1, color + '00');
             ctx.beginPath();
-            data.forEach((v, i) => {
-                const x = pad + (i / (data.length - 1)) * (w - pad * 2);
-                const y = h - pad - ((v - min) / range) * (h - pad * 2);
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
+            points.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+            ctx.lineTo(points[points.length - 1].x, h);
+            ctx.lineTo(points[0].x, h);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // The line itself
+            ctx.beginPath();
+            points.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
             ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.lineJoin = 'round'; ctx.stroke();
+
+            // Pulsing dot on the latest reading
+            const last = points[points.length - 1];
+            ctx.beginPath();
+            ctx.arc(last.x, last.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
         }
         function updateSparklines() {
             pushSparkData();
@@ -4774,7 +5021,7 @@
         }
 
         // --- FARM HEALTH SCORE ---
-        function updateFarmHealthScore() {
+        function updateFarmHealthScore(forceFromZero) {
             const el = document.getElementById('farm-health-score');
             if (!el) return;
             const tempOk = state.currentTemp >= 18 && state.currentTemp <= 28;
@@ -4785,7 +5032,22 @@
             if (!tempOk) score -= 25; if (!humOk) score -= 25; if (!co2Ok) score -= 25;
             score -= Math.min(25, activeAlerts * 10);
             const color = score >= 80 ? 'text-success-green dark:text-emerald-400' : score >= 50 ? 'text-warning-gold' : 'text-error-red';
-            el.innerHTML = `<span class="${color} font-extrabold text-headline-sm">${score}</span><span class="text-on-surface-variant dark:text-zinc-400 text-caption">/100</span>`;
+            // Animate the score count-up (preserve the "/100" suffix structure)
+            const prevScore = forceFromZero ? 0 : parseInt(el.dataset.score || '0', 10);
+            const scoreDuration = forceFromZero ? 2200 : 1400;
+            el.innerHTML = `<span class="${color} font-extrabold text-headline-sm" id="farm-health-score-number">${prevScore}</span><span class="text-on-surface-variant dark:text-zinc-400 text-caption">/100</span>`;
+            el.dataset.score = score;
+            animateCountUp({
+                key: 'farm-health-score',
+                from: prevScore,
+                to: score,
+                duration: scoreDuration,
+                decimals: 0,
+                onUpdate: (val) => {
+                    const numEl = document.getElementById('farm-health-score-number');
+                    if (numEl) numEl.innerText = Math.round(val);
+                }
+            });
             const breakdown = document.getElementById('health-score-breakdown');
             if (breakdown) {
                 const parts = [
@@ -4800,9 +5062,9 @@
             const tasksDone = document.getElementById('summary-tasks-done');
             const alertsCount = document.getElementById('summary-alerts');
             const batchesCount = document.getElementById('summary-batches');
-            if (tasksDone) tasksDone.innerText = state.tasks.filter(t => t.status === 'Completed').length;
-            if (alertsCount) alertsCount.innerText = state.alerts.length;
-            if (batchesCount) batchesCount.innerText = state.growBatches.filter(b => b.stage !== 'Harvested' && !b.contaminated).length;
+            if (tasksDone) countUpElement(tasksDone, state.tasks.filter(t => t.status === 'Completed').length, { duration: forceFromZero ? 2200 : 1200, from: forceFromZero ? 0 : undefined, key: 'summary-tasks-done' });
+            if (alertsCount) countUpElement(alertsCount, state.alerts.length, { duration: forceFromZero ? 2200 : 1200, from: forceFromZero ? 0 : undefined, key: 'summary-alerts' });
+            if (batchesCount) countUpElement(batchesCount, state.growBatches.filter(b => b.stage !== 'Harvested' && !b.contaminated).length, { duration: forceFromZero ? 2200 : 1200, from: forceFromZero ? 0 : undefined, key: 'summary-batches' });
         }
 
         // --- STAFF REPORTS ---
