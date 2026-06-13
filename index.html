@@ -264,9 +264,13 @@
             }
 
             /* Shrink overall UI density on small phones — reduces all
-               rem-based text/spacing proportionally without zooming. */
+               rem-based text/spacing proportionally without zooming.
+               Scales with viewport width so smaller phones (e.g. 360px)
+               render the same proportions/layout as larger ones (e.g. 430px),
+               instead of staying a fixed px size that causes more wrapping
+               on narrower screens. */
             html {
-                font-size: 14px;
+                font-size: clamp(11px, 3.55vw, 14px);
             }
 
             #app-wrapper [class*="rounded-2xl"][class*="p-4"] {
@@ -297,11 +301,11 @@
 
             /* Dashboard sensor card icons and sparkline charts */
             #app-wrapper .sensor-card .material-symbols-outlined {
-                font-size: 16px !important;
+                font-size: 1.15rem !important;
             }
 
             #app-wrapper .sensor-card canvas {
-                height: 28px !important;
+                height: 2rem !important;
             }
 
             #app-wrapper .sensor-card > div[class*="mb-3"] {
@@ -315,11 +319,11 @@
             /* Bottom nav: admin has 6 tabs vs staff's 4 — shrink icons/labels
                slightly so all items fit without crowding or overflow. */
             #app-wrapper nav button .material-symbols-outlined {
-                font-size: 19px !important;
+                font-size: 1.35rem !important;
             }
 
             #app-wrapper nav button [class*="text-[10px]"] {
-                font-size: 9px !important;
+                font-size: 0.65rem !important;
             }
 
             #app-wrapper nav {
