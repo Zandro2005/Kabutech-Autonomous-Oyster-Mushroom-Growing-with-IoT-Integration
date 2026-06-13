@@ -254,13 +254,19 @@
             }
 
             #app-wrapper {
-                width: 100vw !important;
-                max-width: 100vw !important;
-                height: 100dvh !important;
-                max-height: 100dvh !important;
+                width: calc(100vw / 0.7) !important;
+                max-width: calc(100vw / 0.7) !important;
+                height: calc(100dvh / 0.7) !important;
+                max-height: calc(100dvh / 0.7) !important;
                 border: none !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
+                transform: scale(0.7);
+                transform-origin: top left;
+            }
+
+            body {
+                overflow: hidden !important;
             }
 
             #notch,
