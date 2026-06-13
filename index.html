@@ -136,6 +136,23 @@
             opacity: 1;
         }
 
+        /* --- Login <-> Register slide transition --- */
+        #scene-login, #scene-register {
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        .slide-out-left {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        .slide-out-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        .slide-in {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
         /* --- Smooth Light/Dark Mode Transition --- */
         /* Applied temporarily while toggling theme so colors crossfade
            gradually instead of switching instantly. */
@@ -883,17 +900,14 @@
                 <div
                     class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary-container opacity-[0.12] blur-[100px] rounded-full pointer-events-none z-0">
                 </div>
-                <!-- Theme toggle outside form -->
-                <div class="flex justify-end mb-3 relative z-10 shrink-0">
-                    <button onclick="toggleDarkMode()"
-                        class="flex items-center gap-1.5 text-[11px] font-bold text-on-surface-variant dark:text-zinc-400 bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 px-3 py-1.5 rounded-full hover:border-primary transition-all active:scale-95">
-                        <span id="login-theme-icon" class="material-symbols-outlined text-[16px]">dark_mode</span>
-                        <span id="login-theme-label">Dark Mode</span>
-                    </button>
-                </div>
-
                 <div
-                    class="w-full bg-surface-container-lowest dark:bg-zinc-900 rounded-[28px] shadow-lg border border-muted dark:border-zinc-800 p-6 relative z-10 flex flex-col gap-5 mt-4 mb-auto">
+                    class="w-full bg-surface-container-lowest dark:bg-zinc-900 rounded-[28px] shadow-lg border border-muted dark:border-zinc-800 p-6 relative z-10 flex flex-col gap-5 my-auto">
+                    <!-- Theme toggle (icon-only, top-left of form) -->
+                    <button onclick="toggleDarkMode()"
+                        class="absolute top-4 left-4 flex items-center justify-center w-9 h-9 text-on-surface-variant dark:text-zinc-400 bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-full hover:border-primary transition-all active:scale-95">
+                        <span id="login-theme-icon" class="material-symbols-outlined text-[18px]">dark_mode</span>
+                        <span id="login-theme-label" class="hidden">Dark Mode</span>
+                    </button>
                     <!-- Hero Section -->
                     <div class="flex flex-col items-center text-center">
                         <div
@@ -965,7 +979,7 @@
 
             <!-- 2b. REGISTER SCENE -->
             <div id="scene-register"
-                class="hidden absolute inset-0 z-50 bg-app-bg dark:bg-zinc-950 flex flex-col overflow-y-auto hide-scrollbar px-margin-edge py-6 transition-all duration-500">
+                class="hidden absolute inset-0 z-50 bg-app-bg dark:bg-zinc-950 flex flex-col justify-center overflow-y-auto hide-scrollbar px-margin-edge py-6 transition-all duration-500">
                 <!-- Background ambient glows -->
                 <div
                     class="fixed top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary-container opacity-[0.06] blur-[100px] rounded-full pointer-events-none z-0">
@@ -973,17 +987,14 @@
                 <div
                     class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary-container opacity-[0.12] blur-[100px] rounded-full pointer-events-none z-0">
                 </div>
-                <!-- Theme toggle outside form -->
-                <div class="flex justify-end mb-3 relative z-10 shrink-0">
-                    <button onclick="toggleDarkMode()"
-                        class="flex items-center gap-1.5 text-[11px] font-bold text-on-surface-variant dark:text-zinc-400 bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 px-3 py-1.5 rounded-full hover:border-primary transition-all active:scale-95">
-                        <span id="reg-theme-icon" class="material-symbols-outlined text-[16px]">dark_mode</span>
-                        <span id="reg-theme-label">Dark Mode</span>
-                    </button>
-                </div>
-
                 <div
                     class="w-full bg-surface-container-lowest dark:bg-zinc-900 rounded-[28px] shadow-lg border border-muted dark:border-zinc-800 p-6 relative z-10 flex flex-col gap-6 shrink-0">
+                    <!-- Theme toggle (icon-only, top-left of form) -->
+                    <button onclick="toggleDarkMode()"
+                        class="absolute top-4 left-4 flex items-center justify-center w-9 h-9 text-on-surface-variant dark:text-zinc-400 bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-full hover:border-primary transition-all active:scale-95">
+                        <span id="reg-theme-icon" class="material-symbols-outlined text-[18px]">dark_mode</span>
+                        <span id="reg-theme-label" class="hidden">Dark Mode</span>
+                    </button>
                     <!-- Hero Section -->
                     <div class="flex flex-col items-center text-center">
                         <div
@@ -3459,17 +3470,53 @@
         let selectedRegisterRole = 'staff';
 
         function showRegisterScene() {
-            document.getElementById('scene-login').classList.add('hidden');
-            document.getElementById('scene-register').classList.remove('hidden');
+            const login = document.getElementById('scene-login');
+            const register = document.getElementById('scene-register');
+
             // reset form
             ['reg-name', 'reg-email', 'reg-password', 'reg-confirm'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('reg-email-error').classList.add('hidden');
             document.getElementById('reg-confirm-error').classList.add('hidden');
+
+            // Prepare register scene off-screen to the right, then reveal both
+            register.classList.remove('hidden', 'slide-out-left', 'slide-out-right', 'slide-in');
+            register.classList.add('slide-out-right');
+            login.classList.remove('slide-out-left', 'slide-out-right', 'slide-in');
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    login.classList.add('slide-out-left');
+                    register.classList.remove('slide-out-right');
+                    register.classList.add('slide-in');
+                });
+            });
+
+            setTimeout(() => {
+                login.classList.add('hidden');
+                login.classList.remove('slide-out-left');
+            }, 400);
         }
 
         function showLoginScene() {
-            document.getElementById('scene-register').classList.add('hidden');
-            document.getElementById('scene-login').classList.remove('hidden');
+            const login = document.getElementById('scene-login');
+            const register = document.getElementById('scene-register');
+
+            login.classList.remove('hidden', 'slide-out-left', 'slide-out-right', 'slide-in');
+            login.classList.add('slide-out-left');
+            register.classList.remove('slide-out-left', 'slide-out-right', 'slide-in');
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    register.classList.add('slide-out-right');
+                    login.classList.remove('slide-out-left');
+                    login.classList.add('slide-in');
+                });
+            });
+
+            setTimeout(() => {
+                register.classList.add('hidden');
+                register.classList.remove('slide-out-right');
+            }, 400);
         }
 
         function selectRegisterRole(role) {
