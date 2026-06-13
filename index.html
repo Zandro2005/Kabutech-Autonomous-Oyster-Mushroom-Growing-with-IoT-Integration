@@ -4870,14 +4870,12 @@
                             </div>
                             <p class="text-[11px] leading-normal opacity-90">${alert.desc}</p>
                             <p class="text-[9px] font-bold opacity-60">Fired at ${alert.time}</p>
-                            ${alert.resolutionNote ? `<p class="text-[9px] italic opacity-70">Note: ${alert.resolutionNote}</p>` : ''}
                             ${alert.acknowledgedBy ? `<p class="text-[9px] font-bold opacity-60">✓ Acknowledged by <span class="capitalize">${alert.acknowledgedBy}</span> at ${alert.acknowledgedAt}</p>` : ''}
                         </div>
                     </div>
                     ${!alert.acknowledged ? `
-                        <div class="flex flex-wrap gap-2 items-center">
-                            <input id="note-${alert.id}" type="text" placeholder="Resolution note (optional)" class="min-w-0 flex-1 basis-40 text-[10px] bg-white/30 dark:bg-zinc-800 border border-current/20 rounded-lg py-1 px-2 outline-none placeholder:opacity-60 text-inherit">
-                            <button onclick="acknowledgeSingleAlert(${alert.id})" class="text-[9px] uppercase font-bold shrink-0 bg-white/20 hover:bg-white/40 dark:bg-zinc-800 dark:hover:bg-zinc-700 py-1.5 px-3 rounded-lg border border-current whitespace-nowrap">Acknowledge</button>
+                        <div class="flex">
+                            <button onclick="acknowledgeSingleAlert(${alert.id})" class="text-[9px] uppercase font-bold bg-white/20 hover:bg-white/40 dark:bg-zinc-800 dark:hover:bg-zinc-700 py-1.5 px-3 rounded-lg border border-current whitespace-nowrap">Acknowledge</button>
                         </div>
                     ` : ''}
                 `;
@@ -4886,18 +4884,16 @@
         }
 
         function acknowledgeSingleAlert(id) {
-            const note = document.getElementById(`note-${id}`) ? document.getElementById(`note-${id}`).value : '';
             const alert = state.alerts.find(a => a.id === id);
             if (alert) {
                 const user = state.currentUser ? state.currentUser.name || state.currentUser.username || state.currentUser.role : 'Unknown';
                 const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 alert.acknowledged = true;
-                alert.resolutionNote = note || null;
                 alert.acknowledgedBy = user;
                 alert.acknowledgedAt = ts;
                 saveAlerts(); renderAlertsList(); checkAlertThresholds();
                 showToast(`Alert acknowledged by ${user}.`, 'info');
-                addLog(`Alert resolved: "${alert.title}" — acknowledged by ${user} at ${ts}${note ? ' | Note: ' + note : ''}`, 'success');
+                addLog(`Alert resolved: "${alert.title}" — acknowledged by ${user} at ${ts}`, 'success');
             }
         }
 
