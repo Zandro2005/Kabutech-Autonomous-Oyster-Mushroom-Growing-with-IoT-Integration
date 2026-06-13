@@ -132,7 +132,6 @@
         .material-symbols-outlined {
             opacity: 0;
         }
-
         .fonts-ready .material-symbols-outlined {
             opacity: 1;
         }
@@ -242,6 +241,32 @@
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* On real phone-sized viewports, drop the desktop "device mockup"
+           bezel and let the app fill the actual screen — internal layout,
+           styles, and flow are untouched, only the outer frame adapts. */
+        @media (max-width: 480px) {
+            body {
+                padding: 0 !important;
+                display: block !important;
+                min-height: 100vh;
+            }
+
+            #app-wrapper {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                height: 100dvh !important;
+                max-height: 100dvh !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+            }
+
+            #notch,
+            #home-indicator {
+                display: none !important;
+            }
         }
 
         /* Mobile Shell Frame Styling */
@@ -1242,8 +1267,7 @@
                                             <span id="icon-quick-fans"
                                                 class="material-symbols-outlined text-[22px]">mode_fan</span>
                                         </div>
-                                        <span
-                                            class="text-[11px] font-bold text-on-background dark:text-white">Fans</span>
+                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Fans</span>
                                         <span id="status-quick-fans"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-fans"
@@ -1257,8 +1281,7 @@
                                             <span id="icon-quick-misters"
                                                 class="material-symbols-outlined text-[22px]">opacity</span>
                                         </div>
-                                        <span
-                                            class="text-[11px] font-bold text-on-background dark:text-white">Mister</span>
+                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Mister</span>
                                         <span id="status-quick-misters"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-misters"
@@ -1272,8 +1295,7 @@
                                             <span id="icon-quick-lights"
                                                 class="material-symbols-outlined text-[22px]">wb_incandescent</span>
                                         </div>
-                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Grow
-                                            Light</span>
+                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Grow Light</span>
                                         <span id="status-quick-lights"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-lights"
@@ -1419,13 +1441,13 @@
                                     </div>
                                     <!-- Slider -->
                                     <div id="temp-slider-wrapper">
-                                        <input id="slider-temp" class="ctrl-slider w-full" type="range" min="15"
-                                            max="35" step="0.5" value="23.5" onchange="updateTempSetpoint(this.value)"
-                                            oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
-                                        <div
-                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
-                                            <span>15°C Cool</span><span>35°C Hot</span>
-                                        </div>
+                                    <input id="slider-temp" class="ctrl-slider w-full" type="range" min="15" max="35"
+                                        step="0.5" value="23.5" onchange="updateTempSetpoint(this.value)"
+                                        oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
+                                    <div
+                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                        <span>15°C Cool</span><span>35°C Hot</span>
+                                    </div>
                                     </div>
                                     <!-- Device toggle row -->
                                     <div
@@ -1489,13 +1511,13 @@
                                         </div>
                                     </div>
                                     <div id="humidity-slider-wrapper">
-                                        <input id="slider-humidity" class="ctrl-slider w-full" type="range" min="40"
-                                            max="90" step="1" value="75" onchange="updateHumiditySetpoint(this.value)"
-                                            oninput="document.getElementById('val-humidity-setpoint').innerText=this.value; updateSliderFill(this)">
-                                        <div
-                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
-                                            <span>40% Dry</span><span>90% Wet</span>
-                                        </div>
+                                    <input id="slider-humidity" class="ctrl-slider w-full" type="range" min="40"
+                                        max="90" step="1" value="75" onchange="updateHumiditySetpoint(this.value)"
+                                        oninput="document.getElementById('val-humidity-setpoint').innerText=this.value; updateSliderFill(this)">
+                                    <div
+                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                        <span>40% Dry</span><span>90% Wet</span>
+                                    </div>
                                     </div>
                                     <div
                                         class="flex items-center justify-between mt-3.5 pt-3.5 border-t border-border-muted dark:border-zinc-800">
@@ -2193,6 +2215,37 @@
                                 </div>
                             </div>
 
+                            <!-- My Reports (staff only) -->
+                            <div id="my-reports-widget" class="hidden">
+                                <button onclick="toggleAccordion('accordion-my-reports')"
+                                    class="w-full bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl px-4 py-3 shadow-sm flex items-center justify-between transition-all active:scale-[0.99]">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-[18px] text-primary dark:text-primary-fixed"
+                                            style="font-variation-settings:'FILL' 1">inbox</span>
+                                        <span
+                                            class="text-body-sm font-bold text-brand-deep dark:text-primary-fixed">My
+                                            Reports</span>
+                                        <span id="staff-reports-badge"
+                                            class="hidden text-[9px] font-extrabold bg-warning-gold text-white px-2 py-0.5 rounded-full">0
+                                            New</span>
+                                    </div>
+                                    <span id="accordion-my-reports-chevron"
+                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500 transition-transform duration-300">expand_more</span>
+                                </button>
+                                <div id="accordion-my-reports"
+                                    class="hidden bg-surface-container-lowest dark:bg-zinc-900 border border-t-0 border-muted dark:border-zinc-800 rounded-b-2xl -mt-2 pt-4 px-4 pb-4">
+                                    <div id="staff-reports-container"
+                                        class="space-y-2 max-h-72 overflow-y-auto pr-1">
+                                        <div
+                                            class="flex flex-col items-center justify-center py-4 gap-1 text-slate-400 dark:text-zinc-500">
+                                            <span class="material-symbols-outlined text-[28px]">mark_email_read</span>
+                                            <p class="text-[10px] font-semibold">No reports submitted yet.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Staff Account Management (admin only) -->
                             <div id="staff-account-mgmt-widget" class="hidden">
                                 <button onclick="toggleAccordion('accordion-staff-accounts')"
@@ -2354,7 +2407,7 @@
                 <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-error-red">report_problem</span> Report Farm Issue
                 </h3>
-                <button onclick="closeReportModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-full"><span
+                <button onclick="closeReportModal()" class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
 
@@ -2442,7 +2495,7 @@
                     <span class="material-symbols-outlined">inventory_2</span> Log New Batch
                 </h3>
                 <button onclick="closeAddBatchModal()"
-                    class="text-slate-400 hover:text-slate-600 p-1 rounded-full"><span
+                    class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
 
@@ -2515,7 +2568,7 @@
                 <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                     <span class="material-symbols-outlined">assignment_add</span> Assign Farm Task
                 </h3>
-                <button onclick="closeAddTaskModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-full"><span
+                <button onclick="closeAddTaskModal()" class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
 
@@ -2576,6 +2629,35 @@
                     Assign Task
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Admin Note Modal -->
+    <div id="modal-admin-note" onclick="if(event.target===this)closeAdminNoteModal()"
+        class="fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
+        style="display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+        <div class="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-2xl shadow-2xl flex flex-col gap-3"
+            style="width:90%; max-width:340px; box-sizing:border-box; padding:16px;">
+            <div class="flex justify-between items-center">
+                <h3 class="text-[13px] font-extrabold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-[17px]">edit_note</span> Admin Note
+                </h3>
+                <button onclick="closeAdminNoteModal()" class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+            </div>
+            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400">Visible to the staff member who filed
+                this report.</p>
+            <textarea id="admin-note-input" rows="3"
+                class="bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 rounded-xl py-2 px-3 text-body-sm focus:border-primary text-on-surface dark:text-white resize-none"
+                placeholder="e.g. Maintenance scheduled for tomorrow morning."></textarea>
+            <div class="flex gap-2">
+                <button onclick="closeAdminNoteModal()"
+                    class="flex-1 py-2.5 rounded-xl font-bold text-[12px] border border-outline-variant dark:border-zinc-700 text-on-surface-variant dark:text-zinc-400 active:scale-95 transition-all">Cancel</button>
+                <button onclick="saveAdminNote()"
+                    class="flex-1 py-2.5 rounded-xl font-bold text-[12px] bg-primary text-white active:scale-95 transition-all flex items-center justify-center gap-1.5"><span
+                        class="material-symbols-outlined text-[14px]">save</span>Save Note</button>
+            </div>
         </div>
     </div>
 
@@ -2854,7 +2936,7 @@
         let dashboardEnteredOnce = false; // ensures the "count up from 0" intro only happens once per session
 
         window.addEventListener('resize', () => {
-            ['modal-staff-account', 'modal-staff-delete', 'modal-confirm'].forEach(id => {
+            ['modal-staff-account', 'modal-staff-delete', 'modal-confirm', 'modal-admin-note'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el && el.style.display === 'flex') positionModalOverApp(id);
             });
@@ -3142,7 +3224,7 @@
             let containerIds = [];
             if (tabId === 'grow-log') containerIds = ['active-batches-list'];
             else if (tabId === 'diagnostics') containerIds = ['alerts-list-container'];
-            else if (tabId === 'profile') containerIds = ['more-staff-reports-container', 'staff-accounts-list'];
+            else if (tabId === 'profile') containerIds = ['more-staff-reports-container', 'staff-accounts-list', 'staff-reports-container'];
 
             containerIds.forEach(id => {
                 const container = document.getElementById(id);
@@ -3368,6 +3450,7 @@
             document.getElementById('scene-register').classList.add('hidden');
             applyUserProfile(state.currentUser);
             applyRoleNavRestrictions(role);
+            renderStaffReports();
             transitionToApp();
         }
 
@@ -3405,6 +3488,7 @@
             applyUserProfile(user);
             updateGreeting();
             applyRoleNavRestrictions(role);
+            renderStaffReports();
             addLog(`User logged in as ${role === 'admin' ? 'Admin' : 'Staff'}.`, 'success');
             showToast(`Welcome back, ${user.name}!`, 'success');
             transitionToApp();
@@ -3426,6 +3510,7 @@
                 applyUserProfile(state.currentUser);
                 updateGreeting();
                 applyRoleNavRestrictions(state.currentUser.role);
+                renderStaffReports();
                 renderStaffAccountsList();
 
                 // Always land on dashboard — switchTab triggers the
@@ -5075,6 +5160,8 @@
                 ['simulation-console', 'system-audit-logs', 'btn-add-task-modal', 'more-staff-reports-widget', 'staff-account-mgmt-widget'].forEach(id => {
                     const el = document.getElementById(id); if (el) el.classList.add('hidden');
                 });
+                const myReports = document.getElementById('my-reports-widget');
+                if (myReports) myReports.classList.remove('hidden');
                 // Hide yield AI card and CO2 slider from staff
                 const yieldCard = document.getElementById('yield-ai-dashboard-card');
                 if (yieldCard) yieldCard.classList.add('hidden');
@@ -5099,6 +5186,8 @@
                 ['simulation-console', 'system-audit-logs', 'btn-add-task-modal', 'more-staff-reports-widget', 'staff-account-mgmt-widget'].forEach(id => {
                     const el = document.getElementById(id); if (el) el.classList.remove('hidden');
                 });
+                const myReports = document.getElementById('my-reports-widget');
+                if (myReports) myReports.classList.add('hidden');
                 // Show yield AI card and CO2 slider for admin
                 const yieldCard = document.getElementById('yield-ai-dashboard-card');
                 if (yieldCard) yieldCard.classList.remove('hidden');
@@ -5382,14 +5471,16 @@
 
         // --- STAFF REPORTS ---
         function renderStaffReports() {
-            const unread = state.staffReports.filter(r => !r.read).length;
+            const isAdmin = state.currentUser && state.currentUser.role === 'admin';
+            const unread = isAdmin
+                ? state.staffReports.filter(r => !r.read).length
+                : state.staffReports.filter(r => r.adminNote && !r.noteRead).length;
             ['staff-reports-badge', 'more-reports-badge'].forEach(id => {
                 const b = document.getElementById(id);
                 if (b) { b.innerText = `${unread} New`; b.classList.toggle('hidden', unread === 0); }
             });
 
             const emptyHTML = `<div class="flex flex-col items-center justify-center py-4 gap-1 text-slate-400 dark:text-zinc-500"><span class="material-symbols-outlined text-[28px]">mark_email_read</span><p class="text-[10px] font-semibold">No staff reports yet.</p></div>`;
-            const isAdmin = state.currentUser && state.currentUser.role === 'admin';
 
             ['staff-reports-container', 'more-staff-reports-container'].forEach(containerId => {
                 const container = document.getElementById(containerId);
@@ -5401,14 +5492,16 @@
                     const sevColor = r.severity === 'Critical' ? 'text-error-red' : r.severity === 'High' ? 'text-warning-gold' : 'text-on-surface-variant dark:text-zinc-400';
                     const statusColors = { 'Open': 'bg-slate-100 text-slate-500 dark:bg-zinc-700 dark:text-zinc-300', 'Investigating': 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400', 'Resolved': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400' };
                     const statusColor = statusColors[r.status || 'Open'] || statusColors['Open'];
+                    const hasUnreadNote = !!r.adminNote && !r.noteRead;
+                    const highlight = isAdmin ? !r.read : (hasUnreadNote || !r.read);
                     const div = document.createElement('div');
-                    div.className = `rounded-xl border p-3 flex flex-col gap-1.5 ${sevBg} ${!r.read ? 'ring-1 ring-primary/20' : 'opacity-75'}`;
+                    div.className = `rounded-xl border p-3 flex flex-col gap-1.5 ${sevBg} ${highlight ? 'ring-1 ring-primary/20' : 'opacity-75'}`;
                     div.innerHTML = `
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="text-body-sm font-extrabold text-on-background dark:text-white">${r.title}</span>
                                 <span class="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded-full ${sevBg} ${sevColor}">${r.severity}</span>
-                                ${!r.read ? `<span class="text-[8px] font-extrabold uppercase bg-primary text-white px-1.5 py-0.5 rounded-full">New</span>` : ''}
+                                ${!isAdmin && hasUnreadNote ? `<span class="text-[8px] font-extrabold uppercase bg-primary text-white px-1.5 py-0.5 rounded-full">New Note</span>` : (!r.read ? `<span class="text-[8px] font-extrabold uppercase bg-primary text-white px-1.5 py-0.5 rounded-full">New</span>` : '')}
                                 <span class="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded-full ${statusColor}">${r.status || 'Open'}</span>
                             </div>
                             <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">${r.desc}</p>
@@ -5417,12 +5510,12 @@
                             <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[11px]">person</span>${r.reporter} • ${r.category} • ${r.sector}${r.bag ? ' • Bag ' + r.bag : ''}</span>
                             <span>${r.timestamp}</span>
                         </div>
-                        ${r.adminNote ? `<div class="bg-primary/8 dark:bg-emerald-950/30 border border-primary/15 dark:border-emerald-900 rounded-lg px-2.5 py-1.5 text-[10px] text-primary dark:text-emerald-400"><span class="font-bold">Admin note:</span> ${r.adminNote}</div>` : ''}
+                        ${r.adminNote ? `<div class="bg-primary/8 dark:bg-emerald-950/30 border border-primary/15 dark:border-emerald-900 rounded-lg px-2.5 py-1.5 text-[10px] text-primary dark:text-emerald-400 flex items-start justify-between gap-2"><span><span class="font-bold">Admin note:</span> ${r.adminNote}</span>${!isAdmin && hasUnreadNote ? `<button onclick="dismissAdminNote(${r.id})" class="shrink-0 text-[8px] font-extrabold uppercase border border-primary/30 dark:border-emerald-800 rounded-full px-1.5 py-0.5 hover:bg-primary/10 dark:hover:bg-emerald-900/30">Dismiss</button>` : ''}</div>` : ''}
                         ${isAdmin ? `
                         <div class="flex items-center gap-2 pt-0.5 flex-wrap">
                             ${!r.read ? `<button onclick="markReportRead(${r.id})" class="text-[9px] font-bold text-primary dark:text-primary-fixed flex items-center gap-0.5 hover:underline"><span class="material-symbols-outlined text-[12px]">done</span>Mark Read</button>` : ''}
                             ${(r.status || 'Open') !== 'Investigating' ? `<button onclick="updateReportStatus(${r.id},'Investigating')" class="text-[9px] font-bold text-amber-600 dark:text-amber-400 flex items-center gap-0.5 hover:underline"><span class="material-symbols-outlined text-[12px]">search</span>Investigating</button>` : ''}
-                            ${(r.status || 'Open') !== 'Resolved' ? `<button onclick="updateReportStatus(${r.id},'Resolved')" class="text-[9px] font-bold text-success-green dark:text-emerald-400 flex items-center gap-0.5 hover:underline"><span class="material-symbols-outlined text-[12px]">check_circle</span>Resolve</button>` : ''}
+                            ${(r.status || 'Open') !== 'Resolved' ? `<button onclick="updateReportStatus(${r.id},'Resolved')" class="text-[9px] font-bold text-success-green dark:text-emerald-400 flex items-center gap-0.5 hover:underline"><span class="material-symbols-outlined text-[12px]">check_circle</span>Resolve</button>` : `<button onclick="confirmDeleteReport(${r.id})" class="text-[9px] font-bold text-error-red dark:text-red-400 flex items-center gap-0.5 hover:underline"><span class="material-symbols-outlined text-[12px]">delete</span>Delete</button>`}
                             <button onclick="promptAdminNote(${r.id})" class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-400 flex items-center gap-0.5 hover:underline ml-auto"><span class="material-symbols-outlined text-[12px]">edit_note</span>Note</button>
                         </div>` : `<div class="flex items-center gap-1 text-[9px] text-on-surface-variant dark:text-zinc-500">${(r.status || 'Open') === 'Resolved' ? '<span class="material-symbols-outlined text-[11px] text-success-green">check_circle</span><span class="text-success-green dark:text-emerald-400 font-bold">Admin resolved this report</span>' : (r.status === 'Investigating' ? '<span class="material-symbols-outlined text-[11px] text-amber-500">search</span><span class="text-amber-600 dark:text-amber-400 font-bold">Admin is investigating</span>' : '<span class="material-symbols-outlined text-[11px]">schedule</span>Awaiting admin review')}</div>`}
                     `;
@@ -5450,6 +5543,30 @@
             if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
         }
 
+        function confirmDeleteReport(id) {
+            showConfirm({
+                title: 'Delete Report?',
+                body: 'This resolved report will be permanently removed from the inbox. This cannot be undone.',
+                icon: 'delete_forever',
+                iconBg: 'bg-red-100 dark:bg-red-950/40',
+                iconColor: 'text-error-red',
+                okLabel: 'Delete',
+                okIcon: 'delete',
+                okBg: 'bg-error-red hover:bg-red-700',
+                onConfirm: () => {
+                    state.staffReports = state.staffReports.filter(r => r.id !== id);
+                    saveStaffReports();
+                    renderStaffReports();
+                    showToast('Report deleted.', 'info');
+                }
+            });
+        }
+
+        function dismissAdminNote(id) {
+            const r = state.staffReports.find(r => r.id === id);
+            if (r) { r.noteRead = true; saveStaffReports(); renderStaffReports(); }
+        }
+
         function markReportRead(id) {
             const r = state.staffReports.find(r => r.id === id);
             if (r) { r.read = true; saveStaffReports(); renderStaffReports(); }
@@ -5465,17 +5582,30 @@
             showToast(`Report marked as "${status}".`, 'success');
         }
 
+        let _adminNoteReportId = null;
         function promptAdminNote(id) {
             const r = state.staffReports.find(r => r.id === id);
             if (!r) return;
-            const note = prompt('Add acknowledgment note for staff:', r.adminNote || '');
-            if (note !== null) {
-                r.adminNote = note.trim();
-                r.read = true;
-                saveStaffReports();
-                renderStaffReports();
-                showToast('Admin note saved.', 'success');
-            }
+            _adminNoteReportId = id;
+            document.getElementById('admin-note-input').value = r.adminNote || '';
+            positionModalOverApp('modal-admin-note');
+        }
+
+        function closeAdminNoteModal() {
+            document.getElementById('modal-admin-note').style.display = 'none';
+            _adminNoteReportId = null;
+        }
+
+        function saveAdminNote() {
+            const r = state.staffReports.find(r => r.id === _adminNoteReportId);
+            if (!r) { closeAdminNoteModal(); return; }
+            r.adminNote = document.getElementById('admin-note-input').value.trim();
+            r.read = true;
+            r.noteRead = false;
+            saveStaffReports();
+            renderStaffReports();
+            closeAdminNoteModal();
+            showToast('Admin note saved.', 'success');
         }
 
         function submitIssueReport(e) {
