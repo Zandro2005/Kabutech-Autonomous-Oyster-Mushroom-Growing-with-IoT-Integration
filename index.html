@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KabuTech Hiyas - Farm Operations</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -267,6 +267,18 @@
             #home-indicator {
                 display: none !important;
             }
+
+            .phone-frame > .flex-1 {
+                padding-top: 0 !important;
+            }
+
+            /* Prevent iOS Safari from auto-zooming the page when an input
+               is focused (triggered by font-size < 16px). Visible text
+               size in the layout is unaffected since these inputs already
+               render close to 16px; this just guarantees no zoom. */
+            input, select, textarea {
+                font-size: 16px !important;
+            }
         }
 
         /* Mobile Shell Frame Styling */
@@ -275,6 +287,10 @@
             border-radius: 40px;
             box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
             position: relative;
+        }
+
+        .phone-frame > .flex-1 {
+            padding-top: 25px;
         }
 
         .phone-notch {
@@ -734,20 +750,6 @@
         <!-- Phone UI elements -->
         <div id="notch" class="phone-notch"></div>
         <div id="home-indicator" class="phone-indicator"></div>
-
-        <!-- Phone Top Status Bar Mock -->
-        <div
-            class="h-8 shrink-0 flex items-center justify-between px-6 pt-3 pb-1 text-[11px] font-bold text-slate-600 dark:text-slate-400 z-40">
-            <span id="statusBarTime">09:41</span>
-            <div class="flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[13px]"
-                    style="font-variation-settings: 'wght' 700;">signal_cellular_alt</span>
-                <span class="material-symbols-outlined text-[13px]"
-                    style="font-variation-settings: 'wght' 700;">wifi</span>
-                <span class="material-symbols-outlined text-[14px]"
-                    style="font-variation-settings: 'wght' 700;">battery_5_bar</span>
-            </div>
-        </div>
 
         <!-- Toast Notifications Layer -->
         <div id="toast-container" class="absolute top-10 left-4 right-4 z-[99] flex flex-col gap-2 pointer-events-none">
@@ -2943,7 +2945,6 @@
         });
 
         window.addEventListener('load', () => {
-            initTime();
             loadStateFromStorage();
             setSensorDOMStatic();
             updateGreeting();
@@ -2961,8 +2962,6 @@
 
             // Start Dynamic Clock + Greeting refresh
             setInterval(() => {
-                const now = new Date();
-                document.getElementById('statusBarTime').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
                 updateGreeting();
             }, 60000);
 
@@ -3050,11 +3049,6 @@
             else if (hour >= 17) timeGreet = 'Good evening';
             const greetEl = document.getElementById('greeting-text');
             if (greetEl) greetEl.innerText = `${timeGreet}, ${name}`;
-        }
-
-        function initTime() {
-            const now = new Date();
-            document.getElementById('statusBarTime').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
         }
 
         // --- 3. LOCALSTORAGE STATE LOGIC ---
