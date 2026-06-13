@@ -132,22 +132,27 @@
         .material-symbols-outlined {
             opacity: 0;
         }
+
         .fonts-ready .material-symbols-outlined {
             opacity: 1;
         }
 
         /* --- Login <-> Register slide transition --- */
-        #scene-login, #scene-register {
+        #scene-login,
+        #scene-register {
             transition: transform 0.4s ease, opacity 0.4s ease;
         }
+
         .slide-out-left {
             transform: translateX(-100%);
             opacity: 0;
         }
+
         .slide-out-right {
             transform: translateX(100%);
             opacity: 0;
         }
+
         .slide-in {
             transform: translateX(0);
             opacity: 1;
@@ -294,7 +299,7 @@
                 padding: 0.75rem !important;
             }
 
-            #app-wrapper [class*="space-y-4"] > * + * {
+            #app-wrapper [class*="space-y-4"]>*+* {
                 margin-top: 0.75rem !important;
             }
 
@@ -312,7 +317,7 @@
                 gap: 0.625rem !important;
             }
 
-            #app-wrapper #tab-home > * + * {
+            #app-wrapper #tab-home>*+* {
                 margin-top: 0.875rem !important;
             }
 
@@ -325,7 +330,7 @@
                 height: 2rem !important;
             }
 
-            #app-wrapper .sensor-card > div[class*="mb-3"] {
+            #app-wrapper .sensor-card>div[class*="mb-3"] {
                 margin-bottom: 0.75rem !important;
             }
 
@@ -351,7 +356,7 @@
             /* Controls tab: add breathing room between elements inside
                each environment parameter card (icon, name, now/target,
                description, slider, device row). */
-            #app-wrapper #tab-controls [class*="rounded-2xl"][class*="p-4"] > [class*="gap-3"][class*="mb-3"] {
+            #app-wrapper #tab-controls [class*="rounded-2xl"][class*="p-4"]>[class*="gap-3"][class*="mb-3"] {
                 gap: 0.875rem !important;
                 margin-bottom: 1rem !important;
             }
@@ -378,7 +383,7 @@
                 display: none !important;
             }
 
-            .phone-frame > .flex-1 {
+            .phone-frame>.flex-1 {
                 padding-top: 0 !important;
             }
 
@@ -386,7 +391,9 @@
                is focused (triggered by font-size < 16px). Visible text
                size in the layout is unaffected since these inputs already
                render close to 16px; this just guarantees no zoom. */
-            input, select, textarea {
+            input,
+            select,
+            textarea {
                 font-size: 16px !important;
             }
         }
@@ -399,7 +406,7 @@
             position: relative;
         }
 
-        .phone-frame > .flex-1 {
+        .phone-frame>.flex-1 {
             padding-top: 25px;
         }
 
@@ -862,7 +869,8 @@
         <div id="home-indicator" class="phone-indicator"></div>
 
         <!-- Toast Notifications Layer -->
-        <div id="toast-container" class="absolute left-4 right-4 z-[99] flex flex-col gap-2 pointer-events-none" style="top: calc(3.5rem + 0.5rem);">
+        <div id="toast-container" class="absolute left-4 right-4 z-[99] flex flex-col gap-2 pointer-events-none"
+            style="top: calc(3.5rem + 0.5rem);">
         </div>
 
 
@@ -1373,7 +1381,8 @@
                                             <span id="icon-quick-fans"
                                                 class="material-symbols-outlined text-[22px]">mode_fan</span>
                                         </div>
-                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Fans</span>
+                                        <span
+                                            class="text-[11px] font-bold text-on-background dark:text-white">Fans</span>
                                         <span id="status-quick-fans"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-fans"
@@ -1387,7 +1396,8 @@
                                             <span id="icon-quick-misters"
                                                 class="material-symbols-outlined text-[22px]">opacity</span>
                                         </div>
-                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Mister</span>
+                                        <span
+                                            class="text-[11px] font-bold text-on-background dark:text-white">Mister</span>
                                         <span id="status-quick-misters"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-misters"
@@ -1401,7 +1411,8 @@
                                             <span id="icon-quick-lights"
                                                 class="material-symbols-outlined text-[22px]">wb_incandescent</span>
                                         </div>
-                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Grow Light</span>
+                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Grow
+                                            Light</span>
                                         <span id="status-quick-lights"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-lights"
@@ -1547,13 +1558,13 @@
                                     </div>
                                     <!-- Slider -->
                                     <div id="temp-slider-wrapper">
-                                    <input id="slider-temp" class="ctrl-slider w-full" type="range" min="15" max="35"
-                                        step="0.5" value="23.5" onchange="updateTempSetpoint(this.value)"
-                                        oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
-                                    <div
-                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
-                                        <span>15°C Cool</span><span>35°C Hot</span>
-                                    </div>
+                                        <input id="slider-temp" class="ctrl-slider w-full" type="range" min="15"
+                                            max="35" step="0.5" value="23.5" onchange="updateTempSetpoint(this.value)"
+                                            oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
+                                        <div
+                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                            <span>15°C Cool</span><span>35°C Hot</span>
+                                        </div>
                                     </div>
                                     <!-- Device toggle row -->
                                     <div
@@ -1617,13 +1628,13 @@
                                         </div>
                                     </div>
                                     <div id="humidity-slider-wrapper">
-                                    <input id="slider-humidity" class="ctrl-slider w-full" type="range" min="40"
-                                        max="90" step="1" value="75" onchange="updateHumiditySetpoint(this.value)"
-                                        oninput="document.getElementById('val-humidity-setpoint').innerText=this.value; updateSliderFill(this)">
-                                    <div
-                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
-                                        <span>40% Dry</span><span>90% Wet</span>
-                                    </div>
+                                        <input id="slider-humidity" class="ctrl-slider w-full" type="range" min="40"
+                                            max="90" step="1" value="75" onchange="updateHumiditySetpoint(this.value)"
+                                            oninput="document.getElementById('val-humidity-setpoint').innerText=this.value; updateSliderFill(this)">
+                                        <div
+                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                            <span>40% Dry</span><span>90% Wet</span>
+                                        </div>
                                     </div>
                                     <div
                                         class="flex items-center justify-between mt-3.5 pt-3.5 border-t border-border-muted dark:border-zinc-800">
@@ -2329,8 +2340,7 @@
                                         <span
                                             class="material-symbols-outlined text-[18px] text-primary dark:text-primary-fixed"
                                             style="font-variation-settings:'FILL' 1">inbox</span>
-                                        <span
-                                            class="text-body-sm font-bold text-brand-deep dark:text-primary-fixed">My
+                                        <span class="text-body-sm font-bold text-brand-deep dark:text-primary-fixed">My
                                             Reports</span>
                                         <span id="staff-reports-badge"
                                             class="hidden text-[9px] font-extrabold bg-warning-gold text-white px-2 py-0.5 rounded-full">0
@@ -2341,8 +2351,7 @@
                                 </button>
                                 <div id="accordion-my-reports"
                                     class="hidden bg-surface-container-lowest dark:bg-zinc-900 border border-t-0 border-muted dark:border-zinc-800 rounded-b-2xl -mt-2 pt-4 px-4 pb-4">
-                                    <div id="staff-reports-container"
-                                        class="space-y-2 max-h-72 overflow-y-auto pr-1">
+                                    <div id="staff-reports-container" class="space-y-2 max-h-72 overflow-y-auto pr-1">
                                         <div
                                             class="flex flex-col items-center justify-center py-4 gap-1 text-slate-400 dark:text-zinc-500">
                                             <span class="material-symbols-outlined text-[28px]">mark_email_read</span>
@@ -2513,7 +2522,8 @@
                 <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-error-red">report_problem</span> Report Farm Issue
                 </h3>
-                <button onclick="closeReportModal()" class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors"><span
+                <button onclick="closeReportModal()"
+                    class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
 
@@ -2674,7 +2684,8 @@
                 <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                     <span class="material-symbols-outlined">assignment_add</span> Assign Farm Task
                 </h3>
-                <button onclick="closeAddTaskModal()" class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors"><span
+                <button onclick="closeAddTaskModal()"
+                    class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
 
@@ -2745,10 +2756,12 @@
         <div class="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-2xl shadow-2xl flex flex-col gap-3"
             style="width:90%; max-width:340px; box-sizing:border-box; padding:16px;">
             <div class="flex justify-between items-center">
-                <h3 class="text-[13px] font-extrabold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
+                <h3
+                    class="text-[13px] font-extrabold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-[17px]">edit_note</span> Admin Note
                 </h3>
-                <button onclick="closeAdminNoteModal()" class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors">
+                <button onclick="closeAdminNoteModal()"
+                    class="text-slate-400 dark:text-zinc-500 hover:text-slate-600 dark:hover:text-white p-1 rounded-full transition-colors">
                     <span class="material-symbols-outlined text-[18px]">close</span>
                 </button>
             </div>
@@ -4862,9 +4875,9 @@
                         </div>
                     </div>
                     ${!alert.acknowledged ? `
-                        <div class="flex gap-2 items-center">
-                            <input id="note-${alert.id}" type="text" placeholder="Resolution note (optional)" class="flex-1 text-[10px] bg-white/30 dark:bg-zinc-800 border border-current/20 rounded-lg py-1 px-2 outline-none placeholder:opacity-60 text-inherit">
-                            <button onclick="acknowledgeSingleAlert(${alert.id})" class="text-[9px] uppercase font-bold shrink-0 bg-white/20 hover:bg-white/40 dark:bg-zinc-800 dark:hover:bg-zinc-700 py-1 px-2 rounded-lg border border-current whitespace-nowrap">Acknowledge</button>
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <input id="note-${alert.id}" type="text" placeholder="Resolution note (optional)" class="min-w-0 flex-1 basis-40 text-[10px] bg-white/30 dark:bg-zinc-800 border border-current/20 rounded-lg py-1 px-2 outline-none placeholder:opacity-60 text-inherit">
+                            <button onclick="acknowledgeSingleAlert(${alert.id})" class="text-[9px] uppercase font-bold shrink-0 bg-white/20 hover:bg-white/40 dark:bg-zinc-800 dark:hover:bg-zinc-700 py-1.5 px-3 rounded-lg border border-current whitespace-nowrap">Acknowledge</button>
                         </div>
                     ` : ''}
                 `;
