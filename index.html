@@ -14,6 +14,21 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
+        // Reveal icon glyphs only once the Material Symbols font has loaded,
+        // avoiding a brief flash of raw icon-name text (e.g. "energy_savings_leaf").
+        (function () {
+            const reveal = () => document.documentElement.classList.add('fonts-ready');
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.load('24px "Material Symbols Outlined"').then(reveal).catch(reveal);
+                document.fonts.ready.then(reveal);
+            } else {
+                reveal();
+            }
+            // Safety fallback in case font loading stalls
+            setTimeout(reveal, 1500);
+        })();
+    </script>
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -113,6 +128,15 @@
         }
     </script>
     <style>
+        /* --- Prevent "icon name" text flash before Material Symbols font loads --- */
+        .material-symbols-outlined {
+            opacity: 0;
+        }
+
+        .fonts-ready .material-symbols-outlined {
+            opacity: 1;
+        }
+
         /* --- Smooth Light/Dark Mode Transition --- */
         /* Applied temporarily while toggling theme so colors crossfade
            gradually instead of switching instantly. */
@@ -388,16 +412,16 @@
 
         /* iOS-style toggle */
         .ctrl-toggle {
-            width: 52px;
-            height: 28px;
+            width: 40px;
+            height: 22px;
             flex-shrink: 0;
         }
 
         .ctrl-toggle .ctrl-toggle-knob {
-            top: 3px;
-            left: 3px;
-            width: 22px;
-            height: 22px;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
         }
 
         .ctrl-toggle.is-on {
@@ -413,7 +437,7 @@
         }
 
         .ctrl-toggle.is-on .ctrl-toggle-knob {
-            transform: translateX(24px);
+            transform: translateX(18px);
             background: #fff !important;
         }
 
@@ -731,7 +755,7 @@
 
             <!-- 2. LOGIN SCREEN SCENE -->
             <div id="scene-login"
-                class="hidden absolute inset-0 z-50 bg-app-bg dark:bg-zinc-950 flex flex-col overflow-y-auto hide-scrollbar px-margin-edge py-6 transition-all duration-500">
+                class="hidden absolute inset-0 z-50 bg-app-bg dark:bg-zinc-950 flex flex-col justify-center overflow-y-auto hide-scrollbar px-margin-edge py-6 transition-all duration-500">
                 <!-- Background ambient glows -->
                 <div
                     class="fixed top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary-container opacity-[0.06] blur-[100px] rounded-full pointer-events-none z-0">
@@ -749,11 +773,11 @@
                 </div>
 
                 <div
-                    class="w-full bg-surface-container-lowest dark:bg-zinc-900 rounded-[28px] shadow-lg border border-muted dark:border-zinc-800 p-6 relative z-10 flex flex-col gap-6 shrink-0">
+                    class="w-full bg-surface-container-lowest dark:bg-zinc-900 rounded-[28px] shadow-lg border border-muted dark:border-zinc-800 p-6 relative z-10 flex flex-col gap-5 mt-4 mb-auto">
                     <!-- Hero Section -->
                     <div class="flex flex-col items-center text-center">
                         <div
-                            class="w-16 h-16 bg-surface-soft dark:bg-zinc-800 rounded-2xl border border-muted dark:border-zinc-700 flex items-center justify-center shadow-sm mb-4 relative">
+                            class="w-16 h-16 bg-surface-soft dark:bg-zinc-800 rounded-2xl border border-muted dark:border-zinc-700 flex items-center justify-center shadow-sm mb-3 relative">
                             <span
                                 class="material-symbols-outlined text-primary dark:text-primary-fixed text-[36px] relative z-10"
                                 style="font-variation-settings: 'FILL' 1;">eco</span>
@@ -814,8 +838,8 @@
                         <span class="material-symbols-outlined text-[18px]">person_add</span>
                         Create Account for Staff
                     </button>
-                    <p class="text-center text-caption text-on-surface-variant dark:text-zinc-500">Secure connection to
-                        environmental core.</p>
+                    <p class="text-center text-caption text-on-surface-variant dark:text-zinc-500 leading-snug">Secure
+                        connection to environmental core.</p>
                 </div>
             </div>
 
@@ -1024,7 +1048,7 @@
                             <div class="grid grid-cols-2 gap-3.5">
                                 <!-- Temp -->
                                 <div
-                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                    class="sensor-card bg-success-green/[0.05] dark:bg-emerald-950/20 border border-success-green/20 dark:border-emerald-800/40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -1065,7 +1089,7 @@
                                 </div>
                                 <!-- Humidity -->
                                 <div
-                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                    class="sensor-card bg-success-green/[0.05] dark:bg-emerald-950/20 border border-success-green/20 dark:border-emerald-800/40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -1107,7 +1131,7 @@
                                 </div>
                                 <!-- Light -->
                                 <div
-                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                                    class="sensor-card bg-success-green/[0.05] dark:bg-emerald-950/20 border border-success-green/20 dark:border-emerald-800/40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -1148,7 +1172,7 @@
                                 </div>
                                 <!-- CO2 -->
                                 <div id="sensor-co2-card"
-                                    class="sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
+                                    class="sensor-card bg-success-green/[0.05] dark:bg-emerald-950/20 border border-success-green/20 dark:border-emerald-800/40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300">
                                     <div
                                         class="absolute top-0 right-0 w-12 h-12 bg-primary/5 dark:bg-primary-fixed/5 rounded-bl-full -mr-2 -mt-2">
                                     </div>
@@ -1200,7 +1224,7 @@
 
                             <!-- Manual Overrides Quick Panel -->
                             <div
-                                class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm space-y-3">
+                                class="bg-success-green/[0.05] dark:bg-emerald-950/20 border border-success-green/20 dark:border-emerald-800/40 rounded-2xl p-4 shadow-sm space-y-3">
                                 <div class="flex justify-between items-center">
                                     <h3 class="text-body-md font-bold text-brand-deep dark:text-primary-fixed">Quick
                                         Device
@@ -1212,13 +1236,14 @@
                                 <div class="grid grid-cols-3 gap-2">
                                     <!-- Fans -->
                                     <button id="btn-quick-fans" onclick="toggleQuickDevice('fans')"
-                                        class="flex flex-col items-center justify-center gap-2 py-4 px-2 rounded-2xl border border-muted dark:border-zinc-800 hover:bg-surface-soft/50 dark:hover:bg-zinc-800 active:scale-95 transition-all select-none touch-manipulation">
+                                        class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-success-green/25 dark:border-emerald-800/50 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-all select-none">
                                         <div
                                             class="w-10 h-10 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-on-surface-variant dark:text-zinc-300">
                                             <span id="icon-quick-fans"
                                                 class="material-symbols-outlined text-[22px]">mode_fan</span>
                                         </div>
-                                        <span class="text-[11px] font-bold">Fans</span>
+                                        <span
+                                            class="text-[11px] font-bold text-on-background dark:text-white">Fans</span>
                                         <span id="status-quick-fans"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-fans"
@@ -1226,13 +1251,14 @@
                                     </button>
                                     <!-- Misters -->
                                     <button id="btn-quick-misters" onclick="toggleQuickDevice('misters')"
-                                        class="flex flex-col items-center justify-center gap-2 py-4 px-2 rounded-2xl border border-muted dark:border-zinc-800 hover:bg-surface-soft/50 dark:hover:bg-zinc-800 active:scale-95 transition-all select-none touch-manipulation">
+                                        class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-success-green/25 dark:border-emerald-800/50 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-all select-none">
                                         <div
                                             class="w-10 h-10 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-on-surface-variant dark:text-zinc-300">
                                             <span id="icon-quick-misters"
                                                 class="material-symbols-outlined text-[22px]">opacity</span>
                                         </div>
-                                        <span class="text-[11px] font-bold">Mister</span>
+                                        <span
+                                            class="text-[11px] font-bold text-on-background dark:text-white">Mister</span>
                                         <span id="status-quick-misters"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-misters"
@@ -1240,13 +1266,14 @@
                                     </button>
                                     <!-- Lights -->
                                     <button id="btn-quick-lights" onclick="toggleQuickDevice('lights')"
-                                        class="flex flex-col items-center justify-center gap-2 py-4 px-2 rounded-2xl border border-muted dark:border-zinc-800 hover:bg-surface-soft/50 dark:hover:bg-zinc-800 active:scale-95 transition-all select-none touch-manipulation">
+                                        class="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-success-green/25 dark:border-emerald-800/50 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-all select-none">
                                         <div
                                             class="w-10 h-10 rounded-full bg-surface-soft dark:bg-zinc-800 flex items-center justify-center text-on-surface-variant dark:text-zinc-300">
                                             <span id="icon-quick-lights"
                                                 class="material-symbols-outlined text-[22px]">wb_incandescent</span>
                                         </div>
-                                        <span class="text-[11px] font-bold">Grow Light</span>
+                                        <span class="text-[11px] font-bold text-on-background dark:text-white">Grow
+                                            Light</span>
                                         <span id="status-quick-lights"
                                             class="text-[10px] text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">Off</span>
                                         <span id="uptime-quick-lights"
@@ -1358,7 +1385,7 @@
                                 <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm"
                                     id="ctrl-row-temp">
                                     <!-- Top row: icon + name + live reading + target -->
-                                    <div class="flex items-center gap-3 mb-3">
+                                    <div class="flex items-center gap-3 mb-3.5">
                                         <div
                                             class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-orange-100 dark:border-zinc-700">
                                             <span class="material-symbols-outlined text-[22px] text-orange-500"
@@ -1386,21 +1413,23 @@
                                                         <span id="val-temp-setpoint">23.5</span>°C</span>
                                                 </div>
                                             </div>
-                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-1.5">
                                                 Keeps mushrooms at optimal growing temperature</p>
                                         </div>
                                     </div>
                                     <!-- Slider -->
-                                    <input id="slider-temp" class="ctrl-slider w-full" type="range" min="15" max="35"
-                                        step="0.5" value="23.5" onchange="updateTempSetpoint(this.value)"
-                                        oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
-                                    <div
-                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
-                                        <span>15°C Cool</span><span>35°C Hot</span>
+                                    <div id="temp-slider-wrapper">
+                                        <input id="slider-temp" class="ctrl-slider w-full" type="range" min="15"
+                                            max="35" step="0.5" value="23.5" onchange="updateTempSetpoint(this.value)"
+                                            oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
+                                        <div
+                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                            <span>15°C Cool</span><span>35°C Hot</span>
+                                        </div>
                                     </div>
                                     <!-- Device toggle row -->
                                     <div
-                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        class="flex items-center justify-between mt-3.5 pt-3.5 border-t border-border-muted dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
                                             <span
                                                 class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">mode_fan</span>
@@ -1415,7 +1444,7 @@
                                             <span id="lbl-device-fans"
                                                 class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
                                             <button id="btn-device-fans" onclick="toggleDeviceManual('fans')"
-                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                class="ctrl-toggle rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
                                                 aria-label="Toggle fan">
                                                 <span
                                                     class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
@@ -1427,7 +1456,7 @@
                                 <!-- Humidity -->
                                 <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm"
                                     id="ctrl-row-humidity">
-                                    <div class="flex items-center gap-3 mb-3">
+                                    <div class="flex items-center gap-3 mb-3.5">
                                         <div
                                             class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-blue-100 dark:border-zinc-700">
                                             <span class="material-symbols-outlined text-[22px] text-blue-500"
@@ -1455,19 +1484,21 @@
                                                         <span id="val-humidity-setpoint">75</span>%</span>
                                                 </div>
                                             </div>
-                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-1.5">
                                                 Moisture level in the air for healthy fruiting</p>
                                         </div>
                                     </div>
-                                    <input id="slider-humidity" class="ctrl-slider w-full" type="range" min="40"
-                                        max="90" step="1" value="75" onchange="updateHumiditySetpoint(this.value)"
-                                        oninput="document.getElementById('val-humidity-setpoint').innerText=this.value; updateSliderFill(this)">
-                                    <div
-                                        class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
-                                        <span>40% Dry</span><span>90% Wet</span>
+                                    <div id="humidity-slider-wrapper">
+                                        <input id="slider-humidity" class="ctrl-slider w-full" type="range" min="40"
+                                            max="90" step="1" value="75" onchange="updateHumiditySetpoint(this.value)"
+                                            oninput="document.getElementById('val-humidity-setpoint').innerText=this.value; updateSliderFill(this)">
+                                        <div
+                                            class="flex justify-between text-[9px] text-slate-400 font-semibold mt-1 px-0.5">
+                                            <span>40% Dry</span><span>90% Wet</span>
+                                        </div>
                                     </div>
                                     <div
-                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        class="flex items-center justify-between mt-3.5 pt-3.5 border-t border-border-muted dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
                                             <span
                                                 class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">water_drop</span>
@@ -1482,7 +1513,7 @@
                                             <span id="lbl-device-misters"
                                                 class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
                                             <button id="btn-device-misters" onclick="toggleDeviceManual('misters')"
-                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                class="ctrl-toggle rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
                                                 aria-label="Toggle misters">
                                                 <span
                                                     class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
@@ -1494,7 +1525,7 @@
                                 <!-- Light -->
                                 <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm"
                                     id="light-setpoint-card">
-                                    <div class="flex items-center gap-3 mb-3">
+                                    <div class="flex items-center gap-3 mb-3.5">
                                         <div
                                             class="w-10 h-10 rounded-xl bg-yellow-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-yellow-100 dark:border-zinc-700">
                                             <span class="material-symbols-outlined text-[22px] text-yellow-500"
@@ -1521,7 +1552,7 @@
                                                         <span id="val-light-setpoint">500</span> µmol</span>
                                                 </div>
                                             </div>
-                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-1.5">
                                                 Brightness of grow lights (higher = brighter)</p>
                                         </div>
                                     </div>
@@ -1535,7 +1566,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        class="flex items-center justify-between mt-3.5 pt-3.5 border-t border-border-muted dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
                                             <span
                                                 class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">wb_incandescent</span>
@@ -1550,7 +1581,7 @@
                                             <span id="lbl-device-lights"
                                                 class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
                                             <button id="btn-device-lights" onclick="toggleDeviceManual('lights')"
-                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                class="ctrl-toggle rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
                                                 aria-label="Toggle grow lights">
                                                 <span
                                                     class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
@@ -1562,7 +1593,7 @@
                                 <!-- CO2 -->
                                 <div
                                     class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-800 rounded-2xl p-4 shadow-sm">
-                                    <div class="flex items-center gap-3 mb-3">
+                                    <div class="flex items-center gap-3 mb-3.5">
                                         <div
                                             class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-zinc-700">
                                             <span class="material-symbols-outlined text-[22px] text-emerald-600"
@@ -1573,7 +1604,8 @@
                                                 <div class="flex items-center gap-1.5">
                                                     <p
                                                         class="text-[13px] font-extrabold text-on-background dark:text-white">
-                                                        CO₂ Level</p><span id="saving-dot-co2"
+                                                        CO₂ Level</p>
+                                                    <span id="saving-dot-co2"
                                                         class="hidden text-[9px] text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
                                                             class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
                                                 </div>
@@ -1582,14 +1614,14 @@
                                                     <span
                                                         class="text-[10px] text-on-surface-variant dark:text-zinc-400">Now
                                                         <span class="font-bold text-on-background dark:text-white"
-                                                            id="ctrl-current-co2">420</span></span>
+                                                            id="ctrl-current-co2">420</span> ppm</span>
                                                     <span class="text-slate-300 dark:text-zinc-600">›</span>
                                                     <span
                                                         class="text-[10px] font-extrabold text-primary dark:text-primary-fixed">Target
                                                         <span id="val-co2-setpoint">600</span> ppm</span>
                                                 </div>
                                             </div>
-                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-0.5">
+                                            <p class="text-[10px] text-on-surface-variant dark:text-zinc-400 mt-1.5">
                                                 Carbon dioxide concentration — affects mushroom size</p>
                                         </div>
                                     </div>
@@ -1603,7 +1635,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="flex items-center justify-between mt-3 pt-3 border-t border-border-muted dark:border-zinc-800">
+                                        class="flex items-center justify-between mt-3.5 pt-3.5 border-t border-border-muted dark:border-zinc-800">
                                         <div class="flex items-center gap-2">
                                             <span
                                                 class="material-symbols-outlined text-[16px] text-on-surface-variant dark:text-zinc-500">mode_fan</span>
@@ -1618,7 +1650,7 @@
                                             <span id="lbl-vent-fan"
                                                 class="text-[10px] font-bold text-on-surface-variant dark:text-zinc-500">OFF</span>
                                             <button id="btn-vent-fan" onclick="toggleDeviceManual('ventFan')"
-                                                class="ctrl-toggle w-13 h-7 rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
+                                                class="ctrl-toggle rounded-full border-2 border-slate-200 dark:border-zinc-700 bg-slate-200 dark:bg-zinc-700 relative transition-all duration-300 opacity-50 cursor-not-allowed"
                                                 aria-label="Toggle vent fan">
                                                 <span
                                                     class="ctrl-toggle-knob absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-all duration-300"></span>
@@ -2995,7 +3027,7 @@
                 state.humiditySetpoint = sp.humidity;
                 state.lightSetpoint = sp.light || 500;
                 state.co2Setpoint = sp.co2 || 600;
-                state.systemMode = sp.mode;
+                state.systemMode = sp.mode === 'manual' ? 'manual' : 'auto';
                 state.deviceStates = sp.devices || state.deviceStates;
             }
 
@@ -3706,7 +3738,7 @@
                 document.getElementById('co2-trend').className = "flex items-center text-error-red font-caption text-caption bg-error-container px-1.5 py-0.5 rounded-full";
                 document.getElementById('co2-trend').innerHTML = `<span class="material-symbols-outlined text-[12px] mr-0.5 animate-bounce">arrow_upward</span> DANGER`;
             } else {
-                co2Card.className = "sensor-card bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300";
+                co2Card.className = "sensor-card bg-success-green/[0.05] dark:bg-emerald-950/20 border border-success-green/20 dark:border-emerald-800/40 rounded-2xl p-3.5 shadow-sm flex flex-col justify-between relative overflow-hidden group transition-all duration-300";
                 co2Icon.className = "bg-surface-soft dark:bg-zinc-800 p-2 rounded-lg text-primary dark:text-primary-fixed";
                 const co2Trend = document.getElementById('co2-trend');
                 if (co2Trend) {
@@ -3832,26 +3864,33 @@
             });
         }
 
-        // --- 8. DEVICE OVERRIDES & AUTO SYNC ---
-        function setSystemMode(mode) {
-            state.systemMode = mode;
-            saveSetpoints();
-            syncControlsUI();
-
+        function applyModeUI(mode) {
             const btnAuto = document.getElementById('mode-btn-auto');
             const btnManual = document.getElementById('mode-btn-manual');
             const warnLabel = document.getElementById('mode-warning-label');
 
             if (mode === 'auto') {
-                btnAuto.className = "px-3 py-1 rounded-full bg-primary text-on-primary font-bold text-caption transition-all duration-300";
-                btnManual.className = "px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300";
+                btnAuto.className = "px-3 py-1.5 rounded-full bg-primary text-on-primary font-bold text-[11px] transition-all duration-300";
+                btnManual.className = "px-3 py-1.5 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-[11px] transition-all duration-300";
                 if (warnLabel) warnLabel.classList.add('hidden');
+            } else {
+                btnManual.className = "px-3 py-1.5 rounded-full bg-warning-gold text-white font-bold text-[11px] transition-all duration-300";
+                btnAuto.className = "px-3 py-1.5 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-[11px] transition-all duration-300";
+                if (warnLabel) warnLabel.classList.remove('hidden');
+            }
+        }
+
+        // --- 8. DEVICE OVERRIDES & AUTO SYNC ---
+        function setSystemMode(mode) {
+            state.systemMode = mode;
+            saveSetpoints();
+            syncControlsUI();
+            applyModeUI(mode);
+
+            if (mode === 'auto') {
                 addLog('Environmental system Mode set to AUTO.', 'success');
                 showToast('Automatic control loop enabled.', 'info');
             } else {
-                btnManual.className = "px-3 py-1 rounded-full bg-warning-gold text-white font-bold text-caption transition-all duration-300";
-                btnAuto.className = "px-3 py-1 rounded-full text-on-surface-variant dark:text-zinc-400 font-bold text-caption transition-all duration-300";
-                if (warnLabel) warnLabel.classList.remove('hidden');
                 addLog('Environmental system Mode set to MANUAL override.', 'warning');
                 showToast('Manual device controls enabled.', 'warning');
             }
@@ -3883,6 +3922,7 @@
         }
 
         function syncControlsUI() {
+            applyModeUI(state.systemMode);
             const homeBadge = document.getElementById('home-mode-badge');
             homeBadge.innerText = state.systemMode === 'auto' ? 'Auto Mode' : 'Manual Mode';
 
@@ -3907,7 +3947,7 @@
                     if (d === 'fans') icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-spin-slow";
                     else icon.className = "material-symbols-outlined text-[20px] text-primary dark:text-primary-fixed animate-pulse";
                 } else {
-                    btn.className = "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-muted dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-all select-none";
+                    btn.className = "flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border border-success-green/25 dark:border-emerald-800/50 hover:bg-slate-50 dark:hover:bg-zinc-900 transition-all select-none";
                     status.className = "text-[9px] text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide";
                     status.innerText = "Off";
                     icon.className = "material-symbols-outlined text-[20px] text-on-surface-variant dark:text-zinc-400";
@@ -4002,6 +4042,14 @@
                 return;
             }
             state.deviceStates[device] = !state.deviceStates[device];
+
+            // Ventilation Fan (Temperature) and Ventilation Fan (CO2) are
+            // physically the same fan — keep them in sync.
+            if (device === 'fans' || device === 'ventFan') {
+                const linked = device === 'fans' ? 'ventFan' : 'fans';
+                state.deviceStates[linked] = state.deviceStates[device];
+            }
+
             saveSetpoints();
             syncDeviceButtons();
             const label = { fans: 'Ventilation Fan', misters: 'Misters', lights: 'Grow Lights', ventFan: 'Ventilation Fan (CO2)' }[device] || device;
@@ -5009,9 +5057,9 @@
                 adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
                 adminOnlyTabs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); });
                 // Hide target setpoints (sliders) for staff
-                ['slider-temp', 'slider-humidity', 'light-slider-wrapper', 'light-target-display'].forEach(id => {
+                ['temp-slider-wrapper', 'humidity-slider-wrapper', 'light-slider-wrapper', 'co2-slider-wrapper'].forEach(id => {
                     const el = document.getElementById(id);
-                    if (el) el.classList.add('hidden');
+                    if (el) el.style.display = 'none';
                 });
                 const tempTarget = document.getElementById('val-temp-setpoint');
                 if (tempTarget) tempTarget.closest('.text-right') && tempTarget.closest('.text-right').classList.add('hidden');
@@ -5030,15 +5078,13 @@
                 // Hide yield AI card and CO2 slider from staff
                 const yieldCard = document.getElementById('yield-ai-dashboard-card');
                 if (yieldCard) yieldCard.classList.add('hidden');
-                const co2Slider = document.getElementById('co2-slider-wrapper');
-                if (co2Slider) co2Slider.classList.add('hidden');
             } else {
                 adminOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'flex'; });
                 adminOnlyTabs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
                 // Show target setpoints for admin
-                ['slider-temp', 'slider-humidity', 'light-slider-wrapper', 'light-target-display'].forEach(id => {
+                ['temp-slider-wrapper', 'humidity-slider-wrapper', 'light-slider-wrapper', 'co2-slider-wrapper'].forEach(id => {
                     const el = document.getElementById(id);
-                    if (el) el.classList.remove('hidden');
+                    if (el) el.style.display = '';
                 });
                 const tempTarget = document.getElementById('val-temp-setpoint');
                 if (tempTarget) tempTarget.closest('.text-right') && tempTarget.closest('.text-right').classList.remove('hidden');
@@ -5056,14 +5102,16 @@
                 // Show yield AI card and CO2 slider for admin
                 const yieldCard = document.getElementById('yield-ai-dashboard-card');
                 if (yieldCard) yieldCard.classList.remove('hidden');
-                const co2Slider = document.getElementById('co2-slider-wrapper');
-                if (co2Slider) co2Slider.classList.remove('hidden');
             }
         }
 
         // --- SPARKLINES ---
         const sparkHistory = { temp: [], humidity: [], light: [], co2: [] };
+        const sparkPoints = {}; // canvasId -> { points, data, unit }
         const SPARK_MAX = 20;
+        const sparkUnits = { 'spark-temp': '°C', 'spark-humidity': '%', 'spark-light': ' µmol', 'spark-co2': ' ppm' };
+        const sparkDecimals = { 'spark-temp': 1, 'spark-humidity': 0, 'spark-light': 0, 'spark-co2': 0 };
+
         function pushSparkData() {
             sparkHistory.temp.push(state.currentTemp);
             sparkHistory.humidity.push(state.currentHumidity);
@@ -5083,6 +5131,9 @@
                 x: pad + (i / (data.length - 1)) * (w - pad * 2),
                 y: h - pad - ((v - min) / range) * (h - pad * 2)
             }));
+
+            // Save for tooltip hit-testing
+            sparkPoints[canvasId] = { points, data };
 
             // Subtle gradient fill under the line for a richer, more "alive" look
             const gradient = ctx.createLinearGradient(0, 0, 0, h);
@@ -5107,6 +5158,21 @@
             ctx.arc(last.x, last.y, 2, 0, Math.PI * 2);
             ctx.fillStyle = color;
             ctx.fill();
+
+            // Highlight dot for tooltip hover (if active)
+            const active = sparkActive[canvasId];
+            if (active != null && points[active]) {
+                const p = points[active];
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            }
         }
         function updateSparklines() {
             pushSparkData();
@@ -5117,6 +5183,81 @@
             drawSparkline('spark-light', sparkHistory.light, green);
             drawSparkline('spark-co2', sparkHistory.co2, state.currentCO2 > 800 ? '#dc2626' : green);
         }
+
+        // --- Sparkline tooltips ---
+        const sparkActive = {}; // canvasId -> index of active point (or null)
+        function getSparkTooltip() {
+            let el = document.getElementById('spark-tooltip');
+            if (!el) {
+                el = document.createElement('div');
+                el.id = 'spark-tooltip';
+                el.className = 'fixed pointer-events-none z-[150] bg-slate-900/90 dark:bg-zinc-100/95 text-white dark:text-zinc-900 text-[10px] font-bold px-2 py-1 rounded-lg shadow-lg transition-opacity duration-100 opacity-0';
+                document.body.appendChild(el);
+            }
+            return el;
+        }
+        function handleSparkPointer(e, canvasId) {
+            const info = sparkPoints[canvasId];
+            const canvas = document.getElementById(canvasId);
+            if (!info || !canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const x = clientX - rect.left;
+
+            // Find nearest point by x position
+            let nearest = 0, nearestDist = Infinity;
+            info.points.forEach((p, i) => {
+                const d = Math.abs(p.x - x);
+                if (d < nearestDist) { nearestDist = d; nearest = i; }
+            });
+
+            sparkActive[canvasId] = nearest;
+            const value = info.data[nearest];
+            const decimals = sparkDecimals[canvasId] ?? 0;
+            const unit = sparkUnits[canvasId] || '';
+            const ago = info.data.length - 1 - nearest;
+            const tooltip = getSparkTooltip();
+            tooltip.textContent = `${value.toFixed(decimals)}${unit} · ${ago === 0 ? 'now' : ago * 3 + 's ago'}`;
+            tooltip.style.opacity = '1';
+            tooltip.style.left = clientX + 'px';
+            tooltip.style.top = (clientY - 32) + 'px';
+            tooltip.style.transform = 'translateX(-50%)';
+
+            // Redraw to show highlight dot
+            const isDark = document.documentElement.classList.contains('dark');
+            const green = isDark ? '#6ee7b7' : '#166534';
+            const colorMap = {
+                'spark-temp': green, 'spark-humidity': green, 'spark-light': green,
+                'spark-co2': state.currentCO2 > 800 ? '#dc2626' : green
+            };
+            drawSparkline(canvasId, sparkHistory[canvasId.replace('spark-', '')], colorMap[canvasId]);
+        }
+        function clearSparkPointer(canvasId) {
+            sparkActive[canvasId] = null;
+            const tooltip = document.getElementById('spark-tooltip');
+            if (tooltip) tooltip.style.opacity = '0';
+            const isDark = document.documentElement.classList.contains('dark');
+            const green = isDark ? '#6ee7b7' : '#166534';
+            const colorMap = {
+                'spark-temp': green, 'spark-humidity': green, 'spark-light': green,
+                'spark-co2': state.currentCO2 > 800 ? '#dc2626' : green
+            };
+            drawSparkline(canvasId, sparkHistory[canvasId.replace('spark-', '')], colorMap[canvasId]);
+        }
+        function initSparkTooltips() {
+            ['spark-temp', 'spark-humidity', 'spark-light', 'spark-co2'].forEach(id => {
+                const canvas = document.getElementById(id);
+                if (!canvas) return;
+                canvas.style.cursor = 'crosshair';
+                canvas.addEventListener('mousemove', (e) => handleSparkPointer(e, id));
+                canvas.addEventListener('mouseleave', () => clearSparkPointer(id));
+                canvas.addEventListener('touchstart', (e) => { handleSparkPointer(e, id); }, { passive: true });
+                canvas.addEventListener('touchmove', (e) => { handleSparkPointer(e, id); }, { passive: true });
+                canvas.addEventListener('touchend', () => clearSparkPointer(id));
+            });
+        }
+        initSparkTooltips();
         setInterval(() => { updateSparklines(); updateLastUpdated(); updateFarmHealthScore(); }, 3000);
 
         // --- LAST UPDATED TIMESTAMP ---
