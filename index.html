@@ -261,6 +261,18 @@
             box-shadow: 0px 0px 15px rgba(186, 26, 26, 0.3);
         }
 
+        /* Alert glow — inset ring on the app shell itself, clips to overflow:hidden */
+        #app-wrapper.alert-active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 8px solid rgba(186, 26, 26, 0.2);
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 50;
+            transition: opacity 0.5s ease;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
@@ -872,9 +884,6 @@
             style="top: calc(3.5rem + 0.5rem);">
         </div>
 
-        <!-- Screen Anomaly Glow Overlay — absolute so it clips inside app-wrapper and never bleeds to viewport -->
-        <div id="system-error-glow"
-            class="absolute inset-0 pointer-events-none z-50 border-8 border-error/0 transition-all duration-500 rounded-[inherit]"></div>
 
         <!-- APP SHELL SCENE CONTAINER -->
         <div class="flex-1 flex flex-col overflow-hidden relative">
@@ -1144,8 +1153,8 @@
                         <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
                     </button>
                     <div class="min-h-full p-4 pb-28 relative">
-                        <div class="fixed inset-0 ambient-glow-1 pointer-events-none z-0"></div>
-                        <div class="fixed inset-0 ambient-glow-2 pointer-events-none z-0"></div>
+                        <div class="absolute inset-0 ambient-glow-1 pointer-events-none z-0"></div>
+                        <div class="absolute inset-0 ambient-glow-2 pointer-events-none z-0"></div>
 
                         <!-- ACTIVE ALERTS BANNER -->
                         <div id="active-alert-banner"
@@ -4040,13 +4049,11 @@
                 document.getElementById('banner-alert-desc').innerText = topAlert.desc;
 
                 // Red glowing border on app shell
-                document.getElementById('system-error-glow').classList.remove('border-error/0');
-                document.getElementById('system-error-glow').classList.add('border-error/20');
+                document.getElementById('app-wrapper').classList.add('alert-active');
             } else {
                 dot.classList.add('hidden');
                 document.getElementById('active-alert-banner').classList.add('hidden');
-                document.getElementById('system-error-glow').classList.remove('border-error/20');
-                document.getElementById('system-error-glow').classList.add('border-error/0');
+                document.getElementById('app-wrapper').classList.remove('alert-active');
             }
         }
 
@@ -4077,8 +4084,7 @@
             saveAlerts();
             renderAlertsList();
             document.getElementById('active-alert-banner').classList.add('hidden');
-            document.getElementById('system-error-glow').classList.remove('border-error/20');
-            document.getElementById('system-error-glow').classList.add('border-error/0');
+            document.getElementById('app-wrapper').classList.remove('alert-active');
             showToast('All active alerts acknowledged.', 'info');
             addLog('Alerts cleared and acknowledged by operator.', 'info');
         }
