@@ -275,7 +275,10 @@
                 min-height: 100vh;
             }
 
-            #app-wrapper {
+            #app-wrapper,
+            #app-wrapper.phone-frame {
+                position: fixed !important;
+                inset: 0 !important;
                 width: 100vw !important;
                 max-width: 100vw !important;
                 height: 100dvh !important;
@@ -849,10 +852,6 @@
 <body
     class="bg-slate-900 text-on-surface antialiased min-h-screen flex items-center justify-center py-6 px-4 select-none relative overflow-hidden transition-colors duration-300 dark:bg-slate-950">
 
-    <!-- Screen Anomaly Glow Overlay -->
-    <div id="system-error-glow"
-        class="fixed inset-0 pointer-events-none z-50 border-8 border-error/0 transition-all duration-500"></div>
-
     <!-- Toggle Device Frame Button (visible on desktop) -->
     <button onclick="togglePhoneFrame()"
         class="hidden md:flex fixed top-4 right-4 z-50 bg-slate-800 text-slate-300 hover:text-white px-4 py-2 rounded-full border border-slate-700 text-body-sm items-center gap-2 shadow-lg transition-all active:scale-95">
@@ -873,6 +872,9 @@
             style="top: calc(3.5rem + 0.5rem);">
         </div>
 
+        <!-- Screen Anomaly Glow Overlay — absolute so it clips inside app-wrapper and never bleeds to viewport -->
+        <div id="system-error-glow"
+            class="absolute inset-0 pointer-events-none z-50 border-8 border-error/0 transition-all duration-500 rounded-[inherit]"></div>
 
         <!-- APP SHELL SCENE CONTAINER -->
         <div class="flex-1 flex flex-col overflow-hidden relative">
