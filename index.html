@@ -266,23 +266,32 @@
             /* Shrink overall UI density on small phones — reduces all
                rem-based text/spacing proportionally without zooming. */
             html {
-                font-size: 12.5px;
-            }
-
-            #app-wrapper .sensor-card,
-            #app-wrapper [class*="rounded-2xl"][class*="p-3.5"] {
-                padding: 0.5rem !important;
+                font-size: 14px;
             }
 
             #app-wrapper [class*="rounded-2xl"][class*="p-4"] {
-                padding: 0.625rem !important;
-            }
-
-            #app-wrapper .grid[class*="gap-3"] {
-                gap: 0.375rem !important;
+                padding: 0.75rem !important;
             }
 
             #app-wrapper [class*="space-y-4"] > * + * {
+                margin-top: 0.75rem !important;
+            }
+
+            /* Extra compaction for the Home/Dashboard widgets only */
+            #app-wrapper #tab-home .sensor-card,
+            #app-wrapper #tab-home [class*="rounded-2xl"][class*="p-3.5"] {
+                padding: 0.5rem !important;
+            }
+
+            #app-wrapper #tab-home [class*="rounded-2xl"][class*="p-4"] {
+                padding: 0.625rem !important;
+            }
+
+            #app-wrapper #tab-home .grid[class*="gap-3"] {
+                gap: 0.375rem !important;
+            }
+
+            #app-wrapper #tab-home > * + * {
                 margin-top: 0.625rem !important;
             }
 
@@ -301,6 +310,21 @@
 
             #app-wrapper .sensor-card [class*="p-2"][class*="rounded-lg"] {
                 padding: 0.375rem !important;
+            }
+
+            /* Bottom nav: admin has 6 tabs vs staff's 4 — shrink icons/labels
+               slightly so all items fit without crowding or overflow. */
+            #app-wrapper nav button .material-symbols-outlined {
+                font-size: 19px !important;
+            }
+
+            #app-wrapper nav button [class*="text-[10px]"] {
+                font-size: 9px !important;
+            }
+
+            #app-wrapper nav {
+                padding-left: 0.25rem !important;
+                padding-right: 0.25rem !important;
             }
 
             #notch,
