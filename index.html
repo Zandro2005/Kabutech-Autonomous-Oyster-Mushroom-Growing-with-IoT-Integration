@@ -310,6 +310,14 @@
                 font-size: clamp(11px, 3.55vw, 14px);
             }
 
+            /* Login/Register screens are designed with the standard 16px
+               rem scale — keep their spacing/padding proportions intact
+               on small phones instead of the compacted app-wide scale. */
+            html:has(#scene-login:not(.hidden)),
+            html:has(#scene-register:not(.hidden)) {
+                font-size: 16px;
+            }
+
             #app-wrapper [class*="rounded-2xl"][class*="p-4"] {
                 padding: 0.75rem !important;
             }
