@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.25, maximum-scale=10, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9, minimum-scale=0.25, maximum-scale=10, user-scalable=yes">
     <title>KabuTech Hiyas - Farm Operations</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
@@ -293,6 +293,8 @@
                 border: none !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
+                /* Allow overflow so pinch-zoom can scale the full app content */
+                overflow: visible !important;
             }
 
             /* Shrink overall UI density on small phones — reduces all
@@ -865,7 +867,7 @@
 </head>
 
 <body
-    class="bg-slate-900 text-on-surface antialiased min-h-screen flex items-center justify-center py-6 px-4 select-none relative overflow-hidden transition-colors duration-300 dark:bg-slate-950">
+    class="bg-slate-900 text-on-surface antialiased min-h-screen flex items-center justify-center py-6 px-4 select-none relative transition-colors duration-300 dark:bg-slate-950">
 
     <!-- Toggle Device Frame Button (visible on desktop) -->
     <button onclick="togglePhoneFrame()"
@@ -876,7 +878,8 @@
 
     <!-- Main Mobile Application Container Wrapper -->
     <div id="app-wrapper"
-        class="w-full max-w-[430px] h-[884px] phone-frame bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300">
+        class="w-full max-w-[430px] h-[884px] phone-frame bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300"
+        style="">
 
         <!-- Phone UI elements -->
         <div id="notch" class="phone-notch"></div>
