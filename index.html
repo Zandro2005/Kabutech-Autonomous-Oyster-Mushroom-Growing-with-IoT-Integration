@@ -292,6 +292,14 @@
             font-size: calc(16px * var(--user-zoom, 1));
         }
 
+        /* Login/Register panels stay at a fixed 90% scale at all times —
+           intentionally NOT tied to --user-zoom, so they look the same
+           regardless of whatever zoom level was last set inside the app. */
+        html:has(#scene-login:not(.hidden)),
+        html:has(#scene-register:not(.hidden)) {
+            font-size: calc(16px * 0.9);
+        }
+
         /* On real phone-sized viewports, drop the desktop "device mockup"
            bezel and let the app fill the actual screen — internal layout,
            styles, and flow are untouched, only the outer frame adapts. */
@@ -327,10 +335,11 @@
 
             /* Login/Register screens are designed with the standard 16px
                rem scale — keep their spacing/padding proportions intact
-               on small phones instead of the compacted app-wide scale. */
+               on small phones instead of the compacted app-wide scale.
+               Fixed at 90%, independent of --user-zoom (see rule above). */
             html:has(#scene-login:not(.hidden)),
             html:has(#scene-register:not(.hidden)) {
-                font-size: calc(16px * var(--user-zoom, 1));
+                font-size: calc(16px * 0.9);
             }
 
             #app-wrapper [class*="rounded-2xl"][class*="p-4"] {
@@ -886,22 +895,38 @@
            Deliberately styled with fixed px values (not Tailwind's rem
            utilities) so the control itself stays a consistent, comfortable
            size on screen no matter what zoom level the user has chosen —
-           only the app content underneath scales. */
+           only the app content underneath scales.
+           It's transparent at rest and fades in on touch/hover, and can be
+           dragged up/down along the right edge like a phone's side toggle. */
         #zoom-control {
             position: absolute;
-            right: 6px;
+            right: 4px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 45;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
-            padding: 6px 0;
+            gap: 1px;
+            padding: 5px 0;
+            width: 22px;
             background: rgba(255, 255, 255, 0.92);
             border: 1px solid rgba(15, 31, 20, 0.08);
-            border-radius: 18px;
-            box-shadow: 0px 4px 16px rgba(15, 31, 20, 0.18);
+            border-radius: 13px;
+            box-shadow: 0px 4px 14px rgba(15, 31, 20, 0.18);
+            opacity: 0.28;
+            transition: opacity 0.25s ease;
+            touch-action: none;
+            cursor: grab;
+        }
+
+        #zoom-control.zc-active,
+        #zoom-control:hover {
+            opacity: 1;
+        }
+
+        #zoom-control.zc-dragging {
+            cursor: grabbing;
         }
 
         html.dark #zoom-control {
@@ -910,15 +935,15 @@
         }
 
         #zoom-control button {
-            width: 30px;
-            height: 30px;
+            width: 22px;
+            height: 22px;
             border: none;
             background: transparent;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: 700;
             line-height: 1;
             color: #0f1f14;
@@ -951,10 +976,10 @@
         }
 
         #zoom-level-label {
-            font-size: 9px;
+            font-size: 7px;
             font-weight: 700;
             color: #404941;
-            min-width: 30px;
+            min-width: 22px;
             text-align: center;
             user-select: none;
         }
@@ -1025,6 +1050,98 @@
                 // Sync the label/button state with whatever zoom level was
                 // already restored (by the early head script) on load.
                 applyZoom(currentZoom());
+
+                // --- Transparent-until-touched + draggable sidebar behavior ---
+                var ctrl = document.getElementById('zoom-control');
+                var FADE_DELAY = 2200;
+                var fadeTimer = null;
+
+                function wake() {
+                    ctrl.classList.add('zc-active');
+                    if (fadeTimer) clearTimeout(fadeTimer);
+                }
+                function scheduleFade() {
+                    if (fadeTimer) clearTimeout(fadeTimer);
+                    fadeTimer = setTimeout(function () {
+                        ctrl.classList.remove('zc-active');
+                    }, FADE_DELAY);
+                }
+
+                document.getElementById('zoom-in-btn').addEventListener('click', function () { wake(); scheduleFade(); this.blur(); });
+                document.getElementById('zoom-out-btn').addEventListener('click', function () { wake(); scheduleFade(); this.blur(); });
+
+                // Restore a previously-dragged vertical position, like a
+                // remembered cellphone side-toggle placement.
+                try {
+                    var savedTop = localStorage.getItem('kb_zoom_ctrl_top');
+                    if (savedTop) {
+                        ctrl.style.top = savedTop;
+                        ctrl.style.transform = 'none';
+                    }
+                } catch (e) { }
+
+                var dragging = false, moved = false, startY = 0, startTop = 0, suppressClick = false, startPointerId = null;
+
+                function clampTop(top) {
+                    var parent = ctrl.parentElement;
+                    var min = 60; // stay clear of the notch / header area
+                    var max = parent.clientHeight - ctrl.offsetHeight - 70; // stay clear of bottom nav
+                    if (max < min) max = min;
+                    return Math.min(max, Math.max(min, top));
+                }
+
+                function onPointerDown(e) {
+                    dragging = true; moved = false;
+                    startY = e.clientY;
+                    startPointerId = e.pointerId;
+                    var rect = ctrl.getBoundingClientRect();
+                    var parentRect = ctrl.parentElement.getBoundingClientRect();
+                    startTop = rect.top - parentRect.top;
+                    wake();
+                }
+
+                function onPointerMove(e) {
+                    if (!dragging) return;
+                    var dy = e.clientY - startY;
+                    if (Math.abs(dy) > 6 && !moved) {
+                        moved = true;
+                        ctrl.classList.add('zc-dragging');
+                        // Only steal the pointer once we know it's a drag,
+                        // so a plain tap still reaches the +/- button click.
+                        try { ctrl.setPointerCapture(startPointerId); } catch (err) { }
+                    }
+                    if (moved) {
+                        e.preventDefault();
+                        ctrl.style.top = clampTop(startTop + dy) + 'px';
+                        ctrl.style.transform = 'none';
+                    }
+                }
+
+                function onPointerUp() {
+                    dragging = false;
+                    ctrl.classList.remove('zc-dragging');
+                    if (moved) {
+                        suppressClick = true;
+                        try { localStorage.setItem('kb_zoom_ctrl_top', ctrl.style.top); } catch (e) { }
+                    }
+                    moved = false;
+                    scheduleFade();
+                }
+
+                // Dragging the pill shouldn't also trigger the +/- button
+                // it happened to start or end on top of.
+                ctrl.addEventListener('click', function (e) {
+                    if (suppressClick) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        suppressClick = false;
+                    }
+                }, true);
+
+                ctrl.addEventListener('pointerdown', onPointerDown);
+                ctrl.addEventListener('pointermove', onPointerMove);
+                ctrl.addEventListener('pointerup', onPointerUp);
+                ctrl.addEventListener('pointercancel', onPointerUp);
             })();
         </script>
 
