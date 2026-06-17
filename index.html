@@ -987,6 +987,15 @@
         html.dark #zoom-level-label {
             color: #b9c5ba;
         }
+
+        /* Login & Register stay light-mode always — independent of the
+           in-app dark mode toggle. The only place those two screens pick
+           up a dark: variant is this panel's background, so pin it back
+           to the light app-bg color whenever html.dark is set. */
+        html.dark #scene-login .dark\:bg-zinc-950,
+        html.dark #scene-register .dark\:bg-zinc-950 {
+            background-color: #f5f9f6 !important;
+        }
     </style>
 </head>
 
