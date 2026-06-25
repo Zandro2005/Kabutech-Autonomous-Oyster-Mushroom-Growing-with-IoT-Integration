@@ -17,14 +17,14 @@
         })();
     </script>
     <title>KabuTech Hiyas - Farm Operations</title>
-    <!-- PWA manifest omitted for standalone online use -->
+    <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#004521">
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link href="./assets/plus-jakarta-sans.css" rel="stylesheet">
     <!-- Material Symbols -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link href="./assets/material-symbols.css" rel="stylesheet">
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./assets/tailwind.js"></script>
     <script>
         // Reveal icon glyphs only once the Material Symbols font has loaded,
         // avoiding a brief flash of raw icon-name text (e.g. "energy_savings_leaf").
@@ -210,14 +210,11 @@
         /* Wrapper positions the stacked hint (label + pointer) above the button */
         #add-batch-hint {
             display: none;
-            position: absolute;
-            bottom: calc(100% + 4px);
-            right: 0;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             pointer-events: none;
             z-index: 50;
-            gap: 0;
+            gap: 4px;
         }
 
         #add-batch-hint::after,
@@ -237,7 +234,6 @@
             box-shadow: 0 4px 18px rgba(0, 69, 33, 0.3);
             white-space: nowrap;
             display: block;
-            margin-bottom: 1px;
         }
 
         .dark #add-batch-hint .hint-label {
@@ -245,24 +241,21 @@
             color: #adf2bc;
         }
 
-        /* 2. Pointer — sits between label and button, no overlap */
+        /* 2. Caret pointing right toward the button */
         #add-batch-hint-pointer {
-            display: block;
-            width: 18px;
-            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
-            margin-top: 0;
-            animation: hint-hand-bob 0.8s ease-in-out infinite;
+            font-size: 18px;
+            font-weight: 900;
+            color: #004521;
+            line-height: 1;
+            animation: hint-caret-pulse 0.8s ease-in-out infinite;
         }
 
-        #add-batch-hint-pointer svg {
-            width: 18px;
-            height: 22px;
-        }
-
-        /* In dark mode, flip the SVG colours */
-        .dark #add-batch-hint-pointer svg path {
-            stroke: #92d6a2;
+        .dark #add-batch-hint-pointer {
+            color: #92d6a2;
         }
 
         #add-batch-hint.hint-visible {
@@ -275,15 +268,15 @@
             animation: hint-pop-out 0.25s ease forwards;
         }
 
-        @keyframes hint-hand-bob {
+        @keyframes hint-caret-pulse {
 
             0%,
             100% {
-                transform: translateY(0);
+                transform: translateX(0);
             }
 
             50% {
-                transform: translateY(4px);
+                transform: translateX(3px);
             }
         }
 
@@ -1093,6 +1086,27 @@
             transform: translateX(60px) scale(0.9);
         }
 
+        /* --- Sub-page slide-in panels (More tab expandables) --- */
+        .subpage-panel {
+            position: absolute;
+            inset: 0;
+            z-index: 35;
+            background: var(--tw-bg-opacity, 1);
+            transform: translateX(100%);
+            transition: transform 0.32s cubic-bezier(0.25, 0.1, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .subpage-panel.subpage-open {
+            transform: translateX(0);
+        }
+
+        .subpage-panel.subpage-closing {
+            transform: translateX(100%);
+        }
+
         /* --- Floating zoom control ---
            Deliberately styled with fixed px values (not Tailwind's rem
            utilities) so the control itself stays a consistent, comfortable
@@ -1198,168 +1212,6 @@
         html.dark #scene-register .dark\:bg-zinc-950 {
             background-color: #f5f9f6 !important;
         }
-
-        /* Applied to #app-wrapper when the user clicks "Full Screen View"
-           on a desktop viewport (≥768px). Provides a proper sidebar layout
-           instead of just stretching the phone shell. */
-        #app-wrapper.desktop-mode {
-            width: 100vw !important;
-            max-width: 100vw !important;
-            height: 100vh !important;
-            max-height: 100vh !important;
-            border: none !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-        }
-
-        /* The sidebar itself — hidden unless desktop-mode is active */
-        #desktop-sidebar {
-            display: none;
-            width: 220px;
-            flex-shrink: 0;
-            background: var(--dt-sidebar-bg, #0f2318);
-            border-right: 1px solid rgba(255,255,255,0.06);
-            flex-direction: column;
-            padding: 20px 12px 24px;
-            gap: 4px;
-            overflow-y: auto;
-            z-index: 35;
-        }
-
-        html.dark #desktop-sidebar {
-            background: #0a1a10;
-            border-right-color: rgba(255,255,255,0.05);
-        }
-
-        #app-wrapper.desktop-mode #desktop-sidebar {
-            display: flex;
-        }
-
-        /* In desktop mode the main scene-app area becomes a flex row:
-           sidebar (fixed-width) + a center column (flex-1). */
-        #app-wrapper.desktop-mode #scene-app {
-            flex-direction: row !important;
-            overflow: hidden;
-        }
-
-        /* The main column fills remaining width beside the sidebar */
-        #app-wrapper.desktop-mode #app-main-col {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Center content column in desktop mode */
-        #app-wrapper.desktop-mode #scene-app > #app-main-col > header {
-            display: none !important; /* replaced by sidebar branding */
-        }
-
-        /* Content area fills the remaining width */
-        #app-wrapper.desktop-mode #app-scroll-area {
-            flex: 1;
-            min-width: 0;
-        }
-
-        /* In desktop mode the inner padding gets a bit more generous */
-        #app-wrapper.desktop-mode #app-scroll-area > div {
-            padding: 24px 32px 40px !important;
-            max-width: 900px;
-        }
-
-        /* FAB and scroll-to-top button hidden in desktop mode */
-        #app-wrapper.desktop-mode #nav-fab,
-        #app-wrapper.desktop-mode #scroll-top-fab {
-            display: none !important;
-        }
-
-        /* Bottom nav hidden in desktop mode — sidebar replaces it */
-        #app-wrapper.desktop-mode #app-main-col > nav {
-            display: none !important;
-        }
-
-        /* Desktop sidebar nav item styles */
-        .dt-nav-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            color: rgba(255,255,255,0.55);
-            font-size: 13px;
-            font-weight: 600;
-            transition: background 0.15s, color 0.15s;
-            user-select: none;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dt-nav-item:hover {
-            background: rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.9);
-        }
-
-        .dt-nav-item.dt-active {
-            background: rgba(146, 214, 162, 0.12);
-            color: #92d6a2;
-        }
-
-        .dt-nav-item .material-symbols-outlined {
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .dt-nav-item.dt-active .material-symbols-outlined {
-            font-variation-settings: 'FILL' 1;
-        }
-
-        /* Sidebar section divider */
-        .dt-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.07);
-            margin: 8px 4px;
-        }
-
-        /* Sidebar section label */
-        .dt-section-label {
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.3);
-            padding: 4px 12px 2px;
-        }
-
-        /* Frame toggle button label update */
-        #app-wrapper.desktop-mode ~ #frame-toggle-btn,
-        #frame-toggle-btn {
-            z-index: 60;
-        }
-
-        /* Desktop mode — widen sensor grid to 4 columns */
-        @media (min-width: 768px) {
-            #app-wrapper.desktop-mode #tab-home .grid.grid-cols-2 {
-                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-            }
-
-            /* Wider controls layout */
-            #app-wrapper.desktop-mode #tab-controls > div {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 16px;
-                align-items: start;
-            }
-
-            /* Controls: first child (the breadcrumb/header row) spans full width */
-            #app-wrapper.desktop-mode #tab-controls > div > *:first-child {
-                grid-column: 1 / -1;
-            }
-        }
-    
     </style>
 </head>
 
@@ -1913,22 +1765,10 @@
                                     Connect with your team and scale your agricultural business.
                                 </p>
                                 <div id="onboarding-image-slot"
-                                    class="w-full aspect-[16/9] mb-lg rounded-xl overflow-hidden relative bg-surface-container flex items-center justify-center">
-                                    <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-                                        <defs>
-                                            <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                                <stop offset="0%" style="stop-color:#1b5e35;stop-opacity:1" />
-                                                <stop offset="100%" style="stop-color:#6fab85;stop-opacity:1" />
-                                            </linearGradient>
-                                        </defs>
-                                        <rect width="320" height="180" fill="url(#skyGrad)"/>
-                                        <ellipse cx="160" cy="200" rx="200" ry="80" fill="#0d3d1e" opacity="0.4"/>
-                                        <circle cx="260" cy="40" r="22" fill="rgba(255,255,255,0.15)"/>
-                                        <circle cx="265" cy="38" r="16" fill="rgba(255,255,255,0.25)"/>
-                                        <text x="160" y="82" text-anchor="middle" font-family="sans-serif" font-size="32" fill="rgba(255,255,255,0.9)">🌾</text>
-                                        <text x="160" y="115" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="13" fill="white" opacity="0.9">Grow Together</text>
-                                        <text x="160" y="133" text-anchor="middle" font-family="sans-serif" font-size="9" fill="rgba(255,255,255,0.6)">Smart Farm Operations</text>
-                                    </svg>
+                                    class="w-full aspect-[16/9] mb-lg rounded-xl overflow-hidden relative bg-surface-container">
+                                    <img id="onboarding-image" class="w-full h-full object-cover"
+                                        alt="Aerial view of a sustainable farm at sunrise"
+                                        src="./assets/onboarding.jpg">
                                 </div>
                                 <div class="flex gap-1.5 mb-lg" data-dots="2">
                                     <div class="ob-dot"></div>
@@ -2257,89 +2097,7 @@
             <div id="scene-app"
                 class="hidden absolute inset-0 z-40 bg-app-bg dark:bg-zinc-950 flex flex-col overflow-hidden transition-all duration-500">
 
-            <!-- DESKTOP SIDEBAR NAV (visible only in desktop-mode) -->
-            <aside id="desktop-sidebar">
-                <!-- Brand -->
-                <div class="flex items-center gap-2.5 px-3 mb-5">
-                    <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shadow-sm shrink-0">
-                        <span class="material-symbols-outlined text-[18px] text-primary-fixed">eco</span>
-                    </div>
-                    <div>
-                        <p class="text-[13px] font-extrabold text-white leading-tight tracking-tight">KabuTech</p>
-                        <p class="text-[9px] text-white/40 font-semibold leading-none mt-0.5">Farm Dashboard</p>
-                    </div>
-                </div>
-
-                <!-- Mode pill -->
-                <div id="dt-mode-pill" onclick="switchTab('controls')"
-                    class="flex items-center gap-2 px-3 py-2 rounded-xl bg-success-green/10 border border-success-green/25 text-success-green cursor-pointer mb-4 transition-all hover:bg-success-green/15">
-                    <span id="dt-mode-icon" class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1">smart_toy</span>
-                    <span id="dt-mode-text" class="text-[11px] font-extrabold tracking-wide">AUTO MODE</span>
-                </div>
-
-                <p class="dt-section-label">Navigation</p>
-
-                <button class="dt-nav-item dt-active" id="dt-nav-home" onclick="switchTab('home')">
-                    <span class="material-symbols-outlined">home</span>
-                    Dashboard
-                </button>
-                <button class="dt-nav-item" id="dt-nav-controls" onclick="switchTab('controls')">
-                    <span class="material-symbols-outlined">settings_input_component</span>
-                    Controls
-                </button>
-                <button class="dt-nav-item" id="dt-nav-grow-log" onclick="switchTab('grow-log')">
-                    <span class="material-symbols-outlined">agriculture</span>
-                    Grow Log
-                </button>
-                <button class="dt-nav-item" id="dt-nav-history" onclick="switchTab('history')">
-                    <span class="material-symbols-outlined">history</span>
-                    History
-                </button>
-                <button class="dt-nav-item" id="dt-nav-yield" onclick="switchTab('yield')">
-                    <span class="material-symbols-outlined">trending_up</span>
-                    Yield AI
-                </button>
-
-                <div class="dt-divider"></div>
-                <p class="dt-section-label">Account</p>
-
-                <button class="dt-nav-item" id="dt-nav-profile" onclick="switchTab('profile')">
-                    <span class="material-symbols-outlined">person</span>
-                    Profile
-                    <span id="dt-alert-dot" class="hidden ml-auto min-w-[16px] h-4 bg-error text-white text-[8px] font-extrabold rounded-full flex items-center justify-center px-1">0</span>
-                </button>
-
-                <!-- FAB action -->
-                <div class="dt-divider"></div>
-                <button id="dt-fab-btn" onclick="handleNavFabClick()"
-                    class="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-primary text-on-primary font-bold text-[13px] cursor-pointer transition-all hover:bg-primary/85 active:scale-95 w-full mt-1">
-                    <span id="dt-fab-icon" class="material-symbols-outlined text-[18px]">add</span>
-                    <span id="dt-fab-label">Add Crop</span>
-                </button>
-
-                <!-- Spacer -->
-                <div class="flex-1"></div>
-
-                <!-- Bottom controls -->
-                <div class="flex items-center gap-2 px-2 pt-3 border-t border-white/10">
-                    <button onclick="toggleDarkMode()" title="Toggle dark mode"
-                        class="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-all">
-                        <span id="dt-theme-icon" class="material-symbols-outlined text-[18px]">dark_mode</span>
-                    </button>
-                    <div onclick="switchTab('profile')"
-                        class="flex items-center gap-2 cursor-pointer hover:bg-white/05 px-2 py-1 rounded-lg transition-all flex-1">
-                        <div class="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
-                            <span id="dt-user-avatar">A</span>
-                        </div>
-                        <span id="dt-user-name" class="text-[11px] font-semibold text-white/60 truncate">Admin</span>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- MAIN COLUMN: header + scroll area + nav stack vertically beside the sidebar -->
-            <div id="app-main-col" class="flex-1 flex flex-col overflow-hidden min-w-0">
-
-            <!-- TOP HEADER (phone mode only — hidden in desktop-mode) -->
+                <!-- TOP HEADER -->
                 <header
                     class="w-full bg-surface-container-low dark:bg-zinc-900 border-b border-muted dark:border-zinc-800 shadow-sm flex justify-between items-center px-4 h-14 z-30 shrink-0">
                     <div class="flex items-center gap-2.5">
@@ -3717,20 +3475,10 @@
                                     </div>
                                 </div>
                                 <!-- Add Rack button with hint -->
-                                <div class="relative flex items-center">
+                                <div class="flex items-center gap-2">
                                     <div id="add-batch-hint" role="tooltip" aria-hidden="true">
                                         <span class="hint-label">Tap to add a rack</span>
-                                        <span id="add-batch-hint-pointer" aria-hidden="true">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80" fill="none"
-                                                stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M30 72 L6 14 L30 38 Z" fill="white" stroke="#004521"
-                                                    stroke-width="3" stroke-linejoin="round" />
-                                                <path d="M30 72 L54 14 L30 38 Z" fill="white" stroke="#004521"
-                                                    stroke-width="3" stroke-linejoin="round" />
-                                                <line x1="30" y1="38" x2="30" y2="72" stroke="#004521"
-                                                    stroke-width="2.5" stroke-linecap="round" />
-                                            </svg>
-                                        </span>
+                                        <span id="add-batch-hint-pointer" aria-hidden="true">›</span>
                                     </div>
                                     <button id="btn-add-batch-inline" onclick="stopAddBatchHint(); openAddRackModal()"
                                         class="bg-primary dark:bg-primary-container text-on-primary dark:text-white text-caption font-bold px-4 py-2 rounded-full flex items-center gap-1.5 active:scale-95 transition-all shadow-sm">
@@ -3872,25 +3620,6 @@
                                 </button>
                             </div>
 
-                            <!-- Alerts entry point (merged in from old Alerts tab) -->
-                            <button onclick="switchTab('diagnostics')"
-                                class="w-full bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl px-4 py-3 shadow-sm flex items-center justify-between active:scale-[0.99] transition-all">
-                                <div class="flex items-center gap-2">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
-                                        <span class="material-symbols-outlined text-[18px]">warning</span>
-                                    </div>
-                                    <p class="text-body-sm font-bold text-on-background dark:text-white">Alerts</p>
-                                </div>
-                                <div class="flex items-center gap-1.5">
-                                    <span id="more-alerts-count-badge"
-                                        class="hidden text-[10px] font-extrabold bg-error text-white px-2 py-0.5 rounded-full">0
-                                        Active</span>
-                                    <span
-                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500">chevron_right</span>
-                                </div>
-                            </button>
-
                             <!-- Farm Health Score -->
                             <div
                                 class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl px-4 py-3 shadow-sm flex items-center justify-between">
@@ -3956,10 +3685,29 @@
                                 </div>
                             </div>
 
-                            <!-- Staff Reports Inbox (admin only) -->
+                            <!-- Alerts entry point (merged in from old Alerts tab) -->
+                            <button onclick="switchTab('diagnostics')"
+                                class="w-full bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl px-4 py-3 shadow-sm flex items-center justify-between active:scale-[0.99] transition-all">
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="w-8 h-8 rounded-lg bg-surface dark:bg-zinc-800 flex items-center justify-center text-primary dark:text-primary-fixed border border-border-muted dark:border-zinc-700">
+                                        <span class="material-symbols-outlined text-[18px]">warning</span>
+                                    </div>
+                                    <p class="text-body-sm font-bold text-on-background dark:text-white">Alerts</p>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <span id="more-alerts-count-badge"
+                                        class="hidden text-[10px] font-extrabold bg-error text-white px-2 py-0.5 rounded-full">0
+                                        Active</span>
+                                    <span
+                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500">chevron_right</span>
+                                </div>
+                            </button>
+
+                            <!-- Staff Reports Inbox (admin only) — nav row -->
                             <div id="more-staff-reports-widget"
                                 class="hidden bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
-                                <button onclick="toggleAccordion('accordion-staff-reports')"
+                                <button onclick="openSubPage('subpage-staff-reports')"
                                     class="w-full px-4 py-3 flex items-center justify-between transition-all active:scale-[0.99]">
                                     <div class="flex items-center gap-2">
                                         <div
@@ -3974,26 +3722,15 @@
                                             class="hidden text-[9px] font-extrabold bg-warning-gold text-white px-2 py-0.5 rounded-full">0
                                             New</span>
                                     </div>
-                                    <span id="accordion-staff-reports-chevron"
-                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500 transition-transform duration-300">expand_more</span>
+                                    <span
+                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500">chevron_right</span>
                                 </button>
-                                <div id="accordion-staff-reports"
-                                    class="hidden border-t border-muted dark:border-zinc-800 px-4 pt-3 pb-4">
-                                    <div id="more-staff-reports-container"
-                                        class="space-y-2 max-h-72 overflow-y-auto pr-1">
-                                        <div
-                                            class="flex flex-col items-center justify-center py-4 gap-1 text-slate-400 dark:text-zinc-500">
-                                            <span class="material-symbols-outlined text-[28px]">mark_email_read</span>
-                                            <p class="text-[10px] font-semibold">No staff reports yet.</p>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
-                            <!-- Staff Account Management (admin only) -->
+                            <!-- Staff Account Management (admin only) — nav row -->
                             <div id="staff-account-mgmt-widget"
                                 class="hidden bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
-                                <button onclick="toggleAccordion('accordion-staff-accounts')"
+                                <button onclick="openSubPage('subpage-staff-accounts')"
                                     class="w-full px-4 py-3 flex items-center justify-between transition-all active:scale-[0.99]">
                                     <div class="flex items-center gap-2">
                                         <div
@@ -4005,34 +3742,15 @@
                                             class="text-body-sm font-bold text-brand-deep dark:text-primary-fixed">Staff
                                             Accounts</span>
                                     </div>
-                                    <span id="accordion-staff-accounts-chevron"
-                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500 transition-transform duration-300">expand_more</span>
+                                    <span
+                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500">chevron_right</span>
                                 </button>
-                                <div id="accordion-staff-accounts"
-                                    class="hidden border-t border-muted dark:border-zinc-800 px-4 pt-3 pb-4 space-y-3">
-                                    <div class="flex items-center justify-between">
-                                        <div class="relative flex-1 mr-2">
-                                            <span
-                                                class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] text-outline dark:text-zinc-500">search</span>
-                                            <input type="text" id="staff-search-input"
-                                                oninput="renderStaffAccountsList()" placeholder="Search staff..."
-                                                class="w-full text-[10px] bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 py-1.5 pl-7 pr-3 rounded-full outline-none focus:border-primary dark:text-white">
-                                        </div>
-                                        <button onclick="openStaffAccountModal(null)"
-                                            class="text-[10px] bg-primary dark:bg-primary-container text-on-primary dark:text-white font-bold py-1.5 px-2.5 rounded-full flex items-center gap-1 shrink-0 active:scale-95 transition-all">
-                                            <span class="material-symbols-outlined text-[13px]">person_add</span> Add
-                                        </button>
-                                    </div>
-                                    <div id="staff-accounts-list" class="space-y-2 max-h-64 overflow-y-auto pr-1">
-                                        <!-- Populated dynamically -->
-                                    </div>
-                                </div>
                             </div>
 
-                            <!-- Operations Tasks Checklist -->
+                            <!-- Operations Tasks Checklist — nav row -->
                             <div
                                 class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
-                                <button onclick="toggleAccordion('accordion-tasks')"
+                                <button onclick="openSubPage('subpage-tasks')"
                                     class="w-full px-4 py-3 flex items-center justify-between transition-all active:scale-[0.99]">
                                     <div class="flex items-center gap-2">
                                         <div
@@ -4044,35 +3762,15 @@
                                             class="text-body-sm font-bold text-brand-deep dark:text-primary-fixed">Operations
                                             Checklist</span>
                                     </div>
-                                    <span id="accordion-tasks-chevron"
-                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500 transition-transform duration-300">expand_more</span>
+                                    <span
+                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500">chevron_right</span>
                                 </button>
-                                <div id="accordion-tasks"
-                                    class="hidden border-t border-muted dark:border-zinc-800 px-4 pt-3 pb-4 space-y-3">
-                                    <div class="flex items-center justify-between">
-                                        <div
-                                            class="flex gap-1 bg-surface-soft dark:bg-zinc-800 rounded-xl p-1 flex-1 mr-2">
-                                            <button onclick="filterTasks('all')" id="task-filter-all"
-                                                class="flex-1 text-[10px] font-bold py-1 rounded-lg bg-white dark:bg-zinc-700 text-primary dark:text-primary-fixed shadow-sm transition-all">All</button>
-                                            <button onclick="filterTasks('Pending')" id="task-filter-pending"
-                                                class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Pending</button>
-                                            <button onclick="filterTasks('In Progress')" id="task-filter-inprogress"
-                                                class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Active</button>
-                                            <button onclick="filterTasks('Completed')" id="task-filter-completed"
-                                                class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Done</button>
-                                        </div>
-                                        <button id="btn-add-task-modal" onclick="openAddTaskModal()"
-                                            class="text-[10px] bg-primary dark:bg-primary-container text-on-primary dark:text-white font-bold py-1.5 px-2.5 rounded-full shrink-0 active:scale-95 transition-all">+
-                                            Task</button>
-                                    </div>
-                                    <div id="tasks-container" class="space-y-2"></div>
-                                </div>
                             </div>
 
-                            <!-- System Audit Logs -->
+                            <!-- System Audit Logs — nav row -->
                             <div id="system-audit-logs"
                                 class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
-                                <button onclick="toggleAccordion('accordion-logs')"
+                                <button onclick="openSubPage('subpage-logs')"
                                     class="w-full px-4 py-3 flex items-center justify-between transition-all active:scale-[0.99]">
                                     <div class="flex items-center gap-2">
                                         <div
@@ -4083,26 +3781,218 @@
                                             class="text-body-sm font-bold text-brand-deep dark:text-primary-fixed">System
                                             Audit Logs</span>
                                     </div>
-                                    <span id="accordion-logs-chevron"
-                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500 transition-transform duration-300">expand_more</span>
+                                    <span
+                                        class="material-symbols-outlined text-[18px] text-on-surface-variant dark:text-zinc-500">chevron_right</span>
                                 </button>
-                                <div id="accordion-logs"
-                                    class="hidden border-t border-muted dark:border-zinc-800 px-4 pt-3 pb-4 space-y-3">
-                                    <div class="relative">
-                                        <span
-                                            class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] text-outline dark:text-zinc-500">search</span>
-                                        <input type="text" id="log-search-input" oninput="filterLogs()"
-                                            placeholder="Search logs..."
-                                            class="w-full text-[10px] bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 py-1.5 pl-7 pr-3 rounded-full outline-none focus:border-primary dark:text-white">
-                                    </div>
-                                    <div id="logs-container"
-                                        class="text-[10px] space-y-1.5 max-h-48 overflow-y-auto font-mono text-slate-600 dark:text-zinc-400 pr-1">
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
 
+                </div>
+
+                <!-- ====== SUB-PAGES (slide in over the scroll area, inside scene-app) ====== -->
+
+                <!-- Sub-page: Staff Reports Inbox -->
+                <div id="subpage-staff-reports" class="subpage-panel bg-app-bg dark:bg-zinc-950">
+                    <div class="flex-1 overflow-y-auto hide-scrollbar pb-28">
+                        <!-- Page Header -->
+                        <div
+                            class="bg-gradient-to-br from-secondary to-on-secondary-container dark:from-zinc-900 dark:to-zinc-950 px-4 pt-5 pb-5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <button onclick="closeSubPage('subpage-staff-reports')"
+                                        class="text-white/80 hover:text-white p-1.5 -ml-1 rounded-full active:scale-90 transition-all bg-white/10">
+                                        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                                    </button>
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined text-[22px] text-white"
+                                            style="font-variation-settings:'FILL' 1">inbox</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-[17px] font-extrabold text-white leading-tight">Staff Reports
+                                            Inbox</h2>
+                                        <p class="text-[11px] text-white/65 mt-0.5">Issues filed by your team</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Content -->
+                        <div class="p-4 space-y-3">
+                            <div id="more-staff-reports-container" class="space-y-2">
+                                <div
+                                    class="flex flex-col items-center justify-center py-8 gap-1 text-slate-400 dark:text-zinc-500">
+                                    <span class="material-symbols-outlined text-[28px]">mark_email_read</span>
+                                    <p class="text-[10px] font-semibold">No staff reports yet.</p>
+                                </div>
+                            </div>
+                        </div><!-- /content -->
+                    </div>
+                </div>
+
+                <!-- Sub-page: Staff Accounts -->
+                <div id="subpage-staff-accounts" class="subpage-panel bg-app-bg dark:bg-zinc-950">
+                    <div class="flex-1 overflow-y-auto hide-scrollbar pb-28">
+                        <!-- Page Header -->
+                        <div
+                            class="bg-gradient-to-br from-secondary to-on-secondary-container dark:from-zinc-900 dark:to-zinc-950 px-4 pt-5 pb-5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <button onclick="closeSubPage('subpage-staff-accounts')"
+                                        class="text-white/80 hover:text-white p-1.5 -ml-1 rounded-full active:scale-90 transition-all bg-white/10">
+                                        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                                    </button>
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined text-[22px] text-white"
+                                            style="font-variation-settings:'FILL' 1">manage_accounts</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-[17px] font-extrabold text-white leading-tight">Staff Accounts
+                                        </h2>
+                                        <p class="text-[11px] text-white/65 mt-0.5">Manage your team members</p>
+                                    </div>
+                                </div>
+                                <button onclick="openStaffAccountModal(null)"
+                                    class="text-[10px] bg-white/20 hover:bg-white/30 text-white font-bold py-1.5 px-3 rounded-full flex items-center gap-1.5 shrink-0 active:scale-95 transition-all">
+                                    <span class="material-symbols-outlined text-[13px]">person_add</span> Add
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Content -->
+                        <div class="p-4 space-y-3">
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] text-outline dark:text-zinc-500">search</span>
+                                <input type="text" id="staff-search-input" oninput="renderStaffAccountsList()"
+                                    placeholder="Search staff..."
+                                    class="w-full text-[10px] bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 py-1.5 pl-7 pr-3 rounded-full outline-none focus:border-primary dark:text-white">
+                            </div>
+                            <div id="staff-accounts-list" class="space-y-2">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div><!-- /content -->
+                    </div>
+                </div>
+
+                <!-- Sub-page: Operations Checklist -->
+                <div id="subpage-tasks" class="subpage-panel bg-app-bg dark:bg-zinc-950">
+                    <div class="flex-1 overflow-y-auto hide-scrollbar pb-28">
+                        <!-- Page Header -->
+                        <div
+                            class="bg-gradient-to-br from-secondary to-on-secondary-container dark:from-zinc-900 dark:to-zinc-950 px-4 pt-5 pb-5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <button onclick="closeSubPage('subpage-tasks')"
+                                        class="text-white/80 hover:text-white p-1.5 -ml-1 rounded-full active:scale-90 transition-all bg-white/10">
+                                        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                                    </button>
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined text-[22px] text-white"
+                                            style="font-variation-settings:'FILL' 1">task_alt</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-[17px] font-extrabold text-white leading-tight">Operations
+                                            Checklist</h2>
+                                        <p class="text-[11px] text-white/65 mt-0.5">Track and assign farm tasks</p>
+                                    </div>
+                                </div>
+                                <button id="btn-add-task-modal" onclick="openAddTaskModal()"
+                                    class="text-[10px] bg-white/20 hover:bg-white/30 text-white font-bold py-1.5 px-3 rounded-full flex items-center gap-1.5 shrink-0 active:scale-95 transition-all">
+                                    <span class="material-symbols-outlined text-[13px]">add_task</span> Add Task
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Filters + Content -->
+                        <div class="p-4 space-y-3">
+                            <div class="flex gap-1 bg-surface-soft dark:bg-zinc-800 rounded-xl p-1">
+                                <button onclick="filterTasks('all')" id="task-filter-all"
+                                    class="flex-1 text-[10px] font-bold py-1 rounded-lg bg-white dark:bg-zinc-700 text-primary dark:text-primary-fixed shadow-sm transition-all">All</button>
+                                <button onclick="filterTasks('Pending')" id="task-filter-pending"
+                                    class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Pending</button>
+                                <button onclick="filterTasks('In Progress')" id="task-filter-inprogress"
+                                    class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Active</button>
+                                <button onclick="filterTasks('Completed')" id="task-filter-completed"
+                                    class="flex-1 text-[10px] font-bold py-1 rounded-lg text-on-surface-variant dark:text-zinc-400 transition-all">Done</button>
+                            </div>
+                            <div id="tasks-container" class="space-y-2"></div>
+                        </div><!-- /content -->
+                    </div>
+                </div>
+
+                <!-- Sub-page: System Audit Logs -->
+                <div id="subpage-logs" class="subpage-panel bg-app-bg dark:bg-zinc-950">
+                    <div class="flex-1 overflow-y-auto hide-scrollbar pb-28">
+                        <!-- Page Header -->
+                        <div
+                            class="bg-gradient-to-br from-secondary to-on-secondary-container dark:from-zinc-900 dark:to-zinc-950 px-4 pt-5 pb-5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <button onclick="closeSubPage('subpage-logs')"
+                                        class="text-white/80 hover:text-white p-1.5 -ml-1 rounded-full active:scale-90 transition-all bg-white/10">
+                                        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                                    </button>
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                                        <span
+                                            class="material-symbols-outlined text-[22px] text-white">receipt_long</span>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-[17px] font-extrabold text-white leading-tight">System Audit
+                                            Logs</h2>
+                                        <p class="text-[11px] text-white/65 mt-0.5">Full farm event history</p>
+                                    </div>
+                                </div>
+                                <!-- Hide Logs button — only visible when logs are loaded -->
+                                <button id="btn-hide-logs" onclick="hideSystemLogs()"
+                                    class="hidden text-[10px] bg-white/20 hover:bg-white/30 text-white font-bold py-1.5 px-3 rounded-full flex items-center gap-1.5 shrink-0 active:scale-95 transition-all">
+                                    <span class="material-symbols-outlined text-[13px]">visibility_off</span> Hide
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Content -->
+                        <div class="p-4 space-y-3">
+                            <!-- Search bar -->
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[14px] text-outline dark:text-zinc-500">search</span>
+                                <input type="text" id="log-search-input" oninput="onLogSearch()"
+                                    placeholder="Search logs..."
+                                    class="w-full text-[10px] bg-surface-soft dark:bg-zinc-800 border border-outline-variant dark:border-zinc-700 py-1.5 pl-7 pr-3 rounded-full outline-none focus:border-primary dark:text-white">
+                            </div>
+                            <!-- Empty state (shown by default) -->
+                            <div id="logs-empty-state"
+                                class="flex flex-col items-center justify-center py-12 gap-3 text-slate-400 dark:text-zinc-500">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-surface-soft dark:bg-zinc-800 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-[30px]">receipt_long</span>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-[11px] font-bold text-on-surface-variant dark:text-zinc-400">Logs not
+                                        loaded</p>
+                                    <p class="text-[10px] text-on-surface-variant/70 dark:text-zinc-500 mt-0.5">Tap the
+                                        button below to view event history</p>
+                                </div>
+                                <button onclick="loadSystemLogs()"
+                                    class="flex items-center gap-2 bg-primary dark:bg-primary-container text-on-primary dark:text-white text-[11px] font-bold py-2 px-4 rounded-full active:scale-95 transition-all">
+                                    <span class="material-symbols-outlined text-[16px]">download</span> Load Logs
+                                </button>
+                            </div>
+                            <!-- Logs list (hidden until loaded) -->
+                            <div id="logs-container"
+                                class="hidden text-[10px] space-y-1.5 font-mono text-slate-600 dark:text-zinc-400">
+                            </div>
+                            <!-- Action bar (shown after load) -->
+                            <div id="logs-reload-bar" class="hidden flex items-center justify-between pt-1">
+                                <p class="text-[10px] text-on-surface-variant dark:text-zinc-500">Showing all events</p>
+                                <button onclick="loadSystemLogs()"
+                                    class="flex items-center gap-1 text-[10px] font-bold text-primary dark:text-primary-fixed active:scale-95 transition-all">
+                                    <span class="material-symbols-outlined text-[14px]">refresh</span> Refresh
+                                </button>
+                            </div>
+                        </div><!-- /content -->
+                    </div>
                 </div>
 
                 <!-- MOBILE BOTTOM NAVIGATION BAR: every item — including the center FAB —
@@ -4126,12 +4016,12 @@
 
                     <!-- FAB slot: fixed so zoom never shifts it -->
                     <div class="flex-1 relative flex flex-col items-center justify-center py-1">
-                        <button id="nav-fab" onclick="handleNavFabClick()" aria-label="Add Crop"
+                        <button id="nav-fab" onclick="handleNavFabClick()" aria-label="Manage Crop"
                             class="fixed bottom-[44px] left-1/2 -translate-x-1/2 w-[56px] h-[56px] rounded-full bg-primary dark:bg-primary-container text-on-primary dark:text-white shadow-xl flex items-center justify-center active:scale-90 transition-transform duration-150 border-4 border-app-bg dark:border-zinc-950 z-50">
                             <span id="nav-fab-icon" class="material-symbols-outlined text-[26px]">add</span>
                         </button>
                         <span id="nav-fab-label"
-                            class="text-[10px] font-semibold text-on-surface-variant dark:text-zinc-400 whitespace-nowrap mt-7">Add
+                            class="text-[10px] font-semibold text-on-surface-variant dark:text-zinc-400 whitespace-nowrap mt-7">Manage
                             Crop</span>
                     </div>
 
@@ -4155,10 +4045,8 @@
                 </nav>
 
             </div>
-            <!-- end #app-main-col -->
 
         </div>
-        <!-- end #scene-app -->
     </div>
 
     <!-- --- MODALS LAYER --- -->
@@ -4705,28 +4593,6 @@
             setSensorDOMStatic();
             updateGreeting();
 
-            // Auto-switch to desktop layout on wide screens (≥768px)
-            // Respects a previously saved preference via localStorage.
-            (function applyInitialLayout() {
-                const wrapper = document.getElementById('app-wrapper');
-                const toggleText = document.getElementById('frame-toggle-text');
-                const toggleIcon = document.querySelector('#frame-toggle-btn .material-symbols-outlined');
-                const notch = document.getElementById('notch');
-                const ind = document.getElementById('home-indicator');
-                let savedMode = null;
-                try { savedMode = localStorage.getItem('kb_frame_mode'); } catch(e) {}
-
-                const preferDesktop = savedMode === 'desktop' || (savedMode === null && window.innerWidth >= 900);
-                if (preferDesktop) {
-                    wrapper.className = "bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300 desktop-mode";
-                    if (notch) notch.classList.add('hidden');
-                    if (ind) ind.classList.add('hidden');
-                    if (toggleText) toggleText.innerText = "Phone Frame";
-                    if (toggleIcon) toggleIcon.innerText = "smartphone";
-                    state.isPhoneFrame = false;
-                }
-            })();
-
             // Init ctrl-slider fill tracks
             setTimeout(() => {
                 ['slider-temp', 'slider-humidity', 'slider-light', 'slider-co2'].forEach(id => {
@@ -4930,7 +4796,11 @@
             state.eventLogs.unshift({ timestamp: time, msg, type });
             if (state.eventLogs.length > 100) state.eventLogs.pop(); // keep last 100
             saveLogs();
-            renderLogs();
+            // Only re-render if the logs container is currently visible (user already loaded them)
+            const container = document.getElementById('logs-container');
+            if (container && !container.classList.contains('hidden')) {
+                renderLogs();
+            }
         }
 
         // --- 4. NAVIGATION / ROUTER ---
@@ -5001,9 +4871,6 @@
 
                 // Re-trigger stagger animations on dynamically-rendered lists
                 triggerTabContentAnimations(tabId);
-
-                // Keep desktop sidebar active item in sync
-                if (typeof syncDesktopSidebarState === 'function') syncDesktopSidebarState();
             };
 
             // Brief exit animation on the currently visible tab before swapping
@@ -5051,104 +4918,21 @@
         function togglePhoneFrame() {
             const wrapper = document.getElementById('app-wrapper');
             const toggleText = document.getElementById('frame-toggle-text');
-            const toggleIcon = document.querySelector('#frame-toggle-btn .material-symbols-outlined');
             const notch = document.getElementById('notch');
             const ind = document.getElementById('home-indicator');
-            const isDesktop = window.innerWidth >= 768;
 
             if (state.isPhoneFrame) {
-                // Switch to full-screen / desktop mode
-                if (isDesktop) {
-                    wrapper.className = "bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300 desktop-mode";
-                    toggleText.innerText = "Phone Frame";
-                    if (toggleIcon) toggleIcon.innerText = "smartphone";
-                } else {
-                    wrapper.className = "w-screen h-screen bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300";
-                    toggleText.innerText = "Phone Frame";
-                    if (toggleIcon) toggleIcon.innerText = "smartphone";
-                }
+                wrapper.className = "w-screen h-screen bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300";
                 notch.classList.add('hidden');
                 ind.classList.add('hidden');
+                toggleText.innerText = "Phone Frame View";
                 state.isPhoneFrame = false;
-                try { localStorage.setItem('kb_frame_mode', 'desktop'); } catch(e) {}
             } else {
-                // Switch back to phone frame
                 wrapper.className = "w-full max-w-[430px] h-[884px] phone-frame bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300";
-                wrapper.classList.remove('desktop-mode');
                 notch.classList.remove('hidden');
                 ind.classList.remove('hidden');
                 toggleText.innerText = "Full Screen View";
-                if (toggleIcon) toggleIcon.innerText = "cell_phone";
                 state.isPhoneFrame = true;
-                try { localStorage.setItem('kb_frame_mode', 'phone'); } catch(e) {}
-            }
-
-            // Sync desktop sidebar state indicators with bottom nav
-            syncDesktopSidebarState();
-        }
-
-        // Sync the desktop sidebar's active item to match the currently active tab
-        function syncDesktopSidebarState() {
-            // Sync mode pill
-            const modePill = document.getElementById('dt-mode-pill');
-            const modeIcon = document.getElementById('dt-mode-icon');
-            const modeText = document.getElementById('dt-mode-text');
-            const headerModeIcon = document.getElementById('header-mode-icon');
-            const headerModeText = document.getElementById('header-mode-text');
-            if (modeIcon && headerModeIcon) modeIcon.innerText = headerModeIcon.innerText;
-            if (modeText && headerModeText) modeText.innerText = headerModeText.innerText + ' MODE';
-
-            // Sync user info
-            const dtAvatar = document.getElementById('dt-user-avatar');
-            const dtName = document.getElementById('dt-user-name');
-            const headerAvatar = document.getElementById('header-user-avatar');
-            const headerName = document.getElementById('header-user-name');
-            if (dtAvatar && headerAvatar) dtAvatar.innerText = headerAvatar.innerText;
-            if (dtName && headerName) dtName.innerText = headerName.innerText;
-
-            // Sync theme icon
-            const dtTheme = document.getElementById('dt-theme-icon');
-            const headerTheme = document.getElementById('theme-toggle-icon');
-            if (dtTheme && headerTheme) dtTheme.innerText = headerTheme.innerText;
-
-            // Sync alert dot
-            const dtDot = document.getElementById('dt-alert-dot');
-            const navDot = document.getElementById('nav-alert-dot');
-            if (dtDot && navDot) {
-                if (navDot.classList.contains('hidden')) {
-                    dtDot.classList.add('hidden');
-                } else {
-                    dtDot.classList.remove('hidden');
-                    dtDot.innerText = navDot.innerText;
-                }
-            }
-
-            // Sync fab
-            const dtFabIcon = document.getElementById('dt-fab-icon');
-            const dtFabLabel = document.getElementById('dt-fab-label');
-            const navFabIcon = document.getElementById('nav-fab-icon');
-            const navFabLabel = document.getElementById('nav-fab-label');
-            if (dtFabIcon && navFabIcon) dtFabIcon.innerText = navFabIcon.innerText;
-            if (dtFabLabel && navFabLabel) dtFabLabel.innerText = navFabLabel.innerText;
-
-            // Sync active nav highlight
-            const tabMap = {
-                'home': 'dt-nav-home',
-                'controls': 'dt-nav-controls',
-                'grow-log': 'dt-nav-grow-log',
-                'history': 'dt-nav-history',
-                'yield': 'dt-nav-yield',
-                'profile': 'dt-nav-profile',
-            };
-            const currentTab = state.currentTab || 'home';
-            Object.values(tabMap).forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.remove('dt-active');
-            });
-            const activeId = tabMap[currentTab];
-            if (activeId) {
-                const el = document.getElementById(activeId);
-                if (el) el.classList.add('dt-active');
             }
         }
 
@@ -5156,7 +4940,7 @@
         function toggleDarkMode() {
             const html = document.documentElement;
             const isDark = html.classList.contains('dark');
-            const iconIds = ['theme-toggle-icon', 'dt-theme-icon'];
+            const iconIds = ['theme-toggle-icon'];
             const labelIds = [];
 
             // Enable the gradual crossfade transition just before switching
@@ -5282,7 +5066,7 @@
         function setOnboardingImage() {
             const img = document.getElementById('onboarding-image');
             if (img && !img.src) {
-                img.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+                img.src = './assets/onboarding.jpg';
             }
         }
 
@@ -5712,9 +5496,6 @@
                 // sensor count-up-from-0 intro animation automatically
                 switchTab('home');
 
-                // Sync desktop sidebar with logged-in user info
-                if (typeof syncDesktopSidebarState === 'function') syncDesktopSidebarState();
-
                 setTimeout(() => {
                     loading.classList.add('hidden');
                 }, 700);
@@ -5817,10 +5598,9 @@
                 }
             });
 
-            // Hide and remove — show shorter if more toasts are waiting in queue
-            const displayTime = toastQueue.length > 0 ? 900 : 1500;
-            const autoTimer = setTimeout(dismiss, displayTime);
-            toast.addEventListener('mouseenter', () => clearTimeout(autoTimer));
+            // Auto-dismiss — shorter if more toasts are queued
+            const displayTime = toastQueue.length > 0 ? 900 : 2500;
+            setTimeout(dismiss, displayTime);
         }
 
         // --- 7. SENSOR SIMULATION ENGINE ---
@@ -6194,9 +5974,7 @@
                 document.getElementById('active-alert-banner').classList.add('hidden');
                 document.getElementById('app-wrapper').classList.remove('alert-active');
             }
-
-            // Sync desktop sidebar alert dot
-            if (typeof syncDesktopSidebarState === 'function') syncDesktopSidebarState();
+        }
 
         function triggerSystemAlert(title, desc, severity) {
             // Check if alert already active to avoid duplicates
@@ -6527,9 +6305,7 @@
                 if (modePillIcon) modePillIcon.innerText = 'smart_toy';
                 if (modePillText) modePillText.innerText = 'AUTO';
             }
-
-            // Sync desktop sidebar mode pill
-            if (typeof syncDesktopSidebarState === 'function') syncDesktopSidebarState();
+        }
 
         // --- 9. AI OPTIMIZATION RECOMMENDATIONS ---
         // Animate Yield AI tab visuals on entrance: lines draw in, progress fills, actual yield counts up
@@ -7648,8 +7424,8 @@
                 btn.setAttribute('aria-label', 'Report Farm Issue');
             } else {
                 icon.textContent = 'add';
-                label.textContent = 'Add Crop';
-                btn.setAttribute('aria-label', 'Add Crop');
+                label.textContent = 'Manage Crop';
+                btn.setAttribute('aria-label', 'Manage Crop');
             }
         }
 
@@ -8028,6 +7804,57 @@
             }
         }
 
+        // Called by the search input — auto-loads logs if not yet loaded, then filters
+        function onLogSearch() {
+            const container = document.getElementById('logs-container');
+            if (container && container.classList.contains('hidden')) {
+                loadSystemLogs();
+            } else {
+                filterLogs();
+            }
+        }
+
+        // Show the empty "not loaded" state when the logs panel is first opened
+        function resetLogsPanel() {
+            const emptyState = document.getElementById('logs-empty-state');
+            const container = document.getElementById('logs-container');
+            const reloadBar = document.getElementById('logs-reload-bar');
+            const hideBtn = document.getElementById('btn-hide-logs');
+            const searchInput = document.getElementById('log-search-input');
+            if (emptyState) emptyState.classList.remove('hidden');
+            if (container) { container.classList.add('hidden'); container.innerHTML = ''; }
+            if (reloadBar) reloadBar.classList.add('hidden');
+            if (hideBtn) hideBtn.classList.add('hidden');
+            if (searchInput) searchInput.value = '';
+        }
+
+        // Called when user taps "Load Logs" or "Refresh"
+        function loadSystemLogs() {
+            const emptyState = document.getElementById('logs-empty-state');
+            const container = document.getElementById('logs-container');
+            const reloadBar = document.getElementById('logs-reload-bar');
+            const hideBtn = document.getElementById('btn-hide-logs');
+            if (emptyState) emptyState.classList.add('hidden');
+            if (container) container.classList.remove('hidden');
+            if (reloadBar) reloadBar.classList.remove('hidden');
+            if (hideBtn) hideBtn.classList.remove('hidden');
+            renderLogs();
+        }
+
+        // Called when user taps "Hide" in the header
+        function hideSystemLogs() {
+            const emptyState = document.getElementById('logs-empty-state');
+            const container = document.getElementById('logs-container');
+            const reloadBar = document.getElementById('logs-reload-bar');
+            const hideBtn = document.getElementById('btn-hide-logs');
+            const searchInput = document.getElementById('log-search-input');
+            if (emptyState) emptyState.classList.remove('hidden');
+            if (container) { container.classList.add('hidden'); container.innerHTML = ''; }
+            if (reloadBar) reloadBar.classList.add('hidden');
+            if (hideBtn) hideBtn.classList.add('hidden');
+            if (searchInput) searchInput.value = '';
+        }
+
         // --- 14. OPERATIONAL ISSUE REPORT SYSTEM ---
         function openReportModal() {
             document.getElementById('modal-report-issue').classList.remove('hidden');
@@ -8290,7 +8117,7 @@
                     const el = document.getElementById(id);
                     if (el) el.style.display = '';
                 });
-                // Set the center nav button to "Add Crop" for admin
+                // Set the center nav button to "Manage Crop" for admin
                 setNavFabMode('add-crop');
                 // Hide report from staff, show nothing in admin home (report is staff-only)
                 // Show admin-only sections
@@ -8720,6 +8547,59 @@
             if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
         }
 
+        // --- Sub-page slide-in navigation ---
+        let _activeSubPage = null;
+
+        function openSubPage(id) {
+            // Close any currently open sub-page first (instant, no animation)
+            if (_activeSubPage && _activeSubPage !== id) {
+                const prev = document.getElementById(_activeSubPage);
+                if (prev) { prev.classList.remove('subpage-open', 'subpage-closing'); }
+            }
+            _activeSubPage = id;
+            const panel = document.getElementById(id);
+            if (!panel) return;
+            // Trigger refresh hooks
+            if (id === 'subpage-staff-accounts') renderStaffAccountsList();
+            if (id === 'subpage-staff-reports') triggerTabContentAnimations('profile');
+            if (id === 'subpage-tasks') { renderTasks(); triggerTabContentAnimations('tasks-subpage'); }
+            // NOTE: subpage-logs no longer auto-renders — user taps "Load Logs" button
+            if (id === 'subpage-logs') resetLogsPanel();
+            // Slide in
+            panel.classList.remove('subpage-closing');
+            requestAnimationFrame(() => {
+                panel.classList.add('subpage-open');
+            });
+        }
+
+        function closeSubPage(id) {
+            const panel = document.getElementById(id);
+            if (!panel) return;
+            panel.classList.add('subpage-closing');
+            panel.classList.remove('subpage-open');
+            setTimeout(() => {
+                panel.classList.remove('subpage-closing');
+                _activeSubPage = null;
+            }, 340);
+        }
+
+        // Close any open sub-page when switching main tabs
+        const _origSwitchTab = switchTab;
+        // Patch switchTab to also close sub-pages
+        (function () {
+            const _st = window.switchTab;
+            if (!_st) return;
+            window.switchTab = function (tabId) {
+                // Close all sub-pages on tab switch
+                ['subpage-staff-reports', 'subpage-staff-accounts', 'subpage-tasks', 'subpage-logs'].forEach(id => {
+                    const p = document.getElementById(id);
+                    if (p) { p.classList.remove('subpage-open', 'subpage-closing'); }
+                });
+                _activeSubPage = null;
+                _st(tabId);
+            };
+        })();
+
         function confirmDeleteReport(id) {
             showConfirm({
                 title: 'Delete Report?',
@@ -8927,7 +8807,7 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
                     .then(r => console.log('[SW] Registered:', r.scope))
-                    .catch(e => console.info('[SW] Not available in this environment:', e.message));
+                    .catch(e => console.warn('[SW] Registration failed:', e));
             });
         }
     </script>
