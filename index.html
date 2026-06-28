@@ -5,6 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5, user-scalable=yes">
+    // Lock the app height to the initial viewport so the soft keyboard
+    // never causes the layout to shift up/down.
+    (function () {
+    function setInitialVh() {
+    document.documentElement.style.setProperty('--initial-vh', window.innerHeight + 'px');
+    }
+    setInitialVh();
+    // Re-lock on orientation change (screen rotated), but NOT on resize
+    // (which fires when the keyboard opens/closes — that's what we're ignoring).
+    window.addEventListener('orientationchange', function () {
+    setTimeout(setInitialVh, 300);
+    });
+    })();
+    </script>
     <script>
         // Restore the user's saved zoom level as early as possible (before
         // first paint) so there's no flash of the page at the wrong size.
@@ -24,7 +38,7 @@
     <!-- Material Symbols -->
     <link href="./assets/material-symbols.css" rel="stylesheet">
     <!-- Tailwind CSS -->
-    <script src="./assets/tailwind.js"></script>
+    <link href="./assets/tailwind-compiled.css" rel="stylesheet">
     <script>
         // Reveal icon glyphs only once the Material Symbols font has loaded,
         // avoiding a brief flash of raw icon-name text (e.g. "energy_savings_leaf").
@@ -39,105 +53,6 @@
             // Safety fallback in case font loading stalls
             setTimeout(reveal, 1500);
         })();
-    </script>
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#004521",
-                        "app-bg": "#f5f9f6",
-                        "on-secondary-fixed-variant": "#00522c",
-                        "primary-fixed-dim": "#92d6a2",
-                        "on-error": "#ffffff",
-                        "secondary-fixed-dim": "#88d7a1",
-                        "primary-container": "#1b5e35",
-                        "surface-container-lowest": "#ffffff",
-                        "error-container": "#ffdad6",
-                        "success-green": "#166534",
-                        "surface": "#ebffec",
-                        "surface-bright": "#ebffec",
-                        "surface-container-high": "#daeddb",
-                        "on-tertiary-fixed": "#002110",
-                        "on-surface": "#0f1f14",
-                        "surface-container": "#dff3e1",
-                        "surface-dim": "#ccdfcd",
-                        "primary-fixed": "#adf2bc",
-                        "surface-variant": "#d4e8d6",
-                        "surface-container-highest": "#d4e8d6",
-                        "on-primary-fixed-variant": "#09522a",
-                        "outline-variant": "#c0c9be",
-                        "tertiary-fixed-dim": "#7ada9e",
-                        "error-red": "#991b1b",
-                        "surface-tint": "#296a40",
-                        "brand-deep": "#0d3d1e",
-                        "on-tertiary": "#ffffff",
-                        "on-surface-variant": "#404941",
-                        "on-secondary": "#ffffff",
-                        "on-primary": "#ffffff",
-                        "on-primary-container": "#92d5a1",
-                        "inverse-surface": "#243428",
-                        "border-muted": "#cce5d6",
-                        "error": "#ba1a1a",
-                        "on-secondary-container": "#1f7044",
-                        "on-secondary-fixed": "#00210f",
-                        "surface-container-low": "#e5f9e6",
-                        "inverse-primary": "#92d6a2",
-                        "background": "#ebffec",
-                        "inverse-on-surface": "#e2f6e3",
-                        "warning-gold": "#fbbf24",
-                        "secondary": "#196c40",
-                        "on-background": "#0f1f14",
-                        "secondary-fixed": "#a4f4bc",
-                        "outline": "#707970",
-                        "secondary-container": "#a1f1b9",
-                        "on-tertiary-fixed-variant": "#00522e",
-                        "on-tertiary-container": "#79d99e",
-                        "tertiary-container": "#005f37",
-                        "surface-soft": "#f0f7f2",
-                        "on-error-container": "#93000a",
-                        "tertiary": "#004526",
-                        "on-primary-fixed": "#00210d",
-                        "tertiary-fixed": "#96f7b9"
-                    },
-                    borderRadius: {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "2xl": "1rem",
-                        "3xl": "1.5rem",
-                        "full": "9999px"
-                    },
-                    spacing: {
-                        "unit": "4px",
-                        "md": "16px",
-                        "lg": "24px",
-                        "xs": "4px",
-                        "xl": "32px",
-                        "gutter": "16px",
-                        "sm": "8px",
-                        "margin-edge": "20px"
-                    },
-                    fontFamily: {
-                        "sans": ["Plus Jakarta Sans", "sans-serif"]
-                    },
-                    animation: {
-                        "pulse-fast": "pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-                        "progress": "progress 2s ease-in-out infinite",
-                        "spin-slow": "spin 8s linear infinite",
-                        "bounce-slow": "bounce 3s infinite"
-                    },
-                    keyframes: {
-                        progress: {
-                            "0%": { width: "0%", marginLeft: "0%" },
-                            "50%": { width: "50%", marginLeft: "25%" },
-                            "100%": { width: "0%", marginLeft: "100%" }
-                        }
-                    }
-                }
-            }
-        }
     </script>
     <style>
         /* --- Prevent "icon name" text flash before Material Symbols font loads --- */
@@ -171,114 +86,6 @@
         }
 
         /* --- Animated hint tooltip that appears before the Add Batch button is highlighted --- */
-        @keyframes hint-pop-in {
-            0% {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes hint-pop-out {
-            0% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-4px);
-            }
-        }
-
-        @keyframes hint-arrow-slide {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            50% {
-                transform: translateX(4px);
-            }
-        }
-
-        /* Wrapper positions the stacked hint (label + pointer) above the button */
-        #add-batch-hint {
-            display: none;
-            flex-direction: row;
-            align-items: center;
-            pointer-events: none;
-            z-index: 50;
-            gap: 4px;
-        }
-
-        #add-batch-hint::after,
-        #add-batch-hint::before {
-            content: none;
-        }
-
-        /* 1. Text label */
-        #add-batch-hint .hint-label {
-            background: #004521;
-            color: #fff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 12px;
-            box-shadow: 0 4px 18px rgba(0, 69, 33, 0.3);
-            white-space: nowrap;
-            display: block;
-        }
-
-        .dark #add-batch-hint .hint-label {
-            background: #1b5e35;
-            color: #adf2bc;
-        }
-
-        /* 2. Caret pointing right toward the button */
-        #add-batch-hint-pointer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 18px;
-            font-weight: 900;
-            color: #004521;
-            line-height: 1;
-            animation: hint-caret-pulse 0.8s ease-in-out infinite;
-        }
-
-        .dark #add-batch-hint-pointer {
-            color: #92d6a2;
-        }
-
-        #add-batch-hint.hint-visible {
-            display: flex;
-            animation: hint-pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        #add-batch-hint.hint-hiding {
-            display: flex;
-            animation: hint-pop-out 0.25s ease forwards;
-        }
-
-        @keyframes hint-caret-pulse {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            50% {
-                transform: translateX(3px);
-            }
-        }
 
         /* --- Force portrait: hide the app and show a rotate prompt in landscape --- */
         #rotate-lock {
@@ -469,8 +276,8 @@
                 inset: 0 !important;
                 width: 100vw !important;
                 max-width: 100vw !important;
-                height: 100dvh !important;
-                max-height: 100dvh !important;
+                height: var(--initial-vh, 100dvh) !important;
+                max-height: var(--initial-vh, 100dvh) !important;
                 border: none !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
@@ -1239,6 +1046,13 @@
         html.dark #scene-register .dark\:bg-zinc-950 {
             background-color: #f5f9f6 !important;
         }
+
+        /* Scroll-guard: while user is actively scrolling, dim interactive
+           elements to hint they're temporarily non-interactive */
+        #app-scroll-area.is-scrolling button,
+        #app-scroll-area.is-scrolling [role="switch"] {
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -1418,8 +1232,9 @@
                 <div class="relative flex flex-col items-center max-w-xs w-full">
                     <!-- Logo Container -->
                     <div
-                        class="mb-xl animate-pulse-fast rounded-3xl">
-                        <img src="./assets/logo.png" class="w-24 h-24 object-contain rounded-2xl" alt="KabuTech Logo">
+                        class="mb-xl animate-pulse-fast rounded-3xl flex items-center justify-center w-24 h-24 bg-primary-container rounded-2xl">
+                        <span class="material-symbols-outlined text-primary-fixed"
+                            style="font-size:56px; font-variation-settings:'FILL' 1; opacity:1;">energy_savings_leaf</span>
                     </div>
                     <!-- Brand Name -->
                     <h1 class="text-display-lg text-on-primary mb-xs tracking-tight font-extrabold">KabuTech Hiyas</h1>
@@ -1671,7 +1486,8 @@
                                 </div>
                                 <div
                                     class="ob-icon-pop relative w-36 h-36 rounded-3xl bg-white shadow-2xl flex items-center justify-center overflow-hidden">
-                                    <img src="./assets/logo.png" class="w-full h-full object-cover rounded-3xl" alt="KabuTech Logo">
+                                    <img src="./assets/logo.png" class="w-full h-full object-cover rounded-3xl"
+                                        alt="KabuTech Logo">
                                 </div>
                             </div>
                             <div
@@ -1696,7 +1512,7 @@
                                     <span
                                         class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH
                                         ©
-                                        2024</span>
+                                        2026</span>
                                     <div class="flex gap-4">
                                         <button
                                             class="text-[11px] text-on-surface-variant/50 hover:text-primary transition-colors">Privacy
@@ -1759,7 +1575,7 @@
                                     <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
                                 </button>
                                 <span class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH ©
-                                    2024</span>
+                                    2026</span>
                             </div>
                         </div>
 
@@ -1807,7 +1623,7 @@
                                     <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
                                 </button>
                                 <span class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH ©
-                                    2024</span>
+                                    2026</span>
                             </div>
                         </div>
 
@@ -3368,20 +3184,14 @@
                                             class="text-[11px] font-bold text-on-surface dark:text-white">— bags</span>
                                     </div>
                                 </div>
-                                <!-- Add Rack button with hint -->
-                                <div class="flex items-center gap-2">
-                                    <div id="add-batch-hint" role="tooltip" aria-hidden="true">
-                                        <span class="hint-label">Tap to add a rack</span>
-                                        <span id="add-batch-hint-pointer" aria-hidden="true">›</span>
-                                    </div>
-                                    <button id="btn-add-batch-inline" onclick="stopAddBatchHint(); openAddRackModal()"
-                                        class="bg-primary dark:bg-primary-container text-on-primary dark:text-white text-caption font-bold px-4 py-2 rounded-full flex items-center gap-1.5 active:scale-95 transition-all shadow-sm">
-                                        <span class="material-symbols-outlined text-[16px]">add</span> Add Rack
-                                    </button>
-                                </div>
+                                <!-- Add Rack button -->
+                                <button id="btn-add-batch-inline" onclick="stopAddBatchHint(); openAddRackModal()"
+                                    class="bg-primary dark:bg-primary-container text-on-primary dark:text-white text-caption font-bold px-4 py-2 rounded-full flex items-center gap-1.5 active:scale-95 transition-all shadow-sm shrink-0">
+                                    <span class="material-symbols-outlined text-[16px]">add</span> Add Rack
+                                </button>
                             </div>
                             <!-- Rack cards rendered here -->
-                            <div id="active-batches-list" class="space-y-4 pt-2"></div>
+                            <div id="active-batches-list" class="space-y-6 pt-5"></div>
                         </div>
 
                         <!-- TAB E: DIAGNOSTICS placeholder (kept for tab switching logic compatibility) -->
@@ -4000,7 +3810,8 @@
                                 </div>
 
                                 <!-- Mushroom farm photo feed -->
-                                <img src="./assets/mushroom_feed.png" alt="Mushroom grow house - live feed simulation" id="mushroom-farm-img" style="width: 100%; height: 100%; object-fit: cover;">
+                                <img src="./assets/mushroom_feed.png" alt="Mushroom grow house - live feed simulation"
+                                    id="mushroom-farm-img" style="width: 100%; height: 100%; object-fit: cover;">
 
                                 <!-- Corner brackets -->
                                 <div
@@ -4683,11 +4494,16 @@
         </div>
     </div>
 
+
     <!-- Modal: Add Rack -->
     <div id="modal-add-batch"
         class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-        <div
-            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-3xl p-5 w-full max-w-[360px] shadow-2xl relative z-10 flex flex-col gap-4">
+        <div id="modal-add-batch-inner"
+            class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-3xl p-5 w-full max-w-[360px] shadow-2xl relative flex flex-col gap-4">
+
+
+
+
             <div class="flex justify-between items-center">
                 <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                     <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">shelves</span> Add
@@ -7968,10 +7784,24 @@
                 dragHandle.addEventListener('click', e => e.stopPropagation());
 
                 // Click anywhere on the card (except drag handle) → open rack detail subpage
-                card.addEventListener('click', (e) => {
+                // Use pointerdown/pointerup with movement threshold to distinguish taps from scrolls
+                let _cardPointerStart = null;
+                card.addEventListener('pointerdown', (e) => {
                     if (e.target.closest('.drag-handle')) return;
+                    if (e.target.closest('button')) return; // let inner buttons handle themselves
+                    _cardPointerStart = { x: e.clientX, y: e.clientY };
+                }, { passive: true });
+                card.addEventListener('pointerup', (e) => {
+                    if (!_cardPointerStart) return;
+                    if (e.target.closest('.drag-handle')) return;
+                    if (e.target.closest('button')) return;
+                    const dx = Math.abs(e.clientX - _cardPointerStart.x);
+                    const dy = Math.abs(e.clientY - _cardPointerStart.y);
+                    _cardPointerStart = null;
+                    if (dx > 8 || dy > 10) return; // moved too much → was a scroll, not a tap
                     openRackDetailSubpage(rack.id);
-                });
+                }, { passive: true });
+                card.addEventListener('pointercancel', () => { _cardPointerStart = null; }, { passive: true });
 
                 dragHandle.addEventListener('pointerdown', e => {
                     e.preventDefault();
@@ -8563,7 +8393,10 @@
         }
 
         function openAddBatchModal() {
-            document.getElementById('modal-add-batch').classList.remove('hidden');
+            const overlay = document.getElementById('modal-add-batch');
+            overlay.classList.remove('hidden');
+            // Reset scroll to top of overlay each time modal opens
+            overlay.scrollTop = 0;
         }
 
         // Configures the center nav button per role.
@@ -8608,33 +8441,17 @@
                 return;
             }
 
-            const showHintAndPulse = () => {
+            const showPulse = () => {
                 const btn = document.getElementById('btn-add-batch-inline');
-                const hint = document.getElementById('add-batch-hint');
                 if (!btn) return;
 
                 // Scroll button into view smoothly
                 btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-                // Show hint tooltip
-                if (hint) {
-                    hint.classList.remove('hint-hiding');
-                    hint.classList.add('hint-visible');
-                }
-
                 // After a beat, start the pulse on the button
                 setTimeout(() => {
                     btn.classList.add('add-crop-pulse');
                 }, 400);
-
-                // After hint has been visible for ~4s, fade it out
-                setTimeout(() => {
-                    if (hint) {
-                        hint.classList.remove('hint-visible');
-                        hint.classList.add('hint-hiding');
-                        setTimeout(() => hint.classList.remove('hint-hiding'), 300);
-                    }
-                }, 4000);
 
                 // Stop pulsing after ~6s total
                 setTimeout(() => {
@@ -8644,20 +8461,18 @@
 
             const alreadyOnCrops = state.currentTab === 'grow-log' && !document.getElementById('tab-grow-log').classList.contains('hidden');
             if (alreadyOnCrops) {
-                showHintAndPulse();
+                showPulse();
                 return;
             }
 
             switchTab('grow-log');
             // switchTab runs a brief exit/enter animation when changing tabs (250ms); wait it out
-            setTimeout(showHintAndPulse, 320);
+            setTimeout(showPulse, 320);
         }
 
         function stopAddBatchHint() {
             const btn = document.getElementById('btn-add-batch-inline');
-            const hint = document.getElementById('add-batch-hint');
             if (btn) btn.classList.remove('add-crop-pulse');
-            if (hint) { hint.classList.remove('hint-visible', 'hint-hiding'); }
         }
 
         function closeAddBatchModal() {
@@ -9279,8 +9094,6 @@
                 // Hide Add Rack button for staff (read-only)
                 const addBatchBtn = document.getElementById('btn-add-batch-inline');
                 if (addBatchBtn) addBatchBtn.style.display = 'none';
-                const addBatchHint = document.getElementById('add-batch-hint');
-                if (addBatchHint) addBatchHint.style.display = 'none';
                 // Hide rack-level edit/delete inside the subpage for staff
                 const editBtn = document.getElementById('rack-detail-edit-btn');
                 if (editBtn) editBtn.style.display = 'none';
@@ -10167,6 +9980,67 @@
                     .catch(e => console.warn('[SW] Registration failed:', e));
             });
         }
+    </script>
+
+    <!-- Scroll-intent guard: prevents buttons/toggles from firing when
+         the user's finger is scrolling rather than tapping. Works by
+         tracking touch movement on the scroll area — if the finger moved
+         more than 6px vertically during a touch, the release is treated
+         as a scroll end, not a tap, and we block the next click. -->
+    <script>
+        (function () {
+            var scrollArea = null;
+            var touchStartY = 0;
+            var touchStartX = 0;
+            var didScroll = false;
+            var blockNextClick = false;
+
+            function init() {
+                scrollArea = document.getElementById('app-scroll-area');
+                if (!scrollArea) return;
+
+                scrollArea.addEventListener('touchstart', function (e) {
+                    if (e.touches.length !== 1) return;
+                    touchStartY = e.touches[0].clientY;
+                    touchStartX = e.touches[0].clientX;
+                    didScroll = false;
+                    blockNextClick = false;
+                }, { passive: true });
+
+                scrollArea.addEventListener('touchmove', function (e) {
+                    if (e.touches.length !== 1) return;
+                    var dy = Math.abs(e.touches[0].clientY - touchStartY);
+                    var dx = Math.abs(e.touches[0].clientX - touchStartX);
+                    if (dy > 6 && dy > dx) {
+                        didScroll = true;
+                    }
+                }, { passive: true });
+
+                scrollArea.addEventListener('touchend', function () {
+                    if (didScroll) {
+                        blockNextClick = true;
+                        // Clear the block after a short window (click fires ~0-100ms after touchend)
+                        setTimeout(function () { blockNextClick = false; }, 350);
+                    }
+                    didScroll = false;
+                }, { passive: true });
+
+                // Intercept clicks on the scroll area: cancel if we scrolled
+                scrollArea.addEventListener('click', function (e) {
+                    if (blockNextClick) {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                        blockNextClick = false;
+                    }
+                }, true); // capture phase so it fires before onclick handlers
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+        })();
     </script>
 </body>
 
