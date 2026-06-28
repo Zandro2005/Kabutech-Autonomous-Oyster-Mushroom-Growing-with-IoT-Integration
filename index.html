@@ -5,19 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=5, user-scalable=yes">
-    // Lock the app height to the initial viewport so the soft keyboard
-    // never causes the layout to shift up/down.
-    (function () {
-    function setInitialVh() {
-    document.documentElement.style.setProperty('--initial-vh', window.innerHeight + 'px');
-    }
-    setInitialVh();
-    // Re-lock on orientation change (screen rotated), but NOT on resize
-    // (which fires when the keyboard opens/closes — that's what we're ignoring).
-    window.addEventListener('orientationchange', function () {
-    setTimeout(setInitialVh, 300);
-    });
-    })();
+    <script>
+        // Lock the app height to the initial viewport so the soft keyboard
+        // never causes the layout to shift up/down.
+        (function () {
+            function setInitialVh() {
+                document.documentElement.style.setProperty('--initial-vh', window.innerHeight + 'px');
+            }
+            setInitialVh();
+            // Re-lock on orientation change (screen rotated), but NOT on resize
+            // (which fires when the keyboard opens/closes — that's what we're ignoring).
+            window.addEventListener('orientationchange', function () {
+                setTimeout(setInitialVh, 300);
+            });
+        })();
     </script>
     <script>
         // Restore the user's saved zoom level as early as possible (before
@@ -1090,131 +1091,131 @@
             <button id="zoom-out-btn" type="button" onclick="appZoomOut()" aria-label="Zoom out">&minus;</button>
         </div>
         <script>
-                (function () {
-                    var MIN_ZOOM = 0.8, MAX_ZOOM = 1.4, STEP = 0.1;
+            (function () {
+                var MIN_ZOOM = 0.8, MAX_ZOOM = 1.4, STEP = 0.1;
 
-                    function clampZoom(v) {
-                        return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round(v * 100) / 100));
+                function clampZoom(v) {
+                    return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round(v * 100) / 100));
+                }
+
+                function currentZoom() {
+                    var v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--user-zoom'));
+                    return isNaN(v) ? 1 : v;
+                }
+
+                function applyZoom(zoom) {
+                    zoom = clampZoom(zoom);
+                    document.documentElement.style.setProperty('--user-zoom', zoom);
+                    try { localStorage.setItem('kb_zoom_level', zoom); } catch (e) { }
+
+                    var label = document.getElementById('zoom-level-label');
+                    if (label) label.textContent = Math.round(zoom * 100) + '%';
+
+                    var inBtn = document.getElementById('zoom-in-btn');
+                    var outBtn = document.getElementById('zoom-out-btn');
+                    if (inBtn) inBtn.disabled = zoom >= MAX_ZOOM - 0.001;
+                    if (outBtn) outBtn.disabled = zoom <= MIN_ZOOM + 0.001;
+                }
+
+                window.appZoomIn = function () { applyZoom(currentZoom() + STEP); };
+                window.appZoomOut = function () { applyZoom(currentZoom() - STEP); };
+
+                // Sync the label/button state with whatever zoom level was
+                // already restored (by the early head script) on load.
+                applyZoom(currentZoom());
+
+                // --- Transparent-until-touched + draggable sidebar behavior ---
+                var ctrl = document.getElementById('zoom-control');
+                var FADE_DELAY = 2200;
+                var fadeTimer = null;
+
+                function wake() {
+                    ctrl.classList.add('zc-active');
+                    if (fadeTimer) clearTimeout(fadeTimer);
+                }
+                function scheduleFade() {
+                    if (fadeTimer) clearTimeout(fadeTimer);
+                    fadeTimer = setTimeout(function () {
+                        ctrl.classList.remove('zc-active');
+                    }, FADE_DELAY);
+                }
+
+                document.getElementById('zoom-in-btn').addEventListener('click', function () { wake(); scheduleFade(); this.blur(); });
+                document.getElementById('zoom-out-btn').addEventListener('click', function () { wake(); scheduleFade(); this.blur(); });
+
+                // Restore a previously-dragged vertical position, like a
+                // remembered cellphone side-toggle placement.
+                try {
+                    var savedTop = localStorage.getItem('kb_zoom_ctrl_top');
+                    if (savedTop) {
+                        ctrl.style.top = savedTop;
+                        ctrl.style.transform = 'none';
                     }
+                } catch (e) { }
 
-                    function currentZoom() {
-                        var v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--user-zoom'));
-                        return isNaN(v) ? 1 : v;
+                var dragging = false, moved = false, startY = 0, startTop = 0, suppressClick = false, startPointerId = null;
+
+                function clampTop(top) {
+                    var parent = ctrl.parentElement;
+                    var min = 60; // stay clear of the notch / header area
+                    var max = parent.clientHeight - ctrl.offsetHeight - 70; // stay clear of bottom nav
+                    if (max < min) max = min;
+                    return Math.min(max, Math.max(min, top));
+                }
+
+                function onPointerDown(e) {
+                    dragging = true; moved = false;
+                    startY = e.clientY;
+                    startPointerId = e.pointerId;
+                    var rect = ctrl.getBoundingClientRect();
+                    var parentRect = ctrl.parentElement.getBoundingClientRect();
+                    startTop = rect.top - parentRect.top;
+                    wake();
+                }
+
+                function onPointerMove(e) {
+                    if (!dragging) return;
+                    var dy = e.clientY - startY;
+                    if (Math.abs(dy) > 6 && !moved) {
+                        moved = true;
+                        ctrl.classList.add('zc-dragging');
+                        // Only steal the pointer once we know it's a drag,
+                        // so a plain tap still reaches the +/- button click.
+                        try { ctrl.setPointerCapture(startPointerId); } catch (err) { }
                     }
-
-                    function applyZoom(zoom) {
-                        zoom = clampZoom(zoom);
-                        document.documentElement.style.setProperty('--user-zoom', zoom);
-                        try { localStorage.setItem('kb_zoom_level', zoom); } catch (e) { }
-
-                        var label = document.getElementById('zoom-level-label');
-                        if (label) label.textContent = Math.round(zoom * 100) + '%';
-
-                        var inBtn = document.getElementById('zoom-in-btn');
-                        var outBtn = document.getElementById('zoom-out-btn');
-                        if (inBtn) inBtn.disabled = zoom >= MAX_ZOOM - 0.001;
-                        if (outBtn) outBtn.disabled = zoom <= MIN_ZOOM + 0.001;
+                    if (moved) {
+                        e.preventDefault();
+                        ctrl.style.top = clampTop(startTop + dy) + 'px';
+                        ctrl.style.transform = 'none';
                     }
+                }
 
-                    window.appZoomIn = function () { applyZoom(currentZoom() + STEP); };
-                    window.appZoomOut = function () { applyZoom(currentZoom() - STEP); };
-
-                    // Sync the label/button state with whatever zoom level was
-                    // already restored (by the early head script) on load.
-                    applyZoom(currentZoom());
-
-                    // --- Transparent-until-touched + draggable sidebar behavior ---
-                    var ctrl = document.getElementById('zoom-control');
-                    var FADE_DELAY = 2200;
-                    var fadeTimer = null;
-
-                    function wake() {
-                        ctrl.classList.add('zc-active');
-                        if (fadeTimer) clearTimeout(fadeTimer);
+                function onPointerUp() {
+                    dragging = false;
+                    ctrl.classList.remove('zc-dragging');
+                    if (moved) {
+                        suppressClick = true;
+                        try { localStorage.setItem('kb_zoom_ctrl_top', ctrl.style.top); } catch (e) { }
                     }
-                    function scheduleFade() {
-                        if (fadeTimer) clearTimeout(fadeTimer);
-                        fadeTimer = setTimeout(function () {
-                            ctrl.classList.remove('zc-active');
-                        }, FADE_DELAY);
+                    moved = false;
+                    scheduleFade();
+                }
+
+                // Dragging the pill shouldn't also trigger the +/- button
+                // it happened to start or end on top of.
+                ctrl.addEventListener('click', function (e) {
+                    if (suppressClick) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        suppressClick = false;
                     }
+                }, true);
 
-                    document.getElementById('zoom-in-btn').addEventListener('click', function () { wake(); scheduleFade(); this.blur(); });
-                    document.getElementById('zoom-out-btn').addEventListener('click', function () { wake(); scheduleFade(); this.blur(); });
-
-                    // Restore a previously-dragged vertical position, like a
-                    // remembered cellphone side-toggle placement.
-                    try {
-                        var savedTop = localStorage.getItem('kb_zoom_ctrl_top');
-                        if (savedTop) {
-                            ctrl.style.top = savedTop;
-                            ctrl.style.transform = 'none';
-                        }
-                    } catch (e) { }
-
-                    var dragging = false, moved = false, startY = 0, startTop = 0, suppressClick = false, startPointerId = null;
-
-                    function clampTop(top) {
-                        var parent = ctrl.parentElement;
-                        var min = 60; // stay clear of the notch / header area
-                        var max = parent.clientHeight - ctrl.offsetHeight - 70; // stay clear of bottom nav
-                        if (max < min) max = min;
-                        return Math.min(max, Math.max(min, top));
-                    }
-
-                    function onPointerDown(e) {
-                        dragging = true; moved = false;
-                        startY = e.clientY;
-                        startPointerId = e.pointerId;
-                        var rect = ctrl.getBoundingClientRect();
-                        var parentRect = ctrl.parentElement.getBoundingClientRect();
-                        startTop = rect.top - parentRect.top;
-                        wake();
-                    }
-
-                    function onPointerMove(e) {
-                        if (!dragging) return;
-                        var dy = e.clientY - startY;
-                        if (Math.abs(dy) > 6 && !moved) {
-                            moved = true;
-                            ctrl.classList.add('zc-dragging');
-                            // Only steal the pointer once we know it's a drag,
-                            // so a plain tap still reaches the +/- button click.
-                            try { ctrl.setPointerCapture(startPointerId); } catch (err) { }
-                        }
-                        if (moved) {
-                            e.preventDefault();
-                            ctrl.style.top = clampTop(startTop + dy) + 'px';
-                            ctrl.style.transform = 'none';
-                        }
-                    }
-
-                    function onPointerUp() {
-                        dragging = false;
-                        ctrl.classList.remove('zc-dragging');
-                        if (moved) {
-                            suppressClick = true;
-                            try { localStorage.setItem('kb_zoom_ctrl_top', ctrl.style.top); } catch (e) { }
-                        }
-                        moved = false;
-                        scheduleFade();
-                    }
-
-                    // Dragging the pill shouldn't also trigger the +/- button
-                    // it happened to start or end on top of.
-                    ctrl.addEventListener('click', function (e) {
-                        if (suppressClick) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            suppressClick = false;
-                        }
-                    }, true);
-
-                    ctrl.addEventListener('pointerdown', onPointerDown);
-                    ctrl.addEventListener('pointermove', onPointerMove);
-                    ctrl.addEventListener('pointerup', onPointerUp);
-                    ctrl.addEventListener('pointercancel', onPointerUp);
-                })();
+                ctrl.addEventListener('pointerdown', onPointerDown);
+                ctrl.addEventListener('pointermove', onPointerMove);
+                ctrl.addEventListener('pointerup', onPointerUp);
+                ctrl.addEventListener('pointercancel', onPointerUp);
+            })();
         </script>
 
         <!-- Toast Notifications Layer -->
@@ -4350,13 +4351,24 @@
                     </div>
                 </div>
 
-                <!-- MOBILE BOTTOM NAVIGATION BAR: every item — including the center FAB —
-                     is its own equal-width flex-1 slot in a single row. This guarantees
-                     even spacing between ALL visible tabs (not just within sub-groups):
-                     5 slots for staff (Home, Controls, Report, History, More), 6 for
-                     admin (Yield AI added). -->
+                <!-- CENTER FAB: lives OUTSIDE the nav so that the nav's
+                     backdrop-blur-md (backdrop-filter) can never become its
+                     CSS containing block — which would cause the button to
+                     shift / expand the nav bar on tap in Safari / WebKit.
+                     Absolute-positioned relative to #scene-app so it stays
+                     scoped to the app shell and works correctly in both the
+                     phone-frame simulator and the real mobile viewport. -->
+                <button id="nav-fab" onclick="handleNavFabClick()" aria-label="Manage Crop"
+                    class="absolute bottom-[44px] left-1/2 -translate-x-1/2 w-[56px] h-[56px] rounded-full bg-primary dark:bg-primary-container text-on-primary dark:text-white shadow-xl flex items-center justify-center active:scale-90 transition-transform duration-150 border-4 border-app-bg dark:border-zinc-950 z-50">
+                    <span id="nav-fab-icon" class="material-symbols-outlined text-[26px]">agriculture</span>
+                </button>
+
+                <!-- MOBILE BOTTOM NAVIGATION BAR: every item — including the center FAB
+                     spacer — is its own equal-width flex-1 slot in a single row. This
+                     guarantees even spacing between ALL visible tabs: 5 slots for staff
+                     (Home, Controls, [FAB], Report, More), 6 for admin (Yield AI added). -->
                 <nav
-                    class="absolute bottom-0 left-0 w-full z-40 flex items-center px-2 pb-5 pt-2 bg-surface-container/95 dark:bg-zinc-900/95 border-t border-muted/80 dark:border-zinc-800 backdrop-blur-md rounded-t-2xl shadow-[0px_-4px_24px_rgba(15,31,20,0.08)] shrink-0 select-none relative">
+                    class="absolute bottom-0 left-0 w-full z-40 flex items-center px-2 pb-5 pt-2 bg-surface-container/95 dark:bg-zinc-900/95 border-t border-muted/80 dark:border-zinc-800 backdrop-blur-md rounded-t-2xl shadow-[0px_-4px_24px_rgba(15,31,20,0.08)] shrink-0 select-none">
                     <button id="nav-home" onclick="switchTab('home')"
                         class="flex-1 flex flex-col items-center justify-center text-primary dark:text-primary-fixed py-1 active:scale-95 transition-transform duration-150">
                         <span class="material-symbols-outlined text-[22px]"
@@ -4369,14 +4381,15 @@
                         <span class="text-[10px] font-semibold mt-0.5">Controls</span>
                     </button>
 
-                    <!-- FAB slot: fixed so zoom never shifts it -->
-                    <div class="flex-1 relative flex flex-col items-center justify-center py-1">
-                        <button id="nav-fab" onclick="handleNavFabClick()" aria-label="Manage Crop"
-                            class="fixed bottom-[44px] left-1/2 -translate-x-1/2 w-[56px] h-[56px] rounded-full bg-primary dark:bg-primary-container text-on-primary dark:text-white shadow-xl flex items-center justify-center active:scale-90 transition-transform duration-150 border-4 border-app-bg dark:border-zinc-950 z-50">
-                            <span id="nav-fab-icon" class="material-symbols-outlined text-[26px]">agriculture</span>
-                        </button>
+                    <!-- FAB spacer slot: keeps tab spacing symmetric.
+                         The actual FAB button now lives as a sibling of <nav>
+                         above this block to avoid backdrop-filter issues.
+                         A transparent 22px block mirrors the icon height of other
+                         nav items so the label lines up exactly with theirs. -->
+                    <div class="flex-1 flex flex-col items-center justify-center pointer-events-none select-none py-1">
+                        <span style="display:block; height:22px;"></span>
                         <span id="nav-fab-label"
-                            class="text-[10px] font-semibold text-on-surface-variant dark:text-zinc-400 whitespace-nowrap mt-7">Manage
+                            class="text-[10px] font-semibold text-on-surface-variant dark:text-zinc-400 whitespace-nowrap mt-0.5">Manage
                             Crop</span>
                     </div>
 
@@ -5663,11 +5676,11 @@
                 if (tabId === 'grow-log') {
                     // Highlight the center FAB label for grow-log tab
                     const fabLabel = document.getElementById('nav-fab-label');
-                    if (fabLabel) fabLabel.className = 'text-[10px] font-bold text-primary dark:text-primary-fixed whitespace-nowrap mt-7';
+                    if (fabLabel) fabLabel.className = 'text-[10px] font-bold text-primary dark:text-primary-fixed whitespace-nowrap mt-0.5';
                 } else {
                     // Reset FAB label style when leaving grow-log
                     const fabLabel = document.getElementById('nav-fab-label');
-                    if (fabLabel) fabLabel.className = 'text-[10px] font-semibold text-on-surface-variant dark:text-zinc-400 whitespace-nowrap mt-7';
+                    if (fabLabel) fabLabel.className = 'text-[10px] font-semibold text-on-surface-variant dark:text-zinc-400 whitespace-nowrap mt-0.5';
                     const navTargetEl = document.getElementById(`nav-${navTargetId}`);
                     if (navTargetEl) {
                         navTargetEl.className = "flex flex-col items-center justify-center flex-1 text-primary dark:text-primary-fixed py-1 relative active:scale-95 transition-transform duration-150";
