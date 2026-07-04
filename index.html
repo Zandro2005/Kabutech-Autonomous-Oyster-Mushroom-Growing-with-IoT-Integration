@@ -14,7 +14,7 @@
             }
             setInitialVh();
             // Re-lock on orientation change (screen rotated), but NOT on resize
-            // (which fires when the keyboard opens/closes — that's what we're ignoring).
+            // (which fires when the keyboard opens/closes â€” that's what we're ignoring).
             window.addEventListener('orientationchange', function () {
                 setTimeout(setInitialVh, 300);
             });
@@ -164,10 +164,10 @@
         }
 
         /* --- Dark Mode Switch --- */
-        /* No CSS transition on theme switch — transitioning hundreds of elements
+        /* No CSS transition on theme switch â€” transitioning hundreds of elements
            simultaneously causes visible lag. The class swap is instant and smooth. */
 
-        /* --- Sun ↔ Moon morph animation for theme toggle icons --- */
+        /* --- Sun â†” Moon morph animation for theme toggle icons --- */
 
         /* Modern Scrollbars & Transitions */
         .hide-scrollbar::-webkit-scrollbar {
@@ -179,7 +179,7 @@
             scrollbar-width: none;
         }
 
-        /* Dark mode scrollbar — scoped to scrollable widgets only */
+        /* Dark mode scrollbar â€” scoped to scrollable widgets only */
         .dark #alerts-list-container::-webkit-scrollbar,
         .dark #logs-container::-webkit-scrollbar,
         .dark #more-staff-reports-container::-webkit-scrollbar {
@@ -206,7 +206,7 @@
             background: #52525b;
         }
 
-        /* Firefox — scoped to scrollable widgets only */
+        /* Firefox â€” scoped to scrollable widgets only */
         .dark #alerts-list-container,
         .dark #logs-container,
         .dark #more-staff-reports-container {
@@ -242,7 +242,7 @@
            A single multiplier applied on top of the existing rem scale.
            Because every size in this app (padding, gaps, text, icons) is
            already expressed in rem units relative to the html font-size,
-           scaling that one root value scales the whole UI uniformly —
+           scaling that one root value scales the whole UI uniformly â€”
            no individual element's spacing, padding, or proportions change,
            they all just get bigger or smaller together, identically. */
         :root {
@@ -253,7 +253,7 @@
             font-size: calc(16px * var(--user-zoom, 1));
         }
 
-        /* Login/Register panels stay at a fixed 90% scale at all times —
+        /* Login/Register panels stay at a fixed 90% scale at all times â€”
            intentionally NOT tied to --user-zoom, so they look the same
            regardless of whatever zoom level was last set inside the app. */
         html:has(#scene-login:not(.hidden)),
@@ -262,7 +262,7 @@
         }
 
         /* On real phone-sized viewports, drop the desktop "device mockup"
-           bezel and let the app fill the actual screen — internal layout,
+           bezel and let the app fill the actual screen â€” internal layout,
            styles, and flow are untouched, only the outer frame adapts. */
         @media (max-width: 480px) {
             body {
@@ -284,7 +284,7 @@
                 box-shadow: none !important;
             }
 
-            /* Shrink overall UI density on small phones — reduces all
+            /* Shrink overall UI density on small phones â€” reduces all
                rem-based text/spacing proportionally without zooming.
                Scales with viewport width so smaller phones (e.g. 360px)
                render the same proportions/layout as larger ones (e.g. 430px),
@@ -295,7 +295,7 @@
             }
 
             /* Login/Register screens are designed with the standard 16px
-               rem scale — keep their spacing/padding proportions intact
+               rem scale â€” keep their spacing/padding proportions intact
                on small phones instead of the compacted app-wide scale.
                Fixed at 90%, independent of --user-zoom (see rule above). */
             html:has(#scene-login:not(.hidden)),
@@ -346,7 +346,7 @@
                 padding: 0.5rem !important;
             }
 
-            /* Bottom nav: admin has 6 tabs vs staff's 5 — shrink icons/labels
+            /* Bottom nav: admin has 6 tabs vs staff's 5 â€” shrink icons/labels
                slightly so all items fit without crowding or overflow. */
             #app-wrapper nav button .material-symbols-outlined {
                 font-size: 1.35rem !important;
@@ -869,7 +869,7 @@
             padding-right: 16px;
         }
 
-        /* Rack card — make the whole card clickable */
+        /* Rack card â€” make the whole card clickable */
         .batch-card-clickable {
             cursor: pointer;
             transition: box-shadow 0.15s ease, transform 0.1s ease;
@@ -945,7 +945,7 @@
         /* --- Floating zoom control ---
            Deliberately styled with fixed px values (not Tailwind's rem
            utilities) so the control itself stays a consistent, comfortable
-           size on screen no matter what zoom level the user has chosen —
+           size on screen no matter what zoom level the user has chosen â€”
            only the app content underneath scales.
            It's transparent at rest and fades in on touch/hover, and can be
            dragged up/down along the right edge like a phone's side toggle. */
@@ -1039,7 +1039,7 @@
             color: #b9c5ba;
         }
 
-        /* Login & Register stay light-mode always — independent of the
+        /* Login & Register stay light-mode always â€” independent of the
            in-app dark mode toggle. The only place those two screens pick
            up a dark: variant is this panel's background, so pin it back
            to the light app-bg color whenever html.dark is set. */
@@ -1054,18 +1054,188 @@
         #app-scroll-area.is-scrolling [role="switch"] {
             pointer-events: none;
         }
+
+        /* --- DESKTOP SIDEBAR AND CONTENT LAYOUT (>480px) --- */
+        #desktop-sidebar {
+            display: none;
+        }
+
+        @media (min-width: 481px) {
+            body {
+                display: flex !important;
+                flex-direction: row !important;
+                height: 100vh !important;
+                overflow: hidden !important;
+                background-color: #f4f8f5 !important;
+            }
+
+            html.dark body {
+                background-color: #09090b !important;
+            }
+
+            #rotate-lock {
+                display: none !important;
+            }
+
+            #app-wrapper {
+                flex: 1 !important;
+                height: 100vh !important;
+                position: relative !important;
+                border-radius: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                width: auto !important;
+                max-width: none !important;
+            }
+
+            /* Show Desktop Left Sidebar â€” ONLY while the main app scene is
+               active. Loading, onboarding, login and register are full-bleed
+               experiences and must never show the app chrome/sidebar.
+               Checked positively off scene-app AND negatively off every
+               overlay scene, because loading/logout sequences keep
+               #scene-app visible underneath while the loading overlay plays
+               on top â€” so scene-app alone isn't a reliable signal. */
+            #desktop-sidebar {
+                display: none !important;
+            }
+
+            body:has(#scene-app:not(.hidden)) #desktop-sidebar {
+                display: flex !important;
+                flex-direction: column;
+                width: 280px;
+                height: 100vh;
+                background: linear-gradient(185deg, #051d0e 0%, #0a2d18 50%, #0f3d22 100%);
+                border-right: 1px solid rgba(173, 242, 188, 0.08);
+                color: #e2f6e3;
+                padding: 28px 20px;
+                box-sizing: border-box;
+                flex-shrink: 0;
+                z-index: 45;
+                position: relative;
+                justify-content: space-between;
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+            }
+
+            /* Overrides the rule above (same specificity, declared later) so
+               any overlay scene hides the sidebar even while #scene-app is
+               technically still present underneath it. */
+            body:has(#scene-loading:not(.hidden)) #desktop-sidebar,
+            body:has(#scene-onboarding:not(.hidden)) #desktop-sidebar,
+            body:has(#scene-login:not(.hidden)) #desktop-sidebar,
+            body:has(#scene-register:not(.hidden)) #desktop-sidebar {
+                display: none !important;
+            }
+
+            html.dark #desktop-sidebar {
+                background: linear-gradient(185deg, #09090b 0%, #0d0f0e 60%, #111413 100%);
+                border-right: 1px solid rgba(255, 255, 255, 0.04);
+                box-shadow: 4px 0 32px rgba(0, 0, 0, 0.25);
+            }
+
+            /* Sidebar navigation button states */
+            #desktop-sidebar nav button {
+                text-align: left;
+                width: 100%;
+                outline: none;
+                cursor: pointer;
+                border: 1px solid transparent;
+            }
+
+            #desktop-sidebar nav button:hover:not(#sb-nav-fab) {
+                background: rgba(255, 255, 255, 0.06);
+                color: #ffffff;
+            }
+
+            #desktop-sidebar nav button:active {
+                transform: scale(0.97);
+            }
+
+            /* Active Navigation highlight style */
+            #desktop-sidebar nav button.sb-active:not(#sb-nav-fab) {
+                background: rgba(173, 242, 188, 0.1);
+                color: #adf2bc;
+                border: 1px solid rgba(173, 242, 188, 0.15);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            }
+
+            /* Hide Mobile Shell Header & Bottom Nav */
+            #app-wrapper>div>header,
+            #app-wrapper nav,
+            #nav-fab {
+                display: none !important;
+            }
+
+            /* Main scroll container alignment & layout style */
+            #app-scroll-area {
+                padding: 24px 32px !important;
+            }
+
+            #app-scroll-area>div {
+                max-width: 800px !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                padding-bottom: 3rem !important;
+            }
+
+            /* Reposition Mobile-only components on Desktop */
+            #zoom-control {
+                right: 24px !important;
+                top: 24px !important;
+                transform: none !important;
+            }
+
+            #scroll-top-fab {
+                right: 32px !important;
+                bottom: 32px !important;
+                z-index: 50 !important;
+            }
+
+            /* Make widgets and cards more round and modern on Desktop */
+            #app-scroll-area [class*="rounded-2xl"] {
+                border-radius: 24px !important;
+                transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease !important;
+            }
+
+            #app-scroll-area [class*="rounded-2xl"]:hover {
+                transform: translateY(-2.5px) scale(1.008);
+                box-shadow: 0 14px 28px rgba(10, 30, 15, 0.06), 0 4px 10px rgba(0, 0, 0, 0.01) !important;
+                border-color: rgba(22, 101, 52, 0.22) !important;
+            }
+
+            html.dark #app-scroll-area [class*="rounded-2xl"]:hover {
+                box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35), 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+                border-color: rgba(74, 222, 128, 0.18) !important;
+            }
+
+            /* Extra roundness for secondary items too */
+            #app-scroll-area [class*="rounded-xl"] {
+                border-radius: 16px !important;
+            }
+
+            /* --- Full-bleed desktop layout for Loading / Onboarding / Login / Register ---
+               These scenes should occupy the ENTIRE desktop screen edge-to-edge
+               (no sidebar, no narrow centered panel, no side gutters). */
+            body:has(#scene-loading:not(.hidden)) #app-wrapper,
+            body:has(#scene-onboarding:not(.hidden)) #app-wrapper,
+            body:has(#scene-login:not(.hidden)) #app-wrapper,
+            body:has(#scene-register:not(.hidden)) #app-wrapper {
+                width: 100vw !important;
+                max-width: 100vw !important;
+            }
+
+            body:has(#scene-loading:not(.hidden)) #app-scene-container,
+            body:has(#scene-onboarding:not(.hidden)) #app-scene-container,
+            body:has(#scene-login:not(.hidden)) #app-scene-container,
+            body:has(#scene-register:not(.hidden)) #app-scene-container {
+                width: 100% !important;
+                height: 100vh !important;
+            }
+        }
     </style>
 </head>
 
 <body
-    class="bg-slate-900 text-on-surface antialiased min-h-screen flex items-center justify-center py-6 px-4 select-none relative overflow-hidden transition-colors duration-300 dark:bg-slate-950">
-
-    <!-- Toggle Device Frame Button (visible on desktop) -->
-    <button id="frame-toggle-btn" onclick="togglePhoneFrame()"
-        class="hidden md:flex fixed top-4 right-4 z-50 bg-slate-800 text-slate-300 hover:text-white px-4 py-2 rounded-full border border-slate-700 text-body-sm items-center gap-2 shadow-lg transition-all active:scale-95">
-        <span class="material-symbols-outlined text-[18px]">cell_phone</span>
-        <span id="frame-toggle-text">Full Screen View</span>
-    </button>
+    class="bg-app-bg dark:bg-zinc-950 text-on-surface antialiased min-h-screen select-none relative overflow-hidden transition-colors duration-300">
 
     <!-- Rotate-to-portrait prompt: shown instead of the app whenever the device is landscape -->
     <div id="rotate-lock">
@@ -1073,13 +1243,107 @@
         <p>Please rotate your device back to portrait to use KabuTech.</p>
     </div>
 
+    <!-- Desktop Sidebar (Only visible on widescreen >480px) -->
+    <div id="desktop-sidebar" class="flex-col justify-between hidden">
+        <!-- Sidebar Brand & Logo -->
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center gap-3 px-2 py-1">
+                <div
+                    class="w-10 h-10 rounded-2xl bg-[#adf2bc]/10 border border-[#adf2bc]/25 flex items-center justify-center shadow-[0_0_12px_rgba(173,242,188,0.15)]">
+                    <span class="material-symbols-outlined text-[#adf2bc] text-[22px]"
+                        style="font-variation-settings: 'FILL' 1;">energy_savings_leaf</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-extrabold text-[16px] text-white tracking-tight leading-none">KabuTech
+                        Hiyas</span>
+                    <span class="text-[10px] text-zinc-400 font-semibold tracking-wider mt-1.5 uppercase">Farm
+                        Operations</span>
+                </div>
+            </div>
+
+            <!-- Mode Pill Display -->
+            <div id="sidebar-mode-pill" onclick="switchTab('controls')"
+                class="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl border cursor-pointer active:scale-95 transition-all duration-300 bg-success-green/10 border-success-green/30 text-success-green dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-400">
+                <span id="sidebar-mode-icon" class="material-symbols-outlined text-[15px]"
+                    style="font-variation-settings: 'FILL' 1">smart_toy</span>
+                <span id="sidebar-mode-text" class="text-[11px] font-extrabold tracking-wide uppercase">AUTO</span>
+            </div>
+
+            <!-- Divider -->
+            <div class="h-px bg-zinc-800/60 dark:bg-zinc-800/40"></div>
+
+            <!-- Sidebar Navigation Links -->
+            <nav class="flex flex-col gap-2">
+                <button id="sb-nav-home" onclick="switchTab('home')"
+                    class="flex items-center gap-3 px-4 py-3 rounded-2xl text-[13px] font-bold text-zinc-300 hover:text-white hover:bg-white/5 transition-all duration-200">
+                    <span class="material-symbols-outlined text-[20px]">home</span>
+                    <span>Home</span>
+                </button>
+                <button id="sb-nav-controls" onclick="switchTab('controls')"
+                    class="flex items-center gap-3 px-4 py-3 rounded-2xl text-[13px] font-bold text-zinc-300 hover:text-white hover:bg-white/5 transition-all duration-200">
+                    <span class="material-symbols-outlined text-[20px]">settings_input_component</span>
+                    <span>Controls</span>
+                </button>
+                <!-- Widescreen Center FAB Equivalent inside Sidebar Navigation list -->
+                <button id="sb-nav-fab" onclick="handleNavFabClick()"
+                    class="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-[13px] font-bold bg-[#adf2bc] text-[#072211] hover:bg-[#adf2bc]/90 transition-all duration-200 shadow-lg shadow-[#adf2bc]/10">
+                    <span id="sb-nav-fab-icon" class="material-symbols-outlined text-[20px]">agriculture</span>
+                    <span id="sb-nav-fab-label">Manage Crop</span>
+                </button>
+                <button id="sb-nav-yield" onclick="switchTab('yield')"
+                    class="flex items-center gap-3 px-4 py-3 rounded-2xl text-[13px] font-bold text-zinc-300 hover:text-white hover:bg-white/5 transition-all duration-200">
+                    <span class="material-symbols-outlined text-[20px]">bar_chart</span>
+                    <span>Yield AI</span>
+                </button>
+                <button id="sb-nav-history" onclick="switchTab('history')"
+                    class="flex items-center gap-3 px-4 py-3 rounded-2xl text-[13px] font-bold text-zinc-300 hover:text-white hover:bg-white/5 transition-all duration-200">
+                    <span class="material-symbols-outlined text-[20px]">description</span>
+                    <span>Report</span>
+                </button>
+                <button id="sb-nav-profile" onclick="switchTab('profile')"
+                    class="flex items-center gap-3 px-4 py-3 rounded-2xl text-[13px] font-bold text-zinc-300 hover:text-white hover:bg-white/5 transition-all duration-200">
+                    <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                    <span>More</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer (Theme & User Status) -->
+        <div class="flex flex-col gap-4">
+            <!-- Divider -->
+            <div class="h-px bg-zinc-800/60 dark:bg-zinc-800/40"></div>
+
+            <div class="flex items-center justify-between gap-2 px-1">
+                <!-- User profile chip -->
+                <div onclick="switchTab('profile')"
+                    class="flex items-center gap-2.5 cursor-pointer bg-white/5 border border-white/10 hover:bg-white/10 py-1.5 px-3 rounded-2xl transition-all active:scale-95">
+                    <div
+                        class="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-[11px] shadow-sm">
+                        <span id="sidebar-user-avatar">A</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span id="sidebar-user-name" class="text-[11px] font-bold text-white leading-none">Admin</span>
+                        <span id="sidebar-user-role"
+                            class="text-[9px] text-zinc-400 font-semibold tracking-wider uppercase mt-0.5">Administrator</span>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleDarkMode()"
+                    class="text-zinc-300 hover:bg-white/5 hover:text-white p-2 rounded-2xl active:scale-90 duration-150 flex items-center justify-center border border-white/10 shadow-sm">
+                    <span id="sidebar-theme-toggle-icon" class="material-symbols-outlined text-[18px]">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Mobile Application Container Wrapper -->
     <div id="app-wrapper"
-        class="w-full max-w-[430px] h-[884px] phone-frame bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300">
+        class="w-full h-screen bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300">
 
         <!-- Phone UI elements -->
-        <div id="notch" class="phone-notch"></div>
-        <div id="home-indicator" class="phone-indicator"></div>
+        <div id="notch" class="phone-notch hidden"></div>
+        <div id="home-indicator" class="phone-indicator hidden"></div>
 
         <!-- Floating Zoom Control: lets the user scale the whole app UI
              up or down (clamped so it never gets unreadably small or
@@ -1225,7 +1489,7 @@
 
 
         <!-- APP SHELL SCENE CONTAINER -->
-        <div class="flex-1 flex flex-col overflow-hidden relative">
+        <div id="app-scene-container" class="flex-1 flex flex-col overflow-hidden relative">
 
             <!-- 1. LOADING SCREEN SCENE -->
             <div id="scene-loading"
@@ -1512,7 +1776,7 @@
                                     class="pt-md border-t border-outline-variant/40 w-full flex flex-col items-center gap-1.5">
                                     <span
                                         class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH
-                                        ©
+                                        Â©
                                         2026</span>
                                     <div class="flex gap-4">
                                         <button
@@ -1575,7 +1839,8 @@
                                     Continue
                                     <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
                                 </button>
-                                <span class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH ©
+                                <span class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH
+                                    Â©
                                     2026</span>
                             </div>
                         </div>
@@ -1623,7 +1888,8 @@
                                     Get Started
                                     <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
                                 </button>
-                                <span class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH ©
+                                <span class="text-[11px] font-bold text-on-surface-variant/60 tracking-wider">KABUTECH
+                                    Â©
                                     2026</span>
                             </div>
                         </div>
@@ -1771,7 +2037,7 @@
                                     class="material-symbols-outlined absolute left-3 text-[18px] text-gray-400">lock</span>
                                 <input id="login-password" type="password" required
                                     class="auth-input w-full rounded-2xl py-3 pl-[40px] pr-[40px] text-[14px] text-gray-800 placeholder:text-gray-300"
-                                    placeholder="••••••••">
+                                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
                                 <button type="button" onclick="togglePasswordVisibility()"
                                     class="absolute right-3 text-gray-300 hover:text-gray-500 transition-colors">
                                     <span class="material-symbols-outlined text-[18px]"
@@ -1952,7 +2218,7 @@
                             KabuTech Hiyas</h1>
                     </div>
 
-                    <!-- Persistent system mode pill — always visible on every tab -->
+                    <!-- Persistent system mode pill â€” always visible on every tab -->
                     <div id="header-mode-pill" onclick="switchTab('controls')"
                         class="flex items-center gap-1.5 px-2.5 py-1 rounded-full border cursor-pointer active:scale-95 transition-all duration-300 bg-success-green/10 border-success-green/30 text-success-green dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-400">
                         <span id="header-mode-icon" class="material-symbols-outlined text-[13px]"
@@ -2055,16 +2321,17 @@
                                         <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">
                                             Temperature</p>
                                         <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
-                                            id="sensor-temp">24.2°C</p>
+                                            id="sensor-temp">24.2Â°C</p>
                                         <canvas id="spark-temp" height="24" class="w-full mt-1 opacity-60"></canvas>
                                         <div class="sensor-detail">
                                             <div
                                                 class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
                                                 <div class="flex justify-between"><span>Optimal range</span><span
-                                                        class="font-bold text-on-surface dark:text-white">22°C –
-                                                        26°C</span></div>
+                                                        class="font-bold text-on-surface dark:text-white">22Â°C â€“
+                                                        26Â°C</span></div>
                                                 <div class="flex justify-between"><span>Sensor</span><span
-                                                        class="font-bold text-on-surface dark:text-white">DHT22 – Sector
+                                                        class="font-bold text-on-surface dark:text-white">DHT22 â€“
+                                                        Sector
                                                         A</span></div>
                                                 <div class="flex justify-between"><span>Status</span><span
                                                         id="sensor-temp-status"
@@ -2104,10 +2371,11 @@
                                             <div
                                                 class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
                                                 <div class="flex justify-between"><span>Optimal range</span><span
-                                                        class="font-bold text-on-surface dark:text-white">65% –
+                                                        class="font-bold text-on-surface dark:text-white">65% â€“
                                                         80%</span></div>
                                                 <div class="flex justify-between"><span>Sensor</span><span
-                                                        class="font-bold text-on-surface dark:text-white">DHT22 – Sector
+                                                        class="font-bold text-on-surface dark:text-white">DHT22 â€“
+                                                        Sector
                                                         A</span></div>
                                                 <div class="flex justify-between"><span>Status</span><span
                                                         id="sensor-humidity-status"
@@ -2140,16 +2408,16 @@
                                         <p class="text-caption text-on-surface-variant dark:text-zinc-400 mb-0.5">Light
                                             Intensity</p>
                                         <p class="text-headline-md text-brand-deep dark:text-primary-fixed font-extrabold"
-                                            id="sensor-light">420 µmol</p>
+                                            id="sensor-light">420 Âµmol</p>
                                         <canvas id="spark-light" height="24" class="w-full mt-1 opacity-60"></canvas>
                                         <div class="sensor-detail">
                                             <div
                                                 class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
                                                 <div class="flex justify-between"><span>Optimal range</span><span
-                                                        class="font-bold text-on-surface dark:text-white">300 – 500
-                                                        µmol</span></div>
+                                                        class="font-bold text-on-surface dark:text-white">300 â€“ 500
+                                                        Âµmol</span></div>
                                                 <div class="flex justify-between"><span>Sensor</span><span
-                                                        class="font-bold text-on-surface dark:text-white">LUX-100 –
+                                                        class="font-bold text-on-surface dark:text-white">LUX-100 â€“
                                                         Sector A</span></div>
                                                 <div class="flex justify-between"><span>Status</span><span
                                                         id="sensor-light-status"
@@ -2189,10 +2457,10 @@
                                             <div
                                                 class="border-t border-muted dark:border-zinc-800 pt-2 text-[10px] text-on-surface-variant dark:text-zinc-400 space-y-1">
                                                 <div class="flex justify-between"><span>Optimal range</span><span
-                                                        class="font-bold text-on-surface dark:text-white">400 – 800
+                                                        class="font-bold text-on-surface dark:text-white">400 â€“ 800
                                                         ppm</span></div>
                                                 <div class="flex justify-between"><span>Sensor</span><span
-                                                        class="font-bold text-on-surface dark:text-white">MH-Z19 –
+                                                        class="font-bold text-on-surface dark:text-white">MH-Z19 â€“
                                                         Sector A</span></div>
                                                 <div class="flex justify-between"><span>Status</span><span
                                                         id="sensor-co2-status"
@@ -2276,9 +2544,9 @@
                                     <span class="text-[8px] font-semibold text-slate-400 z-10 flex items-center gap-1"
                                         id="dynamic-simulation-label">
                                         <span id="sim-fans-dot" class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                        Fans •
+                                        Fans â€¢
                                         <span id="sim-misters-dot" class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                                        Mister •
+                                        Mister â€¢
                                         <span id="sim-lights-dot" class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                                         Grow
                                         Lights
@@ -2286,7 +2554,7 @@
                                 </div>
                             </div>
 
-                            <!-- Today's Shift Summary (staff only) — fills the space left by the
+                            <!-- Today's Shift Summary (staff only) â€” fills the space left by the
                                  Live Farm Viewing card, which staff don't have access to. Surfaces quick,
                                  useful shift-level info: devices running, reports filed today, alerts. -->
                             <div id="shift-summary-card"
@@ -2349,6 +2617,7 @@
                                     Open Live View
                                 </button>
                             </div>
+
                         </div>
 
                         <!-- TAB B: ENVIRONMENT CONTROLS -->
@@ -2394,10 +2663,10 @@
                             <span id="mode-warning-label"
                                 class="hidden text-[10px] font-bold text-warning-gold flex items-center gap-1 -mt-2 px-1">
                                 <span class="material-symbols-outlined text-[12px]">warning</span> Manual override
-                                active — you control all devices
+                                active â€” you control all devices
                             </span>
 
-                            <!-- Section label — always visible -->
+                            <!-- Section label â€” always visible -->
                             <div class="flex items-center justify-between px-1">
                                 <p
                                     class="text-[10px] font-extrabold uppercase tracking-widest text-on-surface-variant dark:text-zinc-500">
@@ -2426,7 +2695,7 @@
                                                 </div>
                                                 <span id="saving-dot-temp"
                                                     class="hidden text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
-                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Savingâ€¦</span>
                                             </div>
                                             <p
                                                 class="text-[9px] font-extrabold uppercase tracking-wide text-on-surface-variant dark:text-zinc-500">
@@ -2441,7 +2710,7 @@
                                                     class="text-[7px] font-bold uppercase tracking-wide text-on-surface-variant dark:text-zinc-500">Now</span>
                                                 <span
                                                     class="text-[9px] font-extrabold text-brand-deep dark:text-primary-fixed whitespace-nowrap"><span
-                                                        id="ctrl-current-temp">24.2</span>°C</span>
+                                                        id="ctrl-current-temp">24.2</span>Â°C</span>
                                             </div>
                                             <div
                                                 class="flex flex-col items-center gap-0.5 bg-primary/5 dark:bg-zinc-800 rounded-xl px-2 py-2 border border-primary/15 dark:border-zinc-700">
@@ -2449,7 +2718,7 @@
                                                     class="text-[7px] font-bold uppercase tracking-wide text-primary/60 dark:text-zinc-500">Target</span>
                                                 <span
                                                     class="text-[9px] font-extrabold text-primary dark:text-primary-fixed whitespace-nowrap"><span
-                                                        id="val-temp-setpoint">23.5</span>°C</span>
+                                                        id="val-temp-setpoint">23.5</span>Â°C</span>
                                             </div>
                                         </div>
 
@@ -2461,7 +2730,7 @@
                                                 oninput="document.getElementById('val-temp-setpoint').innerText=parseFloat(this.value).toFixed(1); updateSliderFill(this)">
                                             <div
                                                 class="flex justify-between text-[8px] text-slate-400 font-semibold mt-1">
-                                                <span>15°C</span><span>35°C</span>
+                                                <span>15Â°C</span><span>35Â°C</span>
                                             </div>
                                         </div>
 
@@ -2495,7 +2764,7 @@
                                                 </div>
                                                 <span id="saving-dot-humidity"
                                                     class="hidden text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
-                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Savingâ€¦</span>
                                             </div>
                                             <p
                                                 class="text-[9px] font-extrabold uppercase tracking-wide text-on-surface-variant dark:text-zinc-500">
@@ -2563,7 +2832,7 @@
                                                 </div>
                                                 <span id="saving-dot-light"
                                                     class="hidden text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
-                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Savingâ€¦</span>
                                             </div>
                                             <p
                                                 class="text-[9px] font-extrabold uppercase tracking-wide text-on-surface-variant dark:text-zinc-500">
@@ -2577,7 +2846,7 @@
                                                     class="text-[7px] font-bold uppercase tracking-wide text-on-surface-variant dark:text-zinc-500">Now</span>
                                                 <span
                                                     class="text-[9px] font-extrabold text-brand-deep dark:text-primary-fixed"><span
-                                                        id="ctrl-current-light">420</span>µ</span>
+                                                        id="ctrl-current-light">420</span>Âµ</span>
                                             </div>
                                             <div
                                                 class="flex flex-col items-center gap-0.5 bg-primary/5 dark:bg-zinc-800 rounded-xl px-2 py-2 border border-primary/15 dark:border-zinc-700">
@@ -2585,7 +2854,7 @@
                                                     class="text-[7px] font-bold uppercase tracking-wide text-primary/60 dark:text-zinc-500">Target</span>
                                                 <span
                                                     class="text-[9px] font-extrabold text-primary dark:text-primary-fixed"><span
-                                                        id="val-light-setpoint">500</span>µ</span>
+                                                        id="val-light-setpoint">500</span>Âµ</span>
                                             </div>
                                         </div>
 
@@ -2631,11 +2900,11 @@
                                                 </div>
                                                 <span id="saving-dot-co2"
                                                     class="hidden text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 flex items-center gap-0.5"><span
-                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Saving…</span>
+                                                        class="material-symbols-outlined text-[11px] animate-spin">progress_activity</span>Savingâ€¦</span>
                                             </div>
                                             <p
                                                 class="text-[9px] font-extrabold uppercase tracking-wide text-on-surface-variant dark:text-zinc-500">
-                                                CO₂ Level</p>
+                                                COâ‚‚ Level</p>
                                         </div>
 
                                         <div class="grid grid-cols-2 gap-1.5">
@@ -2696,7 +2965,8 @@
                                 <span
                                     class="material-symbols-outlined text-[18px] text-warning-gold shrink-0">warning</span>
                                 <p class="text-[11px] text-on-surface-variant dark:text-zinc-300 leading-relaxed">
-                                    You're on <strong class="text-warning-gold">Manual mode</strong> — you are directly
+                                    You're on <strong class="text-warning-gold">Manual mode</strong> â€” you are
+                                    directly
                                     controlling all devices.<br>
                                     <span id="manual-since-label"
                                         class="text-[10px] text-on-surface-variant dark:text-zinc-500 font-semibold"></span>
@@ -2867,7 +3137,7 @@
                                                 class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide">vs
                                                 Predicted</span>
                                             <span
-                                                class="text-[13px] font-extrabold text-secondary dark:text-emerald-400">−0.14
+                                                class="text-[13px] font-extrabold text-secondary dark:text-emerald-400">âˆ’0.14
                                                 kg</span>
                                         </div>
                                         <div class="flex flex-col gap-0.5">
@@ -3110,7 +3380,7 @@
                                                         class="text-[9px] font-bold text-secondary dark:text-emerald-400 uppercase tracking-wide">Actual</span>
                                                 </div>
                                                 <span id="ya-pin-actual"
-                                                    class="text-[20px] font-extrabold text-on-surface dark:text-white leading-none">—</span>
+                                                    class="text-[20px] font-extrabold text-on-surface dark:text-white leading-none">â€”</span>
                                             </div>
                                             <div
                                                 class="flex flex-col gap-0.5 bg-surface-container-lowest dark:bg-zinc-900 rounded-xl p-3 border border-muted dark:border-zinc-700">
@@ -3121,7 +3391,7 @@
                                                         class="text-[9px] font-bold text-primary dark:text-primary-fixed uppercase tracking-wide">Target</span>
                                                 </div>
                                                 <span id="ya-pin-predicted"
-                                                    class="text-[20px] font-extrabold text-on-surface dark:text-white leading-none">—</span>
+                                                    class="text-[20px] font-extrabold text-on-surface dark:text-white leading-none">â€”</span>
                                             </div>
                                         </div>
                                         <!-- Delta + Rank row -->
@@ -3130,18 +3400,18 @@
                                                 <span
                                                     class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide">vs
                                                     Avg</span>
-                                                <span id="ya-pin-var" class="text-[14px] font-extrabold">—</span>
+                                                <span id="ya-pin-var" class="text-[14px] font-extrabold">â€”</span>
                                             </div>
                                             <div class="flex flex-col gap-0.5">
                                                 <span
-                                                    class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide">Δ
+                                                    class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide">Î”
                                                     Pred</span>
-                                                <span id="ya-pin-delta" class="text-[14px] font-extrabold">—</span>
+                                                <span id="ya-pin-delta" class="text-[14px] font-extrabold">â€”</span>
                                             </div>
                                             <div class="flex flex-col gap-0.5">
                                                 <span
                                                     class="text-[9px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide">Rank</span>
-                                                <span id="ya-pin-vsavg" class="text-[14px] font-extrabold">—</span>
+                                                <span id="ya-pin-vsavg" class="text-[14px] font-extrabold">â€”</span>
                                             </div>
                                         </div>
                                         <!-- Mini insight bar -->
@@ -3174,7 +3444,8 @@
                                             class="material-symbols-outlined text-[14px] text-primary dark:text-primary-fixed"
                                             style="font-variation-settings:'FILL' 1">shelves</span>
                                         <span id="grow-log-batch-count"
-                                            class="text-[11px] font-bold text-on-surface dark:text-white">— racks</span>
+                                            class="text-[11px] font-bold text-on-surface dark:text-white">â€”
+                                            racks</span>
                                     </div>
                                     <div
                                         class="flex items-center gap-1.5 bg-surface-container dark:bg-zinc-800 rounded-xl px-3 py-2">
@@ -3182,7 +3453,8 @@
                                             class="material-symbols-outlined text-[14px] text-secondary dark:text-primary-fixed"
                                             style="font-variation-settings:'FILL' 1">inventory_2</span>
                                         <span id="grow-log-bag-count"
-                                            class="text-[11px] font-bold text-on-surface dark:text-white">— bags</span>
+                                            class="text-[11px] font-bold text-on-surface dark:text-white">â€”
+                                            bags</span>
                                     </div>
                                 </div>
                                 <!-- Add Rack button -->
@@ -3262,7 +3534,7 @@
                                         <p class="text-body-sm font-bold text-on-background dark:text-white">Farm Health
                                             Score</p>
                                         <p class="text-[10px] text-on-surface-variant dark:text-zinc-400"
-                                            id="health-score-breakdown">Temp • Humidity • CO2 • Alerts</p>
+                                            id="health-score-breakdown">Temp â€¢ Humidity â€¢ CO2 â€¢ Alerts</p>
                                     </div>
                                 </div>
                                 <div id="farm-health-score" class="flex items-baseline gap-0.5">
@@ -3333,7 +3605,7 @@
                                 </div>
                             </button>
 
-                            <!-- Staff Reports Inbox (admin only) — nav row -->
+                            <!-- Staff Reports Inbox (admin only) â€” nav row -->
                             <div id="more-staff-reports-widget"
                                 class="hidden bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
                                 <button onclick="openSubPage('subpage-staff-reports')"
@@ -3356,7 +3628,7 @@
                                 </button>
                             </div>
 
-                            <!-- Staff Account Management (admin only) — nav row -->
+                            <!-- Staff Account Management (admin only) â€” nav row -->
                             <div id="staff-account-mgmt-widget"
                                 class="hidden bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-2xl shadow-sm overflow-hidden">
                                 <button onclick="openSubPage('subpage-staff-accounts')"
@@ -3627,7 +3899,7 @@
                             <!-- Subtitle + Hide button row -->
                             <div class="flex items-center justify-between pl-1">
                                 <p class="text-[12px] text-white/65 font-medium">Full farm event history</p>
-                                <!-- Hide Logs button — only visible when logs are loaded -->
+                                <!-- Hide Logs button â€” only visible when logs are loaded -->
                                 <button id="btn-hide-logs" onclick="hideSystemLogs()"
                                     class="hidden text-[11px] bg-white/20 hover:bg-white/30 text-white font-bold py-1.5 px-3 rounded-full flex items-center gap-1.5 shrink-0 active:scale-95 transition-all">
                                     <span class="material-symbols-outlined text-[13px]">visibility_off</span> Hide
@@ -3727,7 +3999,7 @@
                             <!-- Filter chips -->
                             <div id="rack-detail-filter-chips" class="flex gap-1.5 flex-wrap justify-center"></div>
 
-                            <!-- Slot grid — 5 columns via CSS grid -->
+                            <!-- Slot grid â€” 5 columns via CSS grid -->
                             <div id="rack-detail-slot-grid" class="min-h-[60px]"></div>
 
                             <!-- Divider -->
@@ -3779,7 +4051,7 @@
                                     <div>
                                         <h2 class="text-[20px] font-extrabold text-white leading-tight tracking-tight">
                                             Live Farm View</h2>
-                                        <p class="text-[11px] text-zinc-400 font-medium mt-0.5">Growing Room — CAM 01
+                                        <p class="text-[11px] text-zinc-400 font-medium mt-0.5">Growing Room â€” CAM 01
                                         </p>
                                     </div>
                                 </div>
@@ -3832,7 +4104,7 @@
                                 <div class="absolute top-3 left-3 z-30 flex items-center gap-1.5 pt-8">
                                     <span
                                         class="text-[9px] font-mono font-extrabold text-white/60 tracking-widest">KabuTech
-                                        • CAM 01</span>
+                                        â€¢ CAM 01</span>
                                 </div>
 
                                 <!-- Timestamp bottom-left -->
@@ -3915,7 +4187,8 @@
                                 <h2 class="text-[20px] font-extrabold text-white leading-tight tracking-tight">Device
                                     Schedules</h2>
                             </div>
-                            <p class="text-[11px] text-white/65 font-medium pl-1">Automate your traditional routine — no
+                            <p class="text-[11px] text-white/65 font-medium pl-1">Automate your traditional routine â€”
+                                no
                                 sensors needed</p>
                             <!-- Master enable toggle in header -->
                             <div class="mt-4 flex items-center justify-between bg-white/10 rounded-2xl px-4 py-3">
@@ -3945,7 +4218,7 @@
                         <!-- Content -->
                         <div class="p-4 space-y-4">
 
-                            <!-- ── SCHEDULE NOTIFICATION FEED ── -->
+                            <!-- â”€â”€ SCHEDULE NOTIFICATION FEED â”€â”€ -->
                             <div id="sched-notifications-feed" class="space-y-1.5"></div>
 
                             <!-- Device separator -->
@@ -3956,7 +4229,7 @@
                                 <div class="flex-1 h-px bg-border-muted dark:bg-zinc-800"></div>
                             </div>
 
-                            <!-- ── MISTERS ── -->
+                            <!-- â”€â”€ MISTERS â”€â”€ -->
                             <div
                                 class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-700 rounded-2xl overflow-hidden shadow-sm">
                                 <!-- Card header with toggle -->
@@ -4072,7 +4345,7 @@
                                 <div class="flex-1 h-px bg-border-muted dark:bg-zinc-800"></div>
                             </div>
 
-                            <!-- ── FAN ── -->
+                            <!-- â”€â”€ FAN â”€â”€ -->
                             <div
                                 class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-700 rounded-2xl overflow-hidden shadow-sm">
                                 <div
@@ -4112,10 +4385,10 @@
                                         <div class="flex items-center justify-between mb-2">
                                             <p
                                                 class="text-[10px] font-extrabold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide">
-                                                Window 1 — Morning</p>
+                                                Window 1 â€” Morning</p>
                                         </div>
                                         <div class="grid grid-cols-2 gap-2">
-                                            <button onclick="openTimePicker('sched-fan-on1', 'Fan ON — Window 1')"
+                                            <button onclick="openTimePicker('sched-fan-on1', 'Fan ON â€” Window 1')"
                                                 class="sched-time-btn flex flex-col items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-600 rounded-xl py-2.5 px-3 active:scale-95 transition-all">
                                                 <span
                                                     class="text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide mb-1">ON
@@ -4125,7 +4398,7 @@
                                                     id="sched-fan-on1-display">6:00 AM</span>
                                                 <input type="hidden" id="sched-fan-on1" value="06:00">
                                             </button>
-                                            <button onclick="openTimePicker('sched-fan-off1', 'Fan OFF — Window 1')"
+                                            <button onclick="openTimePicker('sched-fan-off1', 'Fan OFF â€” Window 1')"
                                                 class="sched-time-btn flex flex-col items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-600 rounded-xl py-2.5 px-3 active:scale-95 transition-all">
                                                 <span
                                                     class="text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide mb-1">OFF
@@ -4141,9 +4414,9 @@
                                     <div>
                                         <p
                                             class="text-[10px] font-extrabold text-on-surface-variant dark:text-zinc-400 uppercase tracking-wide mb-2">
-                                            Window 2 — Afternoon</p>
+                                            Window 2 â€” Afternoon</p>
                                         <div class="grid grid-cols-2 gap-2">
-                                            <button onclick="openTimePicker('sched-fan-on2', 'Fan ON — Window 2')"
+                                            <button onclick="openTimePicker('sched-fan-on2', 'Fan ON â€” Window 2')"
                                                 class="sched-time-btn flex flex-col items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-600 rounded-xl py-2.5 px-3 active:scale-95 transition-all">
                                                 <span
                                                     class="text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide mb-1">ON
@@ -4153,7 +4426,7 @@
                                                     id="sched-fan-on2-display">2:00 PM</span>
                                                 <input type="hidden" id="sched-fan-on2" value="14:00">
                                             </button>
-                                            <button onclick="openTimePicker('sched-fan-off2', 'Fan OFF — Window 2')"
+                                            <button onclick="openTimePicker('sched-fan-off2', 'Fan OFF â€” Window 2')"
                                                 class="sched-time-btn flex flex-col items-center bg-surface-soft dark:bg-zinc-800 border border-border-muted dark:border-zinc-600 rounded-xl py-2.5 px-3 active:scale-95 transition-all">
                                                 <span
                                                     class="text-[8px] font-bold text-on-surface-variant dark:text-zinc-500 uppercase tracking-wide mb-1">OFF
@@ -4171,8 +4444,8 @@
                                         <span class="material-symbols-outlined text-[13px] text-cyan-600"
                                             style="font-variation-settings:'FILL' 1">mode_fan</span>
                                         <p class="text-[9px] text-cyan-700 dark:text-cyan-300 font-semibold">Fan:
-                                            <strong id="fan-summary-text" class="font-extrabold">6:00–8:00 AM &amp;
-                                                2:00–4:00 PM</strong> daily
+                                            <strong id="fan-summary-text" class="font-extrabold">6:00â€“8:00 AM &amp;
+                                                2:00â€“4:00 PM</strong> daily
                                         </p>
                                     </div>
                                 </div>
@@ -4187,7 +4460,7 @@
                                 <div class="flex-1 h-px bg-border-muted dark:bg-zinc-800"></div>
                             </div>
 
-                            <!-- ── LIGHTS ── -->
+                            <!-- â”€â”€ LIGHTS â”€â”€ -->
                             <div
                                 class="bg-surface-container-lowest dark:bg-zinc-900 border border-border-muted dark:border-zinc-700 rounded-2xl overflow-hidden shadow-sm">
                                 <div
@@ -4256,7 +4529,7 @@
                                         </div>
                                         <span id="lights-period-badge"
                                             class="text-[8px] font-extrabold text-yellow-700 dark:text-yellow-300 bg-yellow-100 dark:bg-yellow-900/40 px-2 py-0.5 rounded-full whitespace-nowrap">6:30
-                                            AM–7:00 PM</span>
+                                            AMâ€“7:00 PM</span>
                                     </div>
                                 </div>
                             </div>
@@ -4353,7 +4626,7 @@
 
                 <!-- CENTER FAB: lives OUTSIDE the nav so that the nav's
                      backdrop-blur-md (backdrop-filter) can never become its
-                     CSS containing block — which would cause the button to
+                     CSS containing block â€” which would cause the button to
                      shift / expand the nav bar on tap in Safari / WebKit.
                      Absolute-positioned relative to #scene-app so it stays
                      scoped to the app shell and works correctly in both the
@@ -4363,8 +4636,8 @@
                     <span id="nav-fab-icon" class="material-symbols-outlined text-[26px]">agriculture</span>
                 </button>
 
-                <!-- MOBILE BOTTOM NAVIGATION BAR: every item — including the center FAB
-                     spacer — is its own equal-width flex-1 slot in a single row. This
+                <!-- MOBILE BOTTOM NAVIGATION BAR: every item â€” including the center FAB
+                     spacer â€” is its own equal-width flex-1 slot in a single row. This
                      guarantees even spacing between ALL visible tabs: 5 slots for staff
                      (Home, Controls, [FAB], Report, More), 6 for admin (Yield AI added). -->
                 <nav
@@ -4673,7 +4946,7 @@
         </div>
     </div>
 
-    <!-- Staff Account Modal — outside app-wrapper so overflow:hidden doesn't clip it -->
+    <!-- Staff Account Modal â€” outside app-wrapper so overflow:hidden doesn't clip it -->
     <div id="modal-staff-account" onclick="if(event.target===this)closeStaffAccountModal()"
         class="fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
         style="display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
@@ -4757,7 +5030,7 @@
         </div>
     </div>
 
-    <!-- Staff Delete Confirm Modal — outside app-wrapper -->
+    <!-- Staff Delete Confirm Modal â€” outside app-wrapper -->
     <div id="modal-staff-delete" onclick="if(event.target===this)closeStaffDeleteModal()"
         class="fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
         style="display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
@@ -4786,7 +5059,7 @@
         </div>
     </div>
 
-    <!-- Reusable Confirm Modal — replaces all JS confirm() dialogs -->
+    <!-- Reusable Confirm Modal â€” replaces all JS confirm() dialogs -->
     <div id="modal-confirm" onclick="if(event.target===this)_confirmCancel()"
         class="fixed z-[200] bg-slate-900/70 backdrop-blur-sm"
         style="display:none; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
@@ -4933,7 +5206,7 @@
         }
 
         // Convenience: animate the text content of an element from 0 to target,
-        // preserving a suffix (e.g. "°C", "%", " ppm", " µmol", "/100").
+        // preserving a suffix (e.g. "Â°C", "%", " ppm", " Âµmol", "/100").
         function countUpElement(el, target, { decimals = 0, suffix = '', duration = 1000, from, key } = {}) {
             if (!el) return;
             if (from === undefined) {
@@ -5089,7 +5362,7 @@
                         const count = typeof b.bags === 'number' ? b.bags : (b.slots || 10);
                         return { id: b.id, rack: b.rack || b.variety || 'Rack', slots: count, substrate: b.substrate || 'Sawdust + Bran', setupDate: b.inocDate || b.setupDate || new Date().toISOString().substring(0, 10), bags: makeBags(count) };
                     }
-                    // Migrate: any Active bag with no harvest data and no plantedDate → Empty
+                    // Migrate: any Active bag with no harvest data and no plantedDate â†’ Empty
                     b.bags = b.bags.map(bag => {
                         if (bag.status === 'Active' && (!bag.harvestLog || bag.harvestLog.length === 0) && !bag.plantedDate) {
                             return { ...bag, status: 'Empty' };
@@ -5182,11 +5455,11 @@
             }));
         }
 
-        // ─────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         //  SCHEDULE CONFIGURATION  (Admin-only traditional-routine automation)
         //  Stores: masterEnabled, per-device enabled + params, persisted to
         //  localStorage under 'kb_schedule_config'.
-        // ─────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         const DEFAULT_SCHEDULE = {
             masterEnabled: false,
@@ -5247,7 +5520,7 @@
             const entryBadge = document.getElementById('schedule-entry-badge');
             const entryStatus = document.getElementById('schedule-entry-status');
             if (entryBadge) entryBadge.classList.toggle('hidden', !scheduleConfig.masterEnabled);
-            if (entryStatus) entryStatus.textContent = scheduleConfig.masterEnabled ? 'Scheduling active — tap to edit' : 'Tap to configure timers & schedules';
+            if (entryStatus) entryStatus.textContent = scheduleConfig.masterEnabled ? 'Scheduling active â€” tap to edit' : 'Tap to configure timers & schedules';
             const masterSub = document.getElementById('schedule-master-sub');
             if (masterSub) masterSub.textContent = scheduleConfig.masterEnabled ? 'Scheduling is active' : 'Scheduling is off';
 
@@ -5319,15 +5592,15 @@
             const entryBadge = document.getElementById('schedule-entry-badge');
             const entryStatus = document.getElementById('schedule-entry-status');
             if (entryBadge) { entryBadge.classList.toggle('hidden', !enabled); }
-            if (entryStatus) entryStatus.textContent = enabled ? 'Scheduling active — tap to edit' : 'Tap to configure timers & schedules';
+            if (entryStatus) entryStatus.textContent = enabled ? 'Scheduling active â€” tap to edit' : 'Tap to configure timers & schedules';
             const masterSub = document.getElementById('schedule-master-sub');
             if (masterSub) masterSub.textContent = enabled ? 'Scheduling is active' : 'Scheduling is off';
             try { localStorage.setItem('kb_schedule_config', JSON.stringify(scheduleConfig)); } catch (e) { }
             addLog(`Scheduled configuration ${enabled ? 'enabled' : 'disabled'}.`, enabled ? 'success' : 'info');
             pushSchedNotification(
                 enabled
-                    ? '<strong>Scheduling enabled</strong> — devices will follow their set timers'
-                    : '<strong>Scheduling disabled</strong> — timers are paused',
+                    ? '<strong>Scheduling enabled</strong> â€” devices will follow their set timers'
+                    : '<strong>Scheduling disabled</strong> â€” timers are paused',
                 enabled ? 'success' : 'warning'
             );
             syncDeviceButtons();
@@ -5379,7 +5652,7 @@
             pushSchedNotification(`<strong>${deviceLabel}</strong> schedule turned <strong>${enabled ? 'ON' : 'OFF'}</strong>`, enabled ? 'success' : 'warning');
         }
 
-        // ── Summary text helpers ──────────────────────────────────────────
+        // â”€â”€ Summary text helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function updateMisterSummary() {
             const dur = scheduleConfig.misters.duration || 30;
             const intv = scheduleConfig.misters.interval || 2;
@@ -5423,7 +5696,7 @@
             };
             const sc = scheduleConfig.fan;
             const el = document.getElementById('fan-summary-text');
-            if (el) el.textContent = `${fmt(sc.on1)}–${fmt(sc.off1)} & ${fmt(sc.on2)}–${fmt(sc.off2)}`;
+            if (el) el.textContent = `${fmt(sc.on1)}â€“${fmt(sc.off1)} & ${fmt(sc.on2)}â€“${fmt(sc.off2)}`;
         }
 
         function updateLightsSummary() {
@@ -5443,16 +5716,16 @@
             const periodEl = document.getElementById('lights-photoperiod');
             const badgeEl = document.getElementById('lights-period-badge');
             if (periodEl) periodEl.textContent = period;
-            if (badgeEl) badgeEl.textContent = `${fmt(sc.on)} – ${fmt(sc.off)}`;
+            if (badgeEl) badgeEl.textContent = `${fmt(sc.on)} â€“ ${fmt(sc.off)}`;
         }
 
-        // ── Toast ─────────────────────────────────────────────────────────
+        // â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         let _schedToastTimer = null;
         function showScheduleSavedToast() {
             pushSchedNotification('Schedule <strong>saved</strong>', 'saved');
         }
 
-        // ── Time Picker ───────────────────────────────────────────────────
+        // â”€â”€ Time Picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         let _tpTargetId = null; // hidden input id to write back to
         let _tpHour = 6, _tpMin = 0, _tpAmpm = 'AM';
 
@@ -5519,7 +5792,7 @@
             closeTimePicker();
         }
 
-        // ── Schedule tick — called inside runSimulationTick every 3s ──────
+        // â”€â”€ Schedule tick â€” called inside runSimulationTick every 3s â”€â”€â”€â”€â”€â”€
         function runScheduleTick() {
             if (!scheduleConfig.masterEnabled) return;
 
@@ -5527,7 +5800,7 @@
             const hhmm = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
             const nowMin = now.getHours() * 60 + now.getMinutes();
 
-            // ── Lights schedule ───────────────────────────────────────────
+            // â”€â”€ Lights schedule â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             if (scheduleConfig.lights.enabled) {
                 const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
                 const onMin = toMin(scheduleConfig.lights.on || '06:30');
@@ -5544,7 +5817,7 @@
                 }
             }
 
-            // ── Fan schedule ──────────────────────────────────────────────
+            // â”€â”€ Fan schedule â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             if (scheduleConfig.fan.enabled) {
                 const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
                 const inWindow = (onT, offT) => {
@@ -5564,7 +5837,7 @@
                 }
             }
 
-            // ── Misters schedule (interval + duration) ────────────────────
+            // â”€â”€ Misters schedule (interval + duration) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             if (scheduleConfig.misters.enabled) {
                 const intervalHours = scheduleConfig.misters.interval || 2; // hours
                 const intervalMinutes = intervalHours * 60;
@@ -5670,8 +5943,8 @@
                 void activeTabEl.offsetWidth;
                 activeTabEl.classList.add('tab-animate-in');
 
-                // Diagnostics is now a sub-page of More — highlight the More icon instead
-                // grow-log is accessed via the FAB — highlight the FAB label instead
+                // Diagnostics is now a sub-page of More â€” highlight the More icon instead
+                // grow-log is accessed via the FAB â€” highlight the FAB label instead
                 const navTargetId = (tabId === 'diagnostics') ? 'profile' : tabId;
                 if (tabId === 'grow-log') {
                     // Highlight the center FAB label for grow-log tab
@@ -5747,34 +6020,12 @@
             }
         }
 
-        // Phone Frame Toggle Logic
-        function togglePhoneFrame() {
-            const wrapper = document.getElementById('app-wrapper');
-            const toggleText = document.getElementById('frame-toggle-text');
-            const notch = document.getElementById('notch');
-            const ind = document.getElementById('home-indicator');
-
-            if (state.isPhoneFrame) {
-                wrapper.className = "w-screen h-screen bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300";
-                notch.classList.add('hidden');
-                ind.classList.add('hidden');
-                toggleText.innerText = "Phone Frame View";
-                state.isPhoneFrame = false;
-            } else {
-                wrapper.className = "w-full max-w-[430px] h-[884px] phone-frame bg-app-bg dark:bg-zinc-950 overflow-hidden flex flex-col transition-all duration-300";
-                notch.classList.remove('hidden');
-                ind.classList.remove('hidden');
-                toggleText.innerText = "Full Screen View";
-                state.isPhoneFrame = true;
-            }
-        }
-
         // Dark Mode Toggle
         function toggleDarkMode() {
             const html = document.documentElement;
             const isDark = html.classList.contains('dark');
 
-            // Swap theme class instantly — no CSS transition, avoids layout/paint lag
+            // Swap theme class instantly â€” no CSS transition, avoids layout/paint lag
             if (isDark) {
                 html.classList.remove('dark');
                 state.theme = 'light';
@@ -6299,7 +6550,7 @@
                 renderStaffReports();
                 renderStaffAccountsList();
 
-                // Always land on dashboard — switchTab triggers the
+                // Always land on dashboard â€” switchTab triggers the
                 // sensor count-up-from-0 intro animation automatically
                 switchTab('home');
 
@@ -6335,7 +6586,7 @@
         function showToast(msg, type = 'success') {
             // Queue the toast instead of showing it immediately, so that
             // flooding (rapid repeated actions) doesn't stack many toasts
-            // at once — they play one at a time.
+            // at once â€” they play one at a time.
             toastQueue.push({ msg, type });
             processToastQueue();
         }
@@ -6405,14 +6656,14 @@
                 }
             });
 
-            // Auto-dismiss — shorter if more toasts are queued
+            // Auto-dismiss â€” shorter if more toasts are queued
             const displayTime = toastQueue.length > 0 ? 900 : 2500;
             setTimeout(dismiss, displayTime);
         }
 
         // --- 7. SENSOR SIMULATION ENGINE ---
 
-        // Demo drift cycle: each sensor cycles normal → warning → critical → recovery
+        // Demo drift cycle: each sensor cycles normal â†’ warning â†’ critical â†’ recovery
         // Tick interval: 3s. Phase length: 10 ticks = 30s per phase, full cycle = 120s
         // Each sensor is staggered so they don't all change at the same time
         // Drift overrides device physics while active so the color change is actually visible
@@ -6459,7 +6710,7 @@
             const lightPhase = getDriftPhase(7);  // staggered ~21s
             const co2Phase = getDriftPhase(20); // staggered ~60s
 
-            // Apply drift — overrides device physics so color changes are visible
+            // Apply drift â€” overrides device physics so color changes are visible
             if (!state.anomalies.overheat) {
                 state.currentTemp = applyDrift(state.currentTemp, DRIFT_TARGETS.temp[tempPhase], DRIFT_SPEEDS.temp);
             }
@@ -6500,19 +6751,19 @@
             state.currentCO2 = Math.max(300, Math.min(2000, state.currentCO2));
             state.currentLight = Math.max(0, Math.min(1000, state.currentLight));
 
-            // AUTOMATED ENVIRONMENT CONTROL LOOP — suspended; drift cycle drives simulation
+            // AUTOMATED ENVIRONMENT CONTROL LOOP â€” suspended; drift cycle drives simulation
             if (false) {
                 let autoLogged = false;
                 // Temperature control
                 if (state.currentTemp > state.tempSetpoint + 0.5) {
                     if (!state.deviceStates.fans) {
                         state.deviceStates.fans = true;
-                        addLog(`Auto Mode triggered Circulation Fans ON. (Temp: ${state.currentTemp.toFixed(1)}°C, Target: ${state.tempSetpoint}°C)`, 'success');
+                        addLog(`Auto Mode triggered Circulation Fans ON. (Temp: ${state.currentTemp.toFixed(1)}Â°C, Target: ${state.tempSetpoint}Â°C)`, 'success');
                     }
                 } else if (state.currentTemp <= state.tempSetpoint) {
                     if (state.deviceStates.fans) {
                         state.deviceStates.fans = false;
-                        addLog(`Auto Mode triggered Circulation Fans OFF. (Temp: ${state.currentTemp.toFixed(1)}°C reached setpoint)`, 'success');
+                        addLog(`Auto Mode triggered Circulation Fans OFF. (Temp: ${state.currentTemp.toFixed(1)}Â°C reached setpoint)`, 'success');
                     }
                 }
 
@@ -6539,7 +6790,7 @@
             updateSystemStatusMsg();
         }
 
-        // Set sensor values instantly (no animation) — used before the dashboard
+        // Set sensor values instantly (no animation) â€” used before the dashboard
         // is visible, so the count-up animation in updateSensorDOM() has a
         // clean "from 0" start once the user actually sees the dashboard.
         function setSensorDOMStatic() {
@@ -6547,9 +6798,9 @@
             const h = document.getElementById('sensor-humidity');
             const l = document.getElementById('sensor-light');
             const c = document.getElementById('sensor-co2');
-            if (t) t.innerText = `${state.currentTemp.toFixed(1)}°C`;
+            if (t) t.innerText = `${state.currentTemp.toFixed(1)}Â°C`;
             if (h) h.innerText = `${state.currentHumidity.toFixed(0)}%`;
-            if (l) l.innerText = `${state.currentLight.toFixed(0)} µmol`;
+            if (l) l.innerText = `${state.currentLight.toFixed(0)} Âµmol`;
             if (c) c.innerText = `${state.currentCO2} ppm`;
             const ct = document.getElementById('ctrl-current-temp');
             const ch = document.getElementById('ctrl-current-humidity');
@@ -6573,9 +6824,9 @@
                 light: state.currentLight,
                 co2: state.currentCO2
             };
-            countUpElement(document.getElementById('sensor-temp'), targets.temp, { decimals: 1, suffix: '°C', duration, from: 0 });
+            countUpElement(document.getElementById('sensor-temp'), targets.temp, { decimals: 1, suffix: 'Â°C', duration, from: 0 });
             countUpElement(document.getElementById('sensor-humidity'), targets.humidity, { decimals: 0, suffix: '%', duration, from: 0 });
-            countUpElement(document.getElementById('sensor-light'), targets.light, { decimals: 0, suffix: ' µmol', duration, from: 0 });
+            countUpElement(document.getElementById('sensor-light'), targets.light, { decimals: 0, suffix: ' Âµmol', duration, from: 0 });
             countUpElement(document.getElementById('sensor-co2'), targets.co2, { decimals: 0, suffix: ' ppm', duration, from: 0 });
 
             countUpElement(document.getElementById('ctrl-current-temp'), targets.temp, { decimals: 1, duration, from: 0, key: 'ctrl-current-temp' });
@@ -6610,15 +6861,15 @@
             const introDuration = playIntro ? 2200 : 600;
             const animFrom = playIntro ? { temp: 0, humidity: 0, light: 0, co2: 0 } : prevReadings;
 
-            countUpElement(document.getElementById('sensor-temp'), state.currentTemp, { decimals: 1, suffix: '°C', duration: introDuration, from: animFrom.temp });
+            countUpElement(document.getElementById('sensor-temp'), state.currentTemp, { decimals: 1, suffix: 'Â°C', duration: introDuration, from: animFrom.temp });
             countUpElement(document.getElementById('sensor-humidity'), state.currentHumidity, { decimals: 0, suffix: '%', duration: introDuration, from: animFrom.humidity });
-            countUpElement(document.getElementById('sensor-light'), state.currentLight, { decimals: 0, suffix: ' µmol', duration: introDuration, from: animFrom.light });
+            countUpElement(document.getElementById('sensor-light'), state.currentLight, { decimals: 0, suffix: ' Âµmol', duration: introDuration, from: animFrom.light });
             countUpElement(document.getElementById('sensor-co2'), state.currentCO2, { decimals: 0, suffix: ' ppm', duration: introDuration, from: animFrom.co2 });
 
             // Update live trend badges
-            document.getElementById('temp-trend').outerHTML = getTrendHTML(state.currentTemp, prevReadings.temp, '°C', false).replace('<span class="flex', '<span id="temp-trend" class="flex');
+            document.getElementById('temp-trend').outerHTML = getTrendHTML(state.currentTemp, prevReadings.temp, 'Â°C', false).replace('<span class="flex', '<span id="temp-trend" class="flex');
             document.getElementById('humidity-trend').outerHTML = getTrendHTML(state.currentHumidity, prevReadings.humidity, '%', false).replace('<span class="flex', '<span id="humidity-trend" class="flex');
-            document.getElementById('light-trend').outerHTML = getTrendHTML(state.currentLight, prevReadings.light, 'µmol', false).replace('<span class="flex', '<span id="light-trend" class="flex');
+            document.getElementById('light-trend').outerHTML = getTrendHTML(state.currentLight, prevReadings.light, 'Âµmol', false).replace('<span class="flex', '<span id="light-trend" class="flex');
 
             // Controls page live readings
             countUpElement(document.getElementById('ctrl-current-temp'), state.currentTemp, { decimals: 1, duration: introDuration, from: animFrom.temp, key: 'ctrl-current-temp' });
@@ -6661,14 +6912,14 @@
                 if (wasExpanded) card.classList.add('expanded');
             }
 
-            // Snap displayed values immediately — no animation lag so color always matches number
+            // Snap displayed values immediately â€” no animation lag so color always matches number
             const tempEl = document.getElementById('sensor-temp');
             const humEl = document.getElementById('sensor-humidity');
             const lightEl = document.getElementById('sensor-light');
             const co2El = document.getElementById('sensor-co2');
-            if (tempEl) tempEl.innerText = `${state.currentTemp.toFixed(1)}°C`;
+            if (tempEl) tempEl.innerText = `${state.currentTemp.toFixed(1)}Â°C`;
             if (humEl) humEl.innerText = `${Math.round(state.currentHumidity)}%`;
-            if (lightEl) lightEl.innerText = `${Math.round(state.currentLight)} µmol`;
+            if (lightEl) lightEl.innerText = `${Math.round(state.currentLight)} Âµmol`;
             if (co2El) co2El.innerText = `${Math.round(state.currentCO2)} ppm`;
 
             // Also snap controls page values
@@ -6717,7 +6968,7 @@
             if (!el) return;
             const activeAlerts = state.alerts.filter(a => !a.acknowledged);
             if (activeAlerts.length > 0) {
-                el.innerText = `⚠ ${activeAlerts.length} active alert${activeAlerts.length > 1 ? 's' : ''}. Review alerts tab.`;
+                el.innerText = `âš  ${activeAlerts.length} active alert${activeAlerts.length > 1 ? 's' : ''}. Review alerts tab.`;
                 el.className = 'text-body-sm text-error-red dark:text-red-400 font-semibold transition-colors duration-500';
             } else if (state.deviceStates.misters && !state.anomalies.misterJammed) {
                 el.innerText = 'Misting system active. Humidity rising.';
@@ -6751,20 +7002,20 @@
             const anySimulationActive = state.anomalies.co2Spike || state.anomalies.overheat || state.anomalies.misterJammed;
 
             if (anySimulationActive) {
-                // CO2 alert — only during co2Spike simulation
+                // CO2 alert â€” only during co2Spike simulation
                 if (state.anomalies.co2Spike && state.currentCO2 > 1200 && canFire('CO2 Levels High')) {
                     alertCooldowns['CO2 Levels High'] = now;
                     triggerSystemAlert('CO2 Levels High', `CO2 level reached ${Math.round(state.currentCO2)} ppm in Sector B. Ventilation triggered.`, 'warning');
                 }
-                // Humidity alert — only during misterJammed simulation
+                // Humidity alert â€” only during misterJammed simulation
                 if (state.anomalies.misterJammed && state.currentHumidity < 45 && canFire('Critical Low Humidity')) {
                     alertCooldowns['Critical Low Humidity'] = now;
                     triggerSystemAlert('Critical Low Humidity', `Humidity dropped to ${Math.round(state.currentHumidity)}%. Crop growth impaired!`, 'critical');
                 }
-                // Temp alert — only during overheat simulation
+                // Temp alert â€” only during overheat simulation
                 if (state.anomalies.overheat && state.currentTemp > 32 && canFire('High Temperature Alarm')) {
                     alertCooldowns['High Temperature Alarm'] = now;
-                    triggerSystemAlert('High Temperature Alarm', `Crop temperature spiked to ${state.currentTemp.toFixed(1)}°C. Cooldown fans enabled.`, 'critical');
+                    triggerSystemAlert('High Temperature Alarm', `Crop temperature spiked to ${state.currentTemp.toFixed(1)}Â°C. Cooldown fans enabled.`, 'critical');
                 }
             }
 
@@ -6985,7 +7236,7 @@
             }, 800);
         }
 
-        // ── Notification Feed (Controls tab top banner) ────────────────────
+        // â”€â”€ Notification Feed (Controls tab top banner) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const NOTIF_ICONS = { info: 'info', success: 'check_circle', warning: 'warning', error: 'error' };
         // Inline styles used so no Tailwind purge issues
         const NOTIF_STYLES = {
@@ -7025,8 +7276,8 @@
             _debouncedSetpoint('temp', () => {
                 state.tempSetpoint = parseFloat(val);
                 saveSetpoints();
-                showToast(`Temperature target set to ${state.tempSetpoint.toFixed(1)}°C`, 'info');
-                addLog(`Temperature setpoint changed to ${state.tempSetpoint.toFixed(1)}°C.`, 'info');
+                showToast(`Temperature target set to ${state.tempSetpoint.toFixed(1)}Â°C`, 'info');
+                addLog(`Temperature setpoint changed to ${state.tempSetpoint.toFixed(1)}Â°C.`, 'info');
             });
         }
 
@@ -7045,7 +7296,7 @@
             _debouncedSetpoint('light', () => {
                 state.lightSetpoint = parseInt(val);
                 saveSetpoints();
-                showToast(`Light target set to ${state.lightSetpoint} µmol`, 'info');
+                showToast(`Light target set to ${state.lightSetpoint} Âµmol`, 'info');
             });
         }
 
@@ -7071,7 +7322,7 @@
             state.deviceStates[device] = !state.deviceStates[device];
 
             // Ventilation Fan (Temperature) and Ventilation Fan (CO2) are
-            // physically the same fan — keep them in sync.
+            // physically the same fan â€” keep them in sync.
             if (device === 'fans' || device === 'ventFan') {
                 const linked = device === 'fans' ? 'ventFan' : 'fans';
                 state.deviceStates[linked] = state.deviceStates[device];
@@ -7118,7 +7369,7 @@
                 if (!isManual) {
                     // Auto mode: always grey, never show green is-on state
                     btn.classList.add('border-slate-200', 'dark:border-zinc-700', 'bg-slate-200', 'dark:bg-zinc-700', 'opacity-50', 'cursor-not-allowed');
-                    // do NOT add is-on — button stays grey even if device is running
+                    // do NOT add is-on â€” button stays grey even if device is running
                 } else {
                     btn.classList.add('border-slate-200', 'dark:border-zinc-700', 'bg-slate-200', 'dark:bg-zinc-700');
                     btn.classList.toggle('is-on', on);
@@ -7325,7 +7576,7 @@
 
         // ===================== YIELD ANALYTICS ENGINE =====================
         // Data: monthly yield data (actual kg, predicted kg) for the past 12 months
-        // Indexed Jan=0 … Dec=11. Current month = May 2025 (index 4).
+        // Indexed Jan=0 â€¦ Dec=11. Current month = May 2025 (index 4).
         const YA_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const YA_DATA = {
             actual: [1.82, 1.95, 2.08, 2.20, 2.31, null, null, null, null, null, null, null],
@@ -7336,9 +7587,9 @@
 
         // Period definitions: [startMonthIdx, endMonthIdx (inclusive)]
         const YA_PERIODS = {
-            monthly: { label: 'Monthly (Jan–May)', start: 0, end: 4 },
-            semi: { label: 'Semi-Annual (Jan–Jun)', start: 0, end: 5 },
-            annual: { label: 'Annual (Jan–Dec)', start: 0, end: 11 }
+            monthly: { label: 'Monthly (Janâ€“May)', start: 0, end: 4 },
+            semi: { label: 'Semi-Annual (Janâ€“Jun)', start: 0, end: 5 },
+            annual: { label: 'Annual (Janâ€“Dec)', start: 0, end: 11 }
         };
 
         let _yaCurPeriod = 'monthly';
@@ -7390,7 +7641,7 @@
             const chartY0 = 10, chartY1 = 90;
             const chartW = chartX1 - chartX0;
 
-            // Dynamic max — consider both actual and predicted
+            // Dynamic max â€” consider both actual and predicted
             const allVals = months.flatMap(m => [m.actual || 0, m.predicted || 0]).filter(Boolean);
             const rawMax = Math.max(...allVals, 1);
             const maxVal = Math.ceil(rawMax / 0.5) * 0.5 + 0.5;
@@ -7425,7 +7676,7 @@
                 const predXc = gx - singleBarW * 0.5 - 0.5;
                 const actXc = gx + singleBarW * 0.5 + 0.5;
 
-                // ── Predicted bar (outline style with fill) ──
+                // â”€â”€ Predicted bar (outline style with fill) â”€â”€
                 if (m.predicted !== null) {
                     const py = scaleY(m.predicted);
                     const ph = chartY1 - py;
@@ -7466,7 +7717,7 @@
                     }
                 }
 
-                // ── Actual bar (solid fill) ──
+                // â”€â”€ Actual bar (solid fill) â”€â”€
                 if (m.actual !== null) {
                     const ay = scaleY(m.actual);
                     const ah = chartY1 - ay;
@@ -7505,7 +7756,7 @@
                         barsG.appendChild(avl);
                     }
                 } else {
-                    // No actual data — placeholder outline at actual bar position
+                    // No actual data â€” placeholder outline at actual bar position
                     const emptyRect = document.createElementNS(ns, 'rect');
                     emptyRect.setAttribute('x', actXc - singleBarW / 2);
                     emptyRect.setAttribute('y', chartY0);
@@ -7533,7 +7784,7 @@
                 barsG.appendChild(xLabel);
             });
 
-            // ── Actual KPI strip ──
+            // â”€â”€ Actual KPI strip â”€â”€
             const actualMonths = months.filter(m => m.actual !== null);
             const total = actualMonths.reduce((s, m) => s + m.actual, 0);
             const avg = actualMonths.length ? total / actualMonths.length : 0;
@@ -7542,7 +7793,7 @@
             const kpiAvg = document.getElementById('ya-kpi-avg');
             const kpiPeak = document.getElementById('ya-kpi-peak');
 
-            // ── Predicted KPI strip ──
+            // â”€â”€ Predicted KPI strip â”€â”€
             const predMonths = months.filter(m => m.predicted !== null);
             const predTotal = predMonths.reduce((s, m) => s + m.predicted, 0);
             const predAvg = predMonths.length ? predTotal / predMonths.length : 0;
@@ -7599,11 +7850,11 @@
             for (let i = start; i <= end; i++) { if (YA_DATA.actual[i] !== null) actualInPeriod.push(YA_DATA.actual[i]); }
             const periodAvg = actualInPeriod.length ? actualInPeriod.reduce((a, b) => a + b, 0) / actualInPeriod.length : 0;
 
-            document.getElementById('ya-pin-title').textContent = `${m.label} ${YA_YEAR} · Detail`;
+            document.getElementById('ya-pin-title').textContent = `${m.label} ${YA_YEAR} Â· Detail`;
 
             // Predicted value
             const predEl = document.getElementById('ya-pin-predicted');
-            if (predEl) predEl.textContent = m.predicted !== null ? m.predicted.toFixed(2) + ' kg' : '—';
+            if (predEl) predEl.textContent = m.predicted !== null ? m.predicted.toFixed(2) + ' kg' : 'â€”';
 
             if (m.actual !== null) {
                 const vsAvg = m.actual - periodAvg;
@@ -7620,7 +7871,7 @@
                     deltaEl.textContent = (delta >= 0 ? '+' : '') + delta.toFixed(2) + ' kg';
                     deltaEl.className = `text-[13px] font-extrabold ${delta >= 0 ? 'text-secondary dark:text-emerald-400' : 'text-error dark:text-red-400'}`;
                 } else if (deltaEl) {
-                    deltaEl.textContent = '—';
+                    deltaEl.textContent = 'â€”';
                     deltaEl.className = 'text-[13px] font-extrabold text-on-surface-variant dark:text-zinc-400';
                 }
 
@@ -7631,24 +7882,24 @@
                 vsAvgEl.className = 'text-[13px] font-extrabold text-on-surface dark:text-white';
 
                 const insights = [];
-                if (vsAvg > 0.1) insights.push('Above-average month — great growing conditions.');
-                else if (vsAvg < -0.1) insights.push('Below average — consider reviewing humidity or temp logs.');
+                if (vsAvg > 0.1) insights.push('Above-average month â€” great growing conditions.');
+                else if (vsAvg < -0.1) insights.push('Below average â€” consider reviewing humidity or temp logs.');
                 else insights.push('Close to the period average. Consistent performance.');
                 if (rank === 1) insights.push('Best month in this period!');
                 if (m.predicted !== null) {
                     const delta = m.actual - m.predicted;
                     if (Math.abs(delta) < 0.05) insights.push('AI prediction was highly accurate this month.');
-                    else if (delta > 0) insights.push('Outperformed AI prediction — excellent batch!');
-                    else insights.push('Fell short of prediction — check CO₂ or misting logs.');
+                    else if (delta > 0) insights.push('Outperformed AI prediction â€” excellent batch!');
+                    else insights.push('Fell short of prediction â€” check COâ‚‚ or misting logs.');
                 }
                 document.getElementById('ya-pin-insight').textContent = insights.join(' ');
             } else {
                 document.getElementById('ya-pin-actual').textContent = 'No data yet';
-                document.getElementById('ya-pin-var').textContent = '—';
+                document.getElementById('ya-pin-var').textContent = 'â€”';
                 document.getElementById('ya-pin-var').className = 'text-[13px] font-extrabold text-on-surface-variant dark:text-zinc-400';
                 const deltaEl = document.getElementById('ya-pin-delta');
-                if (deltaEl) { deltaEl.textContent = '—'; deltaEl.className = 'text-[13px] font-extrabold text-on-surface-variant dark:text-zinc-400'; }
-                document.getElementById('ya-pin-vsavg').textContent = '—';
+                if (deltaEl) { deltaEl.textContent = 'â€”'; deltaEl.className = 'text-[13px] font-extrabold text-on-surface-variant dark:text-zinc-400'; }
+                document.getElementById('ya-pin-vsavg').textContent = 'â€”';
                 document.getElementById('ya-pin-vsavg').className = 'text-[13px] font-extrabold text-on-surface-variant dark:text-zinc-400';
                 document.getElementById('ya-pin-insight').textContent = m.predicted !== null
                     ? `AI predicts ${m.predicted.toFixed(2)} kg for this month. No actual harvest recorded yet.`
@@ -7751,7 +8002,7 @@
                             </div>
                             <div class="min-w-0">
                                 <p class="text-[15px] font-extrabold text-on-background dark:text-white leading-tight">${rack.rack}</p>
-                                <p class="text-[11px] ${contaminated > 0 ? 'text-red-500 dark:text-red-400 font-semibold' : 'text-on-surface-variant dark:text-zinc-300'} leading-tight">${contaminated > 0 ? `⚠ ${contaminated} contaminated · ` : ''}${rack.substrate} · ${bags.length} slots</p>
+                                <p class="text-[11px] ${contaminated > 0 ? 'text-red-500 dark:text-red-400 font-semibold' : 'text-on-surface-variant dark:text-zinc-300'} leading-tight">${contaminated > 0 ? `âš  ${contaminated} contaminated Â· ` : ''}${rack.substrate} Â· ${bags.length} slots</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-1.5 shrink-0">
@@ -7763,15 +8014,15 @@
                     <!-- Stats row -->
                     <div class="flex items-center gap-3 flex-wrap text-[11px] text-on-surface-variant dark:text-zinc-300 bg-surface-soft dark:bg-white/5 rounded-xl px-4 py-2.5">
                         <span><span class="font-bold text-on-background dark:text-white">${activeBags}</span> active</span>
-                        <span class="text-slate-300 dark:text-zinc-500">·</span>
+                        <span class="text-slate-300 dark:text-zinc-500">Â·</span>
                         <span><span class="font-bold text-on-background dark:text-white">${replaced}</span> replaced</span>
-                        ${contaminated > 0 ? `<span class="text-slate-300 dark:text-zinc-500">·</span><span class="font-bold text-error-red">${contaminated} contaminated</span>` : ''}
-                        <span class="text-slate-300 dark:text-zinc-500">·</span>
+                        ${contaminated > 0 ? `<span class="text-slate-300 dark:text-zinc-500">Â·</span><span class="font-bold text-error-red">${contaminated} contaminated</span>` : ''}
+                        <span class="text-slate-300 dark:text-zinc-500">Â·</span>
                         <span class="font-bold text-success-green dark:text-emerald-400">${totalG}g yield</span>
                     </div>
 
                     ${isAdmin ? `
-                    <!-- Admin actions row — left: setup info, right: edit/delete -->
+                    <!-- Admin actions row â€” left: setup info, right: edit/delete -->
                     <div class="flex items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5 text-[11px] text-on-surface-variant dark:text-zinc-400">
                             <span class="material-symbols-outlined text-[14px]">calendar_today</span>
@@ -7796,7 +8047,7 @@
 
                 dragHandle.addEventListener('click', e => e.stopPropagation());
 
-                // Click anywhere on the card (except drag handle) → open rack detail subpage
+                // Click anywhere on the card (except drag handle) â†’ open rack detail subpage
                 // Use pointerdown/pointerup with movement threshold to distinguish taps from scrolls
                 let _cardPointerStart = null;
                 card.addEventListener('pointerdown', (e) => {
@@ -7811,7 +8062,7 @@
                     const dx = Math.abs(e.clientX - _cardPointerStart.x);
                     const dy = Math.abs(e.clientY - _cardPointerStart.y);
                     _cardPointerStart = null;
-                    if (dx > 8 || dy > 10) return; // moved too much → was a scroll, not a tap
+                    if (dx > 8 || dy > 10) return; // moved too much â†’ was a scroll, not a tap
                     openRackDetailSubpage(rack.id);
                 }, { passive: true });
                 card.addEventListener('pointercancel', () => { _cardPointerStart = null; }, { passive: true });
@@ -7845,7 +8096,7 @@
                     `;
 
                     function onMove(mv) {
-                        // Only move vertically — X stays locked to original position
+                        // Only move vertically â€” X stays locked to original position
                         card.style.top = (mv.clientY - grabOffsetY) + 'px';
 
                         const siblings = [...container.children].filter(c => c !== spacer);
@@ -7940,7 +8191,7 @@
             }).join('') || `<p class="text-[10px] text-slate-400 dark:text-zinc-500 py-2">No slots match this filter.</p>`;
         }
 
-        // ── Bag Action Modal (per-slot: harvest / replant / flag / edit / delete) ──────────
+        // â”€â”€ Bag Action Modal (per-slot: harvest / replant / flag / edit / delete) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function openBagActionModal(rackId, bagId) {
             const rack = state.growBatches.find(r => r.id === rackId);
             if (!rack) return;
@@ -7962,13 +8213,13 @@
             modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm';
 
             if (isEmpty) {
-                // Empty slot — show only a prominent Plant New Bag button
+                // Empty slot â€” show only a prominent Plant New Bag button
                 modal.innerHTML = `
                 <div class="bg-surface-container-lowest dark:bg-zinc-900 border border-muted dark:border-zinc-800 rounded-3xl p-5 w-full max-w-[320px] shadow-2xl flex flex-col gap-3">
                     <div class="flex justify-between items-center">
                         <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">inventory_2</span>
-                            ${rack.rack} — Slot ${bagId}
+                            ${rack.rack} â€” Slot ${bagId}
                         </h3>
                         <button onclick="document.getElementById('modal-bag-action').remove()" class="text-slate-400 p-1 rounded-full"><span class="material-symbols-outlined">close</span></button>
                     </div>
@@ -7991,7 +8242,7 @@
                     <div class="flex justify-between items-center">
                         <h3 class="text-body-lg font-bold text-brand-deep dark:text-primary-fixed flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">inventory_2</span>
-                            ${rack.rack} — Slot ${bagId}
+                            ${rack.rack} â€” Slot ${bagId}
                         </h3>
                         <button onclick="document.getElementById('modal-bag-action').remove()" class="text-slate-400 p-1 rounded-full"><span class="material-symbols-outlined">close</span></button>
                     </div>
@@ -8103,7 +8354,7 @@
             });
         }
 
-        // Delete bag from slot — slot stays (becomes Empty) so it can be replanted
+        // Delete bag from slot â€” slot stays (becomes Empty) so it can be replanted
         function deleteSlot(rackId, bagId) {
             const rack = state.growBatches.find(r => r.id === rackId);
             if (!rack) return;
@@ -8206,7 +8457,7 @@
             if (!bag || bag.status !== 'Active') { showToast('Only active bags can be harvested.', 'info'); return; }
             document.getElementById('harvest-batch-id').value = rackId;
             document.getElementById('harvest-bag-id').value = bagId;
-            document.getElementById('harvest-modal-rack').innerText = `${rack.rack} — Slot ${bagId}`;
+            document.getElementById('harvest-modal-rack').innerText = `${rack.rack} â€” Slot ${bagId}`;
             document.getElementById('harvest-kg').value = '';
             document.getElementById('harvest-replace-no').checked = true;
             document.getElementById('modal-harvest').classList.remove('hidden');
@@ -8246,7 +8497,7 @@
                 if (batch.stage === 'Fruiting') {
                     const harvestDate = new Date(); harvestDate.setDate(harvestDate.getDate() + 10);
                     const dueDateStr = harvestDate.toISOString().substring(0, 10);
-                    const autoTask = { id: Date.now(), title: `Schedule harvest check — Batch #${id} (${batch.rack})`, desc: 'Auto-suggested: batch entered Fruiting stage.', assignee: 'Unassigned', priority: 'High', status: 'Pending', dueDate: dueDateStr };
+                    const autoTask = { id: Date.now(), title: `Schedule harvest check â€” Batch #${id} (${batch.rack})`, desc: 'Auto-suggested: batch entered Fruiting stage.', assignee: 'Unassigned', priority: 'High', status: 'Pending', dueDate: dueDateStr };
                     state.tasks.unshift(autoTask);
                     saveTasks(); renderTasks();
                     showToast(`Task auto-created: harvest check for Batch #${id}.`, 'info');
@@ -8310,7 +8561,7 @@
             if (replace) bag.status = 'Replaced';
             saveBatches(); renderBatches();
             closeHarvestModal();
-            addLog(`Harvest logged: Slot ${bagId} on ${rack.rack} — ${grams}g${replace ? ' (bag replaced)' : ''}.`, 'success');
+            addLog(`Harvest logged: Slot ${bagId} on ${rack.rack} â€” ${grams}g${replace ? ' (bag replaced)' : ''}.`, 'success');
             if (replace) {
                 // Show replant prompt after a brief delay
                 setTimeout(() => {
@@ -8397,7 +8648,7 @@
         function createTaskFromBatch(id) {
             const rack = state.growBatches.find(r => r.id === id);
             if (!rack) return;
-            const title = `Check ${rack.rack} — inspect bags and harvest ripe mushrooms`;
+            const title = `Check ${rack.rack} â€” inspect bags and harvest ripe mushrooms`;
             const newTask = { id: Date.now(), title, desc: `Auto-generated from ${rack.rack}.`, assignee: 'Unassigned', priority: 'Normal', status: 'Pending', dueDate: '' };
             state.tasks.unshift(newTask);
             saveTasks(); renderTasks();
@@ -8605,7 +8856,7 @@
                             </div>
                             <p class="text-[11px] leading-normal opacity-90">${alert.desc}</p>
                             <p class="text-[9px] font-bold opacity-60">Fired at ${alert.time}</p>
-                            ${alert.acknowledgedBy ? `<p class="text-[9px] font-bold opacity-60">✓ Acknowledged by <span class="capitalize">${alert.acknowledgedBy}</span> at ${alert.acknowledgedAt}</p>` : ''}
+                            ${alert.acknowledgedBy ? `<p class="text-[9px] font-bold opacity-60">âœ“ Acknowledged by <span class="capitalize">${alert.acknowledgedBy}</span> at ${alert.acknowledgedAt}</p>` : ''}
                         </div>
                     </div>
                     ${!alert.acknowledged ? `
@@ -8629,7 +8880,7 @@
                 alertCooldowns[alert.title] = Infinity; // permanently suppress this alert from re-firing
                 saveAlerts(); renderAlertsList(); checkAlertThresholds();
                 showToast(`Alert acknowledged by ${user}.`, 'info');
-                addLog(`Alert resolved: "${alert.title}" — acknowledged by ${user} at ${ts}`, 'success');
+                addLog(`Alert resolved: "${alert.title}" â€” acknowledged by ${user} at ${ts}`, 'success');
             }
         }
 
@@ -8693,7 +8944,7 @@
                         <p class="${titleClass} truncate">${task.title}</p>
                         <div class="flex items-center gap-1.5 mt-1">
                             <span class="text-[12px] text-slate-400 dark:text-zinc-500 font-medium">${task.assignee}</span>
-                            <span class="text-slate-300 dark:text-zinc-700">•</span>
+                            <span class="text-slate-300 dark:text-zinc-700">â€¢</span>
                             ${priorityPill}
                         </div>
                     </div>
@@ -8795,7 +9046,7 @@
             }
         }
 
-        // Called by the search input — auto-loads logs if not yet loaded, then filters
+        // Called by the search input â€” auto-loads logs if not yet loaded, then filters
         function onLogSearch() {
             const container = document.getElementById('logs-container');
             if (container && container.classList.contains('hidden')) {
@@ -9081,7 +9332,7 @@
                 staffOnlyNavs.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'flex'; });
                 staffOnlyTabs.forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); });
                 // Hide target-setting sliders for staff (they can still see the Target pill,
-                // they just can't change it — that's admin-only)
+                // they just can't change it â€” that's admin-only)
                 ['temp-slider-wrapper', 'humidity-slider-wrapper', 'light-slider-wrapper', 'co2-slider-wrapper'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
@@ -9098,7 +9349,7 @@
                 // Show live farm viewing card for staff (same as admin)
                 const liveCard = document.getElementById('live-farm-dashboard-card');
                 if (liveCard) liveCard.classList.remove('hidden');
-                // Hide shift summary card — replaced by live view widget
+                // Hide shift summary card â€” replaced by live view widget
                 const shiftCard = document.getElementById('shift-summary-card');
                 if (shiftCard) shiftCard.classList.add('hidden');
                 // Make grow-log tab accessible to staff (show nav is handled by FAB)
@@ -9152,7 +9403,7 @@
         const sparkHistory = { temp: [], humidity: [], light: [], co2: [] };
         const sparkPoints = {}; // canvasId -> { points, data, unit }
         const SPARK_MAX = 20;
-        const sparkUnits = { 'spark-temp': '°C', 'spark-humidity': '%', 'spark-light': ' µmol', 'spark-co2': ' ppm' };
+        const sparkUnits = { 'spark-temp': 'Â°C', 'spark-humidity': '%', 'spark-light': ' Âµmol', 'spark-co2': ' ppm' };
         const sparkDecimals = { 'spark-temp': 1, 'spark-humidity': 0, 'spark-light': 0, 'spark-co2': 0 };
 
         function pushSparkData() {
@@ -9261,7 +9512,7 @@
             const unit = sparkUnits[canvasId] || '';
             const ago = info.data.length - 1 - nearest;
             const tooltip = getSparkTooltip();
-            tooltip.textContent = `${value.toFixed(decimals)}${unit} · ${ago === 0 ? 'now' : ago * 3 + 's ago'}`;
+            tooltip.textContent = `${value.toFixed(decimals)}${unit} Â· ${ago === 0 ? 'now' : ago * 3 + 's ago'}`;
             tooltip.style.opacity = '1';
             tooltip.style.left = clientX + 'px';
             tooltip.style.top = (clientY - 32) + 'px';
@@ -9341,7 +9592,7 @@
                 const priority = task.priority || 'Normal';
                 const pillColors = { High: 'bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400', Normal: 'bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400', Low: 'bg-surface-variant text-on-surface-variant dark:bg-zinc-800 dark:text-zinc-400' };
                 const priorityPill = `<span class="text-[11px] font-extrabold uppercase tracking-wide ${pillColors[priority] || pillColors.Normal} px-2 py-0.5 rounded-full">${priority}</span>`;
-                const dueBadge = task.due ? `<span class="text-slate-300 dark:text-zinc-700">•</span><span class="text-[12px] text-on-surface-variant dark:text-zinc-500 font-medium">Due ${task.due}</span>` : '';
+                const dueBadge = task.due ? `<span class="text-slate-300 dark:text-zinc-700">â€¢</span><span class="text-[12px] text-on-surface-variant dark:text-zinc-500 font-medium">Due ${task.due}</span>` : '';
                 const item = document.createElement('div');
                 item.className = `flex items-center gap-3 p-4 rounded-2xl border bg-white dark:bg-zinc-900 ${cardAccent} transition-all`;
                 item.innerHTML = `
@@ -9351,7 +9602,7 @@
                         ${task.desc ? `<p class="text-[13px] text-on-surface-variant dark:text-zinc-500 mt-0.5 line-clamp-1">${task.desc}</p>` : ''}
                         <div class="flex items-center gap-1.5 mt-1 flex-wrap">
                             <span class="text-[12px] text-slate-400 dark:text-zinc-500 font-medium">${task.assignee}</span>
-                            <span class="text-slate-300 dark:text-zinc-700">•</span>
+                            <span class="text-slate-300 dark:text-zinc-700">â€¢</span>
                             ${priorityPill}${dueBadge}
                         </div>
                     </div>
@@ -9444,14 +9695,14 @@
             const breakdown = document.getElementById('health-score-breakdown');
             if (breakdown) {
                 const fmt = (label, lvl) => {
-                    if (lvl === 'normal') return `<span class="text-success-green dark:text-emerald-400">${label} ✓</span>`;
-                    if (lvl === 'warning') return `<span class="text-warning-gold">${label} −10pts</span>`;
-                    return `<span class="text-error-red">${label} −20pts</span>`;
+                    if (lvl === 'normal') return `<span class="text-success-green dark:text-emerald-400">${label} âœ“</span>`;
+                    if (lvl === 'warning') return `<span class="text-warning-gold">${label} âˆ’10pts</span>`;
+                    return `<span class="text-error-red">${label} âˆ’20pts</span>`;
                 };
                 const alertStr = activeAlerts === 0
-                    ? `<span class="text-success-green dark:text-emerald-400">Alerts ✓</span>`
-                    : `<span class="text-error-red">Alerts −${Math.min(20, activeAlerts * 7)}pts</span>`;
-                breakdown.innerHTML = [fmt('Temp', tempLevel), fmt('Humidity', humLevel), fmt('Light', lightLevel), fmt('CO2', co2Level), alertStr].join(' • ');
+                    ? `<span class="text-success-green dark:text-emerald-400">Alerts âœ“</span>`
+                    : `<span class="text-error-red">Alerts âˆ’${Math.min(20, activeAlerts * 7)}pts</span>`;
+                breakdown.innerHTML = [fmt('Temp', tempLevel), fmt('Humidity', humLevel), fmt('Light', lightLevel), fmt('CO2', co2Level), alertStr].join(' â€¢ ');
             }
             // Shift summary
             const tasksDone = document.getElementById('summary-tasks-done');
@@ -9526,7 +9777,7 @@
                             <p class="text-[13px] text-on-surface-variant dark:text-zinc-400 mt-1">${r.desc}</p>
                         </div>
                         <div class="flex items-center justify-between text-[12px] text-on-surface-variant dark:text-zinc-500 flex-wrap gap-1">
-                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span>${r.reporter} • ${r.category} • ${r.sector}${r.bag ? ' • Bag ' + r.bag : ''}</span>
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">person</span>${r.reporter} â€¢ ${r.category} â€¢ ${r.sector}${r.bag ? ' â€¢ Bag ' + r.bag : ''}</span>
                             <span>${r.timestamp}</span>
                         </div>
                         ${r.adminNote ? `<div class="bg-primary/8 dark:bg-emerald-950/30 border border-primary/15 dark:border-emerald-900 rounded-lg px-3 py-2 text-[13px] text-primary dark:text-emerald-400 flex items-start justify-between gap-2"><span><span class="font-bold">Admin note:</span> ${r.adminNote}</span>${!isAdmin && hasUnreadNote ? `<button onclick="dismissAdminNote(${r.id})" class="shrink-0 text-[11px] font-extrabold uppercase border border-primary/30 dark:border-emerald-800 rounded-full px-2 py-0.5 hover:bg-primary/10 dark:hover:bg-emerald-900/30">Dismiss</button>` : ''}</div>` : ''}
@@ -9565,7 +9816,7 @@
         // --- Sub-page slide-in navigation ---
         let _activeSubPage = null;
 
-        // ── Rack Detail Subpage ─────────────────────────────────────────────
+        // â”€â”€ Rack Detail Subpage â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         let _rackDetailFilter = 'all';
 
         function openRackDetailSubpage(rackId) {
@@ -9694,7 +9945,7 @@
             _renderRackDetailChips(rackId, bags, replaced, contaminated);
             renderRackDetailSlotGrid(rack, filter);
         }
-        // ────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         function openSubPage(id) {
             // Close any currently open sub-page first (instant, no animation)
@@ -9710,7 +9961,7 @@
             if (id === 'subpage-staff-accounts') renderStaffAccountsList();
             if (id === 'subpage-staff-reports') triggerTabContentAnimations('profile');
             if (id === 'subpage-tasks') { renderTasks(); triggerTabContentAnimations('tasks-subpage'); }
-            // NOTE: subpage-logs no longer auto-renders — user taps "Load Logs" button
+            // NOTE: subpage-logs no longer auto-renders â€” user taps "Load Logs" button
             if (id === 'subpage-logs') resetLogsPanel();
 
             // Slide in
@@ -9943,7 +10194,7 @@
                 <button onclick="closeHarvestModal()" class="text-slate-400 p-1 rounded-full"><span
                         class="material-symbols-outlined">close</span></button>
             </div>
-            <p class="text-body-sm text-on-surface-variant dark:text-zinc-400 -mt-2" id="harvest-modal-rack">Rack A —
+            <p class="text-body-sm text-on-surface-variant dark:text-zinc-400 -mt-2" id="harvest-modal-rack">Rack A â€”
                 Slot 1</p>
             <form onsubmit="submitHarvest(event)" class="flex flex-col gap-3">
                 <input type="hidden" id="harvest-batch-id">
@@ -9997,7 +10248,7 @@
 
     <!-- Scroll-intent guard: prevents buttons/toggles from firing when
          the user's finger is scrolling rather than tapping. Works by
-         tracking touch movement on the scroll area — if the finger moved
+         tracking touch movement on the scroll area â€” if the finger moved
          more than 6px vertically during a touch, the release is treated
          as a scroll end, not a tap, and we block the next click. -->
     <script>
@@ -10052,6 +10303,172 @@
                 document.addEventListener('DOMContentLoaded', init);
             } else {
                 init();
+            }
+        })();
+    </script>
+
+    <!-- Desktop Sidebar Synchronization & Patching Script -->
+    <script>
+        (function () {
+            function patchApp() {
+                if (typeof window.switchTab !== 'function' || typeof window.applyRoleNavRestrictions !== 'function') {
+                    setTimeout(patchApp, 50);
+                    return;
+                }
+
+                // 1. Patch switchTab to highlight active sidebar button
+                const origSwitchTab = window.switchTab;
+                window.switchTab = function (tabId) {
+                    origSwitchTab(tabId);
+
+                    // Reset all sidebar buttons
+                    const sbButtons = ['home', 'controls', 'yield', 'history', 'profile'];
+                    sbButtons.forEach(btnId => {
+                        const btn = document.getElementById(`sb-nav-${btnId}`);
+                        if (btn) {
+                            btn.classList.remove('sb-active');
+                            const icon = btn.querySelector('.material-symbols-outlined');
+                            if (icon) icon.style.fontVariationSettings = "'FILL' 0";
+                        }
+                    });
+
+                    // Set active sidebar button
+                    const targetId = (tabId === 'diagnostics' || tabId === 'grow-log') ? 'profile' : tabId;
+                    const activeBtn = document.getElementById(`sb-nav-${targetId}`);
+                    if (activeBtn) {
+                        activeBtn.classList.add('sb-active');
+                        const icon = activeBtn.querySelector('.material-symbols-outlined');
+                        if (icon) icon.style.fontVariationSettings = "'FILL' 1";
+                    }
+
+                    // Special highlight behavior for center FAB on desktop
+                    const sbFab = document.getElementById('sb-nav-fab');
+                    if (sbFab) {
+                        if (tabId === 'grow-log') {
+                            sbFab.classList.add('bg-primary', 'text-on-primary');
+                            sbFab.classList.remove('bg-[#adf2bc]', 'text-[#072211]');
+                        } else {
+                            sbFab.classList.remove('bg-primary', 'text-on-primary');
+                            sbFab.classList.add('bg-[#adf2bc]', 'text-[#072211]');
+                        }
+                    }
+                };
+
+                // 2. Patch applyRoleNavRestrictions to sync sidebar role visibility
+                const origApplyRoleNavRestrictions = window.applyRoleNavRestrictions;
+                window.applyRoleNavRestrictions = function (role) {
+                    origApplyRoleNavRestrictions(role);
+
+                    const sbYield = document.getElementById('sb-nav-yield');
+                    const sbHistory = document.getElementById('sb-nav-history');
+
+                    if (role === 'staff') {
+                        if (sbYield) sbYield.style.display = 'none';
+                        if (sbHistory) sbHistory.style.display = 'flex';
+                        // Staff avatar info
+                        const avatar = document.getElementById('sidebar-user-avatar');
+                        const name = document.getElementById('sidebar-user-name');
+                        const roleEl = document.getElementById('sidebar-user-role');
+                        if (avatar) avatar.innerText = 'S';
+                        if (name && window.state && window.state.currentUser) name.innerText = window.state.currentUser.name || 'Staff';
+                        if (roleEl) roleEl.innerText = 'Staff Member';
+                    } else {
+                        if (sbYield) sbYield.style.display = 'flex';
+                        if (sbHistory) sbHistory.style.display = 'none';
+                        // Admin avatar info
+                        const avatar = document.getElementById('sidebar-user-avatar');
+                        const name = document.getElementById('sidebar-user-name');
+                        const roleEl = document.getElementById('sidebar-user-role');
+                        if (avatar) avatar.innerText = 'A';
+                        if (name) name.innerText = 'Admin';
+                        if (roleEl) roleEl.innerText = 'Administrator';
+                    }
+                };
+
+                // 3. Patch setNavFabMode to sync sidebar FAB labels/icons
+                const origSetNavFabMode = window.setNavFabMode;
+                if (typeof origSetNavFabMode === 'function') {
+                    window.setNavFabMode = function (mode) {
+                        origSetNavFabMode(mode);
+                        const sbFabLabel = document.getElementById('sb-nav-fab-label');
+                        const sbFabIcon = document.getElementById('sb-nav-fab-icon');
+                        if (mode === 'add-crop') {
+                            if (sbFabLabel) sbFabLabel.innerText = 'Add Crop';
+                            if (sbFabIcon) sbFabIcon.innerText = 'add';
+                        } else if (mode === 'manage-crop-staff') {
+                            if (sbFabLabel) sbFabLabel.innerText = 'View Crops';
+                            if (sbFabIcon) sbFabIcon.innerText = 'agriculture';
+                        } else {
+                            if (sbFabLabel) sbFabLabel.innerText = 'Manage Crop';
+                            if (sbFabIcon) sbFabIcon.innerText = 'agriculture';
+                        }
+                    };
+                }
+
+                // 4. MutationObserver to sync Mode Pill state live
+                const modePillText = document.getElementById('header-mode-text');
+                if (modePillText) {
+                    const observer = new MutationObserver(function () {
+                        const sbModeText = document.getElementById('sidebar-mode-text');
+                        const sbModeIcon = document.getElementById('sidebar-mode-icon');
+                        const sbModePill = document.getElementById('sidebar-mode-pill');
+
+                        if (sbModeText) sbModeText.innerText = modePillText.innerText;
+
+                        if (modePillText.innerText === 'MANUAL') {
+                            if (sbModeIcon) sbModeIcon.innerText = 'tune';
+                            if (sbModePill) {
+                                sbModePill.className = 'flex items-center gap-2 px-3.5 py-2.5 rounded-2xl border cursor-pointer active:scale-95 transition-all duration-300 bg-warning-gold/20 border-warning-gold/60 text-warning-gold';
+                            }
+                        } else {
+                            const isScheduled = window.scheduleConfig && window.scheduleConfig.masterEnabled;
+                            if (sbModeIcon) sbModeIcon.innerText = isScheduled ? 'schedule' : 'smart_toy';
+                            if (sbModePill) {
+                                sbModePill.className = 'flex items-center gap-2 px-3.5 py-2.5 rounded-2xl border cursor-pointer active:scale-95 transition-all duration-300 bg-success-green/10 border-success-green/30 text-success-green dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-400';
+                            }
+                        }
+                    });
+                    observer.observe(modePillText, { childList: true, characterData: true, subtree: true });
+                }
+
+                // 5. MutationObserver to sync Theme icon
+                const themeIcon = document.getElementById('theme-toggle-icon');
+                if (themeIcon) {
+                    const observer = new MutationObserver(function () {
+                        const sbThemeIcon = document.getElementById('sidebar-theme-toggle-icon');
+                        if (sbThemeIcon) sbThemeIcon.innerText = themeIcon.innerText;
+                    });
+                    observer.observe(themeIcon, { childList: true, characterData: true, subtree: true });
+                }
+
+                // 6. MutationObserver to sync user info (name, avatar)
+                const headerName = document.getElementById('header-user-name');
+                if (headerName) {
+                    const observer = new MutationObserver(function () {
+                        const sbName = document.getElementById('sidebar-user-name');
+                        if (sbName) sbName.innerText = headerName.innerText;
+
+                        const sbAvatar = document.getElementById('sidebar-user-avatar');
+                        const headerAvatar = document.getElementById('header-user-avatar');
+                        if (sbAvatar && headerAvatar) sbAvatar.innerText = headerAvatar.innerText;
+                    });
+                    observer.observe(headerName, { childList: true, characterData: true, subtree: true });
+                }
+
+                // Initial synchronization
+                if (window.state && window.state.currentTab) {
+                    window.switchTab(window.state.currentTab);
+                }
+                if (window.state && window.state.currentUser) {
+                    window.applyRoleNavRestrictions(window.state.currentUser.role);
+                }
+            }
+
+            // Start patching once page is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', patchApp);
+            } else {
+                patchApp();
             }
         })();
     </script>
